@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import no.dyrebar.dyrebar.BuildConfig;
+
 public class Api
 {
     public URL getUrl(String _url)
@@ -31,6 +33,9 @@ public class Api
             try {
                 HttpsURLConnection client = (HttpsURLConnection )url.openConnection();
                 client.setSSLSocketFactory(Certificate.sslContext.getSocketFactory());
+                /*if (BuildConfig.DEBUG)
+                    client.setHostnameVerifier(Certificate.hostnameVerifier());*/
+
                 client.setRequestMethod("GET");
                 client.setReadTimeout(5000);
                 client.setConnectTimeout(5000);
@@ -55,6 +60,9 @@ public class Api
             try {
                 HttpsURLConnection client = (HttpsURLConnection )url.openConnection();
                 client.setSSLSocketFactory(Certificate.sslContext.getSocketFactory());
+                /*if (BuildConfig.DEBUG)
+                    client.setHostnameVerifier(Certificate.hostnameVerifier());*/
+
                 client.setDoOutput(true);
                 client.setRequestMethod("POST");
 

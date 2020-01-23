@@ -12,7 +12,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 
 import no.dyrebar.dyrebar.R;
@@ -25,7 +27,7 @@ public class Certificate
     {
         try {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            int certId = 0; // R.raw.meet_vlab_cs_hioa_no
+            int certId = R.raw.cert; // R.raw.meet_vlab_cs_hioa_no
             InputStream caInput = context.getResources().openRawResource(certId);
             java.security.cert.Certificate ca;
             ca = cf.generateCertificate(caInput);
@@ -59,5 +61,16 @@ public class Certificate
             e.printStackTrace();
         }
 
+    }
+
+    public static HostnameVerifier hostnameVerifier()
+    {
+        return new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session)
+            {
+                return true;
+            }
+        };
     }
 }

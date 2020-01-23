@@ -2,11 +2,16 @@ package no.dyrebar.dyrebar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+
+import no.dyrebar.dyrebar.web.Api;
+import no.dyrebar.dyrebar.web.Source;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -24,5 +29,14 @@ public class MainActivity extends AppCompatActivity
             no.dyrebar.dyrebar.web.Certificate cert = new no.dyrebar.dyrebar.web.Certificate();
             cert.InitializeCetificate(getApplicationContext());
         }
+
+
+        AsyncTask.execute(() -> {
+            Api api = new Api();
+            String data = api.Get(Source.Api + "?request=heartbeat");
+            Log.d("TEST", data);
+        });
+
+
     }
 }
