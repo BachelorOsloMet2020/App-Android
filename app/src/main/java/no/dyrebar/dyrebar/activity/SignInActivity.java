@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
+import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.SiginInChallenge;
+import no.dyrebar.dyrebar.json.jProfile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +19,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,6 +33,9 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -69,7 +77,17 @@ public class SignInActivity extends AppCompatActivity
         {
             /* Needs to provide data for backend challenge
              * This i needed in order to verify the authenticity of the user and session*/
-            runLoginChallenge(null);
+            runLoginChallenge(new SiginInChallenge(
+                    gsia.getId(),
+                    gsia.getIdToken(),
+                    SiginInChallenge.oAuthProvider.GOOGLE,
+                    new Profile(
+                            gsia.getGivenName(),
+                            gsia.getFamilyName(),
+                            gsia.getEmail()
+                    )
+            ));
+            //gsia.get
         }
         else
         {
@@ -91,13 +109,41 @@ public class SignInActivity extends AppCompatActivity
         Button login = findViewById(R.id.login_facebook);
         login.setOnClickListener(v ->
         {
+            LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
             LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("email", "user_photos", "public_profile", "user_location"));
             LoginManager.getInstance().registerCallback(facebook_CallBackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult)
                 {
-
-                    runLoginChallenge(null);
+                    GraphRequest gr = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                            new GraphRequest.GraphJSONObjectCallback() {
+                                @Override
+                                public void onCompleted(JSONObject object, GraphResponse response)
+                                {
+                                    try
+                                    {
+                                        Profile graphProfile = new jProfile().jGraphProfile(object);
+                                        runLoginChallenge(new SiginInChallenge(
+                                                object.getString("id"),
+                                                loginResult.getAccessToken().getToken(),
+                                                SiginInChallenge.oAuthProvider.FACEBOOK,
+                                                graphProfile
+                                        ));
+                                    }
+                                    catch (JSONException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                    Log.d(TAG + " Facebook Grap: ", object.toString());
+                                }
+                            });
+                    Bundle b = new Bundle();
+                    b.putString("fields", "id,first_name,last_name,email,location,address");
+                    gr.setParameters(b);
+                    gr.executeAsync();
+                    //runLoginChallenge(null);
+                    Log.d(TAG + " Facebook AT-Str: ", loginResult.getAccessToken().toString());
+                    Log.d(TAG + " Facebook AT-TOK: ", loginResult.getAccessToken().getToken());
                 }
 
                 @Override
@@ -120,19 +166,34 @@ public class SignInActivity extends AppCompatActivity
 
     private void runLoginChallenge(SiginInChallenge sic)
     {
-
+        Log.d(TAG, sic.toString());
     }
 
     private void GSO_SignInResult(Task<GoogleSignInAccount> completedTask)
     {
         try
         {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            GoogleSignInAccount gsia = completedTask.getResult(ApiException.class);
+            runLoginChallenge(new SiginInChallenge(
+                    gsia.getId(),
+                    gsia.getIdToken(),
+                    SiginInChallenge.oAuthProvider.GOOGLE,
+                    new Profile(
+                            gsia.getGivenName(),
+                            gsia.getFamilyName(),
+                            gsia.getEmail()
+                    )
+            ));
+
 
         }
         catch (ApiException e)
         {
             Log.w(TAG, "handleSignInResult:error", e);
+        }
+        catch (Exception e)
+        {
+            Log.w(TAG, "Error for GSO", e);
         }
     }
 
@@ -154,5 +215,11 @@ public class SignInActivity extends AppCompatActivity
         else if (FacebookSdk.isFacebookRequestCode(requestCode))
             facebook_CallBackManager.onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
     }
 }
