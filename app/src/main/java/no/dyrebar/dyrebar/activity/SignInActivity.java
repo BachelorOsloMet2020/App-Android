@@ -3,16 +3,22 @@ package no.dyrebar.dyrebar.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.Profile;
-import no.dyrebar.dyrebar.classes.SiginInChallenge;
+import no.dyrebar.dyrebar.classes.SignInChallenge;
 import no.dyrebar.dyrebar.json.jProfile;
+import no.dyrebar.dyrebar.json.jSignInChallenge;
+import no.dyrebar.dyrebar.web.Api;
+import no.dyrebar.dyrebar.web.Source;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
+import android.util.Pair;
 import android.widget.Button;
 
 import com.facebook.CallbackManager;
@@ -21,7 +27,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -29,14 +34,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SignInActivity extends AppCompatActivity
@@ -44,13 +48,15 @@ public class SignInActivity extends AppCompatActivity
     private final String TAG = this.getClass().getName();
 
     private final int AR_ID_GSO = 666; /* Google sign in id for activity result*/
-
+    private String Device_ID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+       Device_ID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         load_Google_SingIn();
         load_Facebook_SignIn();
@@ -71,37 +77,37 @@ public class SignInActivity extends AppCompatActivity
         GoogleSignInClient gsic = GoogleSignIn.getClient(this, gso);
 
         /* Gets the logged inn account
-        * returns null if none */
+         * returns null if none */
         GoogleSignInAccount gsia = GoogleSignIn.getLastSignedInAccount(this);
         if (gsia != null)
         {
             /* Needs to provide data for backend challenge
              * This i needed in order to verify the authenticity of the user and session*/
-            runLoginChallenge(new SiginInChallenge(
+            runLoginChallenge(new SignInChallenge(
                     gsia.getId(),
                     gsia.getIdToken(),
-                    SiginInChallenge.oAuthProvider.GOOGLE,
+                    SignInChallenge.oAuthProvider.GOOGLE,
                     new Profile(
                             gsia.getGivenName(),
                             gsia.getFamilyName(),
                             gsia.getEmail()
-                    )
+                    ),
+                    Device_ID
             ));
             //gsia.get
         }
-        else
+
+        // Enable login button
+        login.setOnClickListener(v ->
         {
-            // Enable login button
-            login.setOnClickListener(v ->
-            {
-                Intent gsii = gsic.getSignInIntent();
-                startActivityForResult(gsii, AR_ID_GSO);
-            });
-        }
+            Intent gsii = gsic.getSignInIntent();
+            startActivityForResult(gsii, AR_ID_GSO);
+        });
 
     }
 
     CallbackManager facebook_CallBackManager;
+
     private void load_Facebook_SignIn()
     {
 
@@ -111,31 +117,30 @@ public class SignInActivity extends AppCompatActivity
         {
             LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
             LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("email", "user_photos", "public_profile", "user_location"));
-            LoginManager.getInstance().registerCallback(facebook_CallBackManager, new FacebookCallback<LoginResult>() {
+            LoginManager.getInstance().registerCallback(facebook_CallBackManager, new FacebookCallback<LoginResult>()
+            {
                 @Override
                 public void onSuccess(LoginResult loginResult)
                 {
                     GraphRequest gr = GraphRequest.newMeRequest(loginResult.getAccessToken(),
-                            new GraphRequest.GraphJSONObjectCallback() {
-                                @Override
-                                public void onCompleted(JSONObject object, GraphResponse response)
+                            (object, response) ->
+                            {
+                                try
                                 {
-                                    try
-                                    {
-                                        Profile graphProfile = new jProfile().jGraphProfile(object);
-                                        runLoginChallenge(new SiginInChallenge(
-                                                object.getString("id"),
-                                                loginResult.getAccessToken().getToken(),
-                                                SiginInChallenge.oAuthProvider.FACEBOOK,
-                                                graphProfile
-                                        ));
-                                    }
-                                    catch (JSONException e)
-                                    {
-                                        e.printStackTrace();
-                                    }
-                                    Log.d(TAG + " Facebook Grap: ", object.toString());
+                                    Profile graphProfile = new jProfile().jGraphProfile(object);
+                                    runLoginChallenge(new SignInChallenge(
+                                            object.getString("id"),
+                                            loginResult.getAccessToken().getToken(),
+                                            SignInChallenge.oAuthProvider.FACEBOOK,
+                                            graphProfile,
+                                            Device_ID
+                                    ));
                                 }
+                                catch (JSONException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                                Log.d(TAG + " Facebook Grap: ", object.toString());
                             });
                     Bundle b = new Bundle();
                     b.putString("fields", "id,first_name,last_name,email,location,address");
@@ -163,10 +168,30 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
-
-    private void runLoginChallenge(SiginInChallenge sic)
+    private void runLoginChallenge(SignInChallenge sic)
     {
         Log.d(TAG, sic.toString());
+        try
+        {
+            String jSic = new jSignInChallenge().encode(sic);
+
+            Api api = new Api();
+            AsyncTask.execute(() ->
+            {
+                String resp = api.Post(Source.Api, new ArrayList<Pair<String, String>>(){{
+                    add(new Pair<>("request", "oAuth"));
+                    add(new Pair<>("challenge", jSic));
+                }});
+                if (resp != null)
+                    Log.d(TAG + " SIC", resp);
+            });
+
+            Log.d(TAG, jSic);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void GSO_SignInResult(Task<GoogleSignInAccount> completedTask)
@@ -174,15 +199,16 @@ public class SignInActivity extends AppCompatActivity
         try
         {
             GoogleSignInAccount gsia = completedTask.getResult(ApiException.class);
-            runLoginChallenge(new SiginInChallenge(
+            runLoginChallenge(new SignInChallenge(
                     gsia.getId(),
                     gsia.getIdToken(),
-                    SiginInChallenge.oAuthProvider.GOOGLE,
+                    SignInChallenge.oAuthProvider.GOOGLE,
                     new Profile(
                             gsia.getGivenName(),
                             gsia.getFamilyName(),
                             gsia.getEmail()
-                    )
+                    ),
+                    Device_ID
             ));
 
 
@@ -198,10 +224,11 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
-    /** Standard android impmentasjon for å sjekke resultatet fra aktiviteten som ble startet
+    /**
+     * Standard android impmentasjon for å sjekke resultatet fra aktiviteten som ble startet
      * Request_Code er koden som separerer de forskjellige foresøprselene
      * Eks Facebook sin er forskjellig fra Google sin
-     * */
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {

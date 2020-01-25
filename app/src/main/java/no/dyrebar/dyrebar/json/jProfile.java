@@ -16,5 +16,14 @@ public class jProfile
         );
     }
 
+    public JSONObject jsonProfileChallenge(Profile profile) throws JSONException
+    {
+        JSONObject o = new JSONObject();
+        o.put("firstName", profile.getFirstName());
+        o.put("lastName", profile.getLastName());
+        o.put("email", profile.getEmail());
+        return o;
+    }
+
 
 }

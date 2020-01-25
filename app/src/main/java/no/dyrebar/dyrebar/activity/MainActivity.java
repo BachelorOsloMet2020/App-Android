@@ -25,12 +25,6 @@ public class MainActivity extends AppCompatActivity
                 Analytics.class, Crashes.class);
         setContentView(R.layout.activity_main);
 
-        if (no.dyrebar.dyrebar.web.Certificate.sslContext == null)
-        {
-            no.dyrebar.dyrebar.web.Certificate cert = new no.dyrebar.dyrebar.web.Certificate();
-            cert.InitializeCetificate(getApplicationContext());
-        }
-
 
         AsyncTask.execute(() -> {
             Api api = new Api();
