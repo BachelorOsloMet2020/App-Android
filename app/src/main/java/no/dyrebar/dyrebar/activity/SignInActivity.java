@@ -17,6 +17,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -44,7 +45,7 @@ public class SignInActivity extends AppCompatActivity
         setContentView(R.layout.activity_sign_in);
 
         load_Google_SingIn();
-        //load_Facebook_SignIn();
+        load_Facebook_SignIn();
     }
 
     private void load_Google_SingIn()
@@ -56,7 +57,7 @@ public class SignInActivity extends AppCompatActivity
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(S.Google_Sign_In_Client_Id)
                 .requestEmail()
-                /*.requestProfile()*/
+                .requestProfile()
                 .build();
         /* Builds the sign in client with GSO*/
         GoogleSignInClient gsic = GoogleSignIn.getClient(this, gso);
@@ -85,28 +86,34 @@ public class SignInActivity extends AppCompatActivity
     CallbackManager facebook_CallBackManager;
     private void load_Facebook_SignIn()
     {
+
         facebook_CallBackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_photos", "public_profile", "user_location"));
-        LoginManager.getInstance().registerCallback(facebook_CallBackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult)
-            {
+        Button login = findViewById(R.id.login_facebook);
+        login.setOnClickListener(v ->
+        {
+            LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("email", "user_photos", "public_profile", "user_location"));
+            LoginManager.getInstance().registerCallback(facebook_CallBackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult)
+                {
 
-                runLoginChallenge(null);
-            }
+                    runLoginChallenge(null);
+                }
 
-            @Override
-            public void onCancel()
-            {
+                @Override
+                public void onCancel()
+                {
 
-            }
+                }
 
-            @Override
-            public void onError(FacebookException error)
-            {
+                @Override
+                public void onError(FacebookException error)
+                {
 
-            }
+                }
+            });
         });
+
     }
 
 
