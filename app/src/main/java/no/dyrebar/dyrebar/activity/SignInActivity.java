@@ -81,7 +81,7 @@ public class SignInActivity extends AppCompatActivity
                     {
                         // User is valid and authenticated
                         Log.d(TAG, "User is valid and has a session");
-                        findViewById(R.id.login_skip).setOnClickListener(v -> {
+                        runOnUiThread(() -> {
                             startActivity(new Intent(this, MainActivity.class));
                             finish();
                         });
