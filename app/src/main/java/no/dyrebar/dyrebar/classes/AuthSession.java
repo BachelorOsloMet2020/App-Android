@@ -8,11 +8,11 @@ import java.util.Map;
 public class AuthSession
 {
     private String id;
-    private SignInChallenge.oAuthProvider provider;
+    private AuthChallenge.oAuthProvider provider;
     private long time;
     private String token;
 
-    public AuthSession(String id, String token, SignInChallenge.oAuthProvider provider, long time)
+    public AuthSession(String id, String token, AuthChallenge.oAuthProvider provider, long time)
     {
         this.id = id;
         this.token = token;
@@ -26,7 +26,7 @@ public class AuthSession
         this.token = (String) map.get("token");
         if (map.get("time") instanceof Long)
             this.time = (Long) map.get("time");
-        this.provider = SignInChallenge.oAuthProvider.valueOf((String)map.get("provider"));
+        this.provider = AuthChallenge.oAuthProvider.valueOf((String)map.get("provider"));
     }
 
     public String getId()
@@ -34,7 +34,7 @@ public class AuthSession
         return id;
     }
 
-    public SignInChallenge.oAuthProvider getProvider()
+    public AuthChallenge.oAuthProvider getProvider()
     {
         return provider;
     }

@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import no.dyrebar.dyrebar.classes.AuthSession;
-import no.dyrebar.dyrebar.classes.SignInChallenge;
+import no.dyrebar.dyrebar.classes.AuthChallenge;
 
 public class jAuthSession
 {
@@ -14,7 +14,7 @@ public class jAuthSession
         return new AuthSession(
                 o.getString("id"),
                 o.getString("session_token"),
-                SignInChallenge.oAuthProvider.valueOf(o.getString("provider")),
+                AuthChallenge.oAuthProvider.valueOf(o.getString("provider")),
                 o.getLong("time")
 
         );
@@ -25,6 +25,7 @@ public class jAuthSession
         o.put("id", session.getId());
         o.put("session_token", session.getToken());
         o.put("provider", session.getProvider());
+        o.put("action", "VALIDATE");
         return o.toString();
     }
 

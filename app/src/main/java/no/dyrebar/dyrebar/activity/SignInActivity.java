@@ -8,11 +8,11 @@ import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
-import no.dyrebar.dyrebar.classes.SignInChallenge;
+import no.dyrebar.dyrebar.classes.AuthChallenge;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jAuthSession;
 import no.dyrebar.dyrebar.json.jProfile;
-import no.dyrebar.dyrebar.json.jSignInChallenge;
+import no.dyrebar.dyrebar.json.jAuthChallenge;
 import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
@@ -30,7 +30,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -68,9 +67,7 @@ public class SignInActivity extends AppCompatActivity
         SettingsHandler sh = new SettingsHandler(getApplicationContext());
         Map<String, ?> map = sh.getMultilineSetting(S.Dyrebar_Auth);
         if (map.size() > 0)
-        {
             authSession = new AuthSession(map);
-        }
         if (authSession != null && authSession.objVal())
         {
             // Request Token validation
@@ -78,12 +75,16 @@ public class SignInActivity extends AppCompatActivity
                 try
                 {
                     String json = new jAuthSession().encode(authSession);
-                    String resp = new Api().Get(Source.Api + "?request=validateSessionToken&data="+json);
+                    String resp = new Api().Get(Source.Api + "?request=isSessionValid&data="+json);
                     boolean success = new jStatus().getStatus(resp);
                     if (success && new JSONObject(resp).getBoolean("isValid"))
                     {
                         // User is valid and authenticated
                         Log.d(TAG, "User is valid and has a session");
+                        findViewById(R.id.login_skip).setOnClickListener(v -> {
+                            startActivity(new Intent(this, MainActivity.class));
+                            finish();
+                        });
                     }
                     else
                     {
@@ -136,10 +137,11 @@ public class SignInActivity extends AppCompatActivity
         {
             /* Needs to provide data for backend challenge
              * This i needed in order to verify the authenticity of the user and session*/
-            runLoginChallenge(new SignInChallenge(
+            runLoginChallenge(new AuthChallenge(
                     gsia.getId(),
+                    gsia.getEmail(),
                     gsia.getIdToken(),
-                    SignInChallenge.oAuthProvider.GOOGLE,
+                    AuthChallenge.oAuthProvider.GOOGLE,
                     new Profile(
                             gsia.getGivenName(),
                             gsia.getFamilyName(),
@@ -181,10 +183,11 @@ public class SignInActivity extends AppCompatActivity
                                 try
                                 {
                                     Profile graphProfile = new jProfile().jGraphProfile(object);
-                                    runLoginChallenge(new SignInChallenge(
+                                    runLoginChallenge(new AuthChallenge(
                                             object.getString("id"),
+                                            object.getString("email"),
                                             loginResult.getAccessToken().getToken(),
-                                            SignInChallenge.oAuthProvider.FACEBOOK,
+                                            AuthChallenge.oAuthProvider.FACEBOOK,
                                             graphProfile,
                                             Device_ID
                                     ));
@@ -221,19 +224,19 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
-    private void runLoginChallenge(SignInChallenge sic)
+    private void runLoginChallenge(AuthChallenge sic)
     {
         Log.d(TAG, sic.toString());
         try
         {
-            String jSic = new jSignInChallenge().encode(sic);
-
+            String jSic = new jAuthChallenge().encode(sic);
             Api api = new Api();
             AsyncTask.execute(() ->
             {
+                String method = (sic.getProvider() == AuthChallenge.oAuthProvider.FACEBOOK || sic.getProvider() == AuthChallenge.oAuthProvider.GOOGLE) ? "oAuth" : "pAuth";
                 String resp = api.Post(Source.Api, new ArrayList<Pair<String, String>>(){{
-                    add(new Pair<>("request", "oAuth"));
-                    add(new Pair<>("challenge", jSic));
+                    add(new Pair<>("request", method));
+                    add(new Pair<>("data", jSic));
                 }});
                 boolean success = new jStatus().getStatus(resp);
                 if (success)
@@ -266,10 +269,11 @@ public class SignInActivity extends AppCompatActivity
         try
         {
             GoogleSignInAccount gsia = completedTask.getResult(ApiException.class);
-            runLoginChallenge(new SignInChallenge(
+            runLoginChallenge(new AuthChallenge(
                     gsia.getId(),
+                    gsia.getEmail(),
                     gsia.getIdToken(),
-                    SignInChallenge.oAuthProvider.GOOGLE,
+                    AuthChallenge.oAuthProvider.GOOGLE,
                     new Profile(
                             gsia.getGivenName(),
                             gsia.getFamilyName(),
