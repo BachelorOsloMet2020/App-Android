@@ -71,7 +71,7 @@ public class SignInActivity extends AppCompatActivity
         {
             authSession = new AuthSession(map);
         }
-        if (authSession.objVal())
+        if (authSession != null && authSession.objVal())
         {
             // Request Token validation
             AsyncTask.execute(() -> {
