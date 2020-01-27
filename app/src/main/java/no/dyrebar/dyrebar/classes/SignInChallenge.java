@@ -11,7 +11,8 @@ public class SignInChallenge
     public enum oAuthProvider
     {
         FACEBOOK,
-        GOOGLE
+        GOOGLE,
+        EMAIL
     }
 
     public SignInChallenge(String id, String token, oAuthProvider provider, Profile profile, String DeviceId)

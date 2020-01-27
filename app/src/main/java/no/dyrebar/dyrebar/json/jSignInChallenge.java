@@ -14,6 +14,7 @@ public class jSignInChallenge
         o.put("id", sic.getId());
         o.put("token", sic.getToken());
         o.put("profile", new jProfile().jsonProfileChallenge(sic.getProfile()));
+        o.put("clientType", "android");
         o.put("deviceId", sic.getDeviceId());
         return o.toString();
     }

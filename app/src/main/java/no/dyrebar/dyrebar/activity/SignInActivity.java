@@ -6,10 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
+import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.SignInChallenge;
+import no.dyrebar.dyrebar.handler.SettingsHandler;
+import no.dyrebar.dyrebar.json.jAuthSession;
 import no.dyrebar.dyrebar.json.jProfile;
 import no.dyrebar.dyrebar.json.jSignInChallenge;
+import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
@@ -42,6 +46,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class SignInActivity extends AppCompatActivity
 {
@@ -50,17 +55,60 @@ public class SignInActivity extends AppCompatActivity
     private final int AR_ID_GSO = 666; /* Google sign in id for activity result*/
     private String Device_ID = "";
 
+    private AuthSession authSession;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-       Device_ID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Device_ID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
+        SettingsHandler sh = new SettingsHandler(getApplicationContext());
+        Map<String, ?> map = sh.getMultilineSetting(S.Dyrebar_Auth);
+        if (map.size() > 0)
+        {
+            authSession = new AuthSession(map);
+        }
+        if (authSession.objVal())
+        {
+            // Request Token validation
+            AsyncTask.execute(() -> {
+                try
+                {
+                    String json = new jAuthSession().encode(authSession);
+                    String resp = new Api().Get(Source.Api + "?request=validateSessionToken&data="+json);
+                    boolean success = new jStatus().getStatus(resp);
+                    if (success && new JSONObject(resp).getBoolean("isValid"))
+                    {
+                        // User is valid and authenticated
+                        Log.d(TAG, "User is valid and has a session");
+                    }
+                    else
+                    {
+                        runOnUiThread(this::loadSingInOptions);
+                    }
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            });
+        }
+        else
+        {
+            loadSingInOptions();
+        }
+
+    }
+
+    private void loadSingInOptions()
+    {
         load_Google_SingIn();
         load_Facebook_SignIn();
     }
+
 
     private void load_Google_SingIn()
     {
@@ -182,8 +230,22 @@ public class SignInActivity extends AppCompatActivity
                     add(new Pair<>("request", "oAuth"));
                     add(new Pair<>("challenge", jSic));
                 }});
-                if (resp != null)
-                    Log.d(TAG + " SIC", resp);
+                boolean success = new jStatus().getStatus(resp);
+                if (success)
+                {
+                    try
+                    {
+                        AuthSession authSession = new jAuthSession().decode(resp);
+                        new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, authSession.asList());
+                    }
+                    catch (JSONException e) {   e.printStackTrace(); }
+                }
+                else
+                {
+                    Log.e(TAG, "Request failed");
+                }
+
+
             });
 
             Log.d(TAG, jSic);
