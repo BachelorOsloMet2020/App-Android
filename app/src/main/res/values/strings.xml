@@ -8,8 +8,12 @@
     <string name="signin_mail">Epost</string>
     <string name="skip_signin">Hopp over</string>
 
+    <string name="home">Hjem</string>
+    <string name="missing">Savnet</string>
+    <string name="found">Funnet</string>
+    <string name="blogg">Blogg</string>
+
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
-
-
+    
 </resources>
