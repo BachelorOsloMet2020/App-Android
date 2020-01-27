@@ -107,6 +107,11 @@ public class SignInActivity extends AppCompatActivity
     {
         load_Google_SingIn();
         load_Facebook_SignIn();
+
+        findViewById(R.id.login_skip).setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
     }
 
 

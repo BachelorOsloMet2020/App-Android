@@ -6,6 +6,7 @@
     <string name="signin_facebook">Facebook</string>
     <string name="or">eller</string>
     <string name="signin_mail">Epost</string>
+    <string name="skip_signin">Hopp over</string>
 
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
