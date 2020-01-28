@@ -7,6 +7,7 @@ public class Profile
     private String Email;
     private String Tlf;
     private String Address;
+    private String Image;
 
     /**
      * Only to be used for SignIn Channelge
@@ -22,13 +23,14 @@ public class Profile
         this.Email = Email;
     }
 
-    public Profile(String FirstName, String LastName, String Email, String Tlf, String Address)
+    public Profile(String FirstName, String LastName, String Email, String Tlf, String Address, String Image)
     {
         this.FirstName = FirstName;
         this.LastName = LastName;
         this.Email = Email;
         this.Tlf = Tlf;
         this.Address = Address;
+        this.Image = Image;
     }
 
 
@@ -55,5 +57,10 @@ public class Profile
     public String getAddress()
     {
         return Address;
+    }
+
+    public String getImage()
+    {
+        return Image;
     }
 }
