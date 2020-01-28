@@ -53,8 +53,10 @@ public class PetPosterAdapter extends BaseAdapter
         }
         ProfileAnimal profileAnimal = item.get(i);
         Profile profile = itemUser.get(i);
-        //Hvordan få image url til å postes i/til riktig ImageView
+
+        //Hvordan få image url til å postes i/til og vises riktig ImageView???
         //((TextView) view.findViewById(R.id.img_pet)).setText(profileAnimal.getImage());
+
         ((TextView) view.findViewById(R.id.txt_name)).setText(profileAnimal.getName());
         ((TextView) view.findViewById(R.id.txt_address)).setText(profile.getAddress());
 
