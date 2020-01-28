@@ -16,6 +16,15 @@
     <string name="contact">Kontakt</string>
     <string name="show_map">Vis i kart</string>
 
+
+    <string name="create_profile_hint_firstName">Fornavn</string>
+    <string name="create_profile_hint_lastName">Etternavn</string>
+    <string name="create_profile_hint_phone">Telefonnummer</string>
+    <string name="create_profile_hint_address">Adresse</string>
+    <string name="create_profile_hint_postCode">Postnummer</string>
+
+    <string name="create_profile_image_desc">Profil bilde</string>
+
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
 
