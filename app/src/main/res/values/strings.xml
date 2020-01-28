@@ -13,6 +13,8 @@
     <string name="found">Funnet</string>
     <string name="blogg">Blogg</string>
     <string name="adp_home_poster_distance">Avstand</string>
+    <string name="contact">Kontakt</string>
+    <string name="show_map">Vis i kart</string>
 
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
