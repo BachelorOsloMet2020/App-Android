@@ -13,21 +13,23 @@
         android:layout_marginTop="32dp"
         android:src="@drawable/ic_dyrebarlogo"
         android:tint="#000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.110000014" />
 
     <TextView
         android:id="@+id/textView"
-        android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signin"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/login_google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintVertical_bias="0.83" />
 
     <Button
         android:id="@+id/login_google"
@@ -67,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/signin"
+        android:text="@string/or"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +86,7 @@
         android:elevation="3dp"
         android:paddingStart="16dp"
         android:paddingEnd="40dp"
-        android:text="@string/signin"
+        android:text="@string/signin_mail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
