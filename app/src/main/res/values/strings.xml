@@ -25,6 +25,8 @@
 
     <string name="create_profile_image_desc">Profil bilde</string>
 
+    <string name="report_missing_btn">Meld Savnet</string>
+
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
 
