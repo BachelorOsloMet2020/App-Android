@@ -43,7 +43,6 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -147,7 +146,7 @@ public class SignInActivity extends AppCompatActivity
          * returns null if none */
 
         GoogleSignInAccount gsia = GoogleSignIn.getLastSignedInAccount(this);
-        if (gsia != null && !Source.ovverideGoogleAutoResignIn)
+        if (gsia != null && !Source.suppressGoogleAutoResignIn)
         {
             /* Needs to provide data for backend challenge
              * This i needed in order to verify the authenticity of the user and session*/

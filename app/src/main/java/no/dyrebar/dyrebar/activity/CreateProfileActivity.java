@@ -73,6 +73,13 @@ public class CreateProfileActivity extends AppCompatActivity
                         add(new Pair<>("token", authSession.getToken()));
                     }});
                     boolean success = new jStatus().getStatus(resp);
+                    if(success)
+                    {
+                        runOnUiThread(() -> {
+                            Intent homeIntent = new Intent(this, MainActivity.class);
+                            startActivity(homeIntent);
+                        });
+                    }
                 });
             }
         });
