@@ -43,6 +43,7 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -75,20 +76,34 @@ public class SignInActivity extends AppCompatActivity
                 try
                 {
                     String json = new jAuthSession().encode(authSession);
-                    String resp = new Api().Get(Source.Api + "?request=isSessionValid&data="+json);
+                    String resp = new Api().Post(Source.Api, new ArrayList<Pair<String, ?>>(){{
+                        add(new Pair<>("auth", "validate"));
+                        add(new Pair<>("data", json));
+                    }});
                     boolean success = new jStatus().getStatus(resp);
                     if (success && new JSONObject(resp).getBoolean("isValid"))
                     {
-                        // User is valid and authenticated
                         Log.d(TAG, "User is valid and has a session");
-                        runOnUiThread(() -> {
+                        boolean profileExists = hasProfile(new Api(), authSession);
+
+                        if (profileExists)
+                        {
                             startActivity(new Intent(this, MainActivity.class));
                             finish();
-                        });
+                        }
+                        /*else
+                        {
+                            Intent createProfile = new Intent(this, CreateProfileActivity.class);
+                            Bundle bunde = new Bundle();
+                            bunde.putString("token", authSession.getToken());
+                            startActivity(createProfile);
+                        }*/
                     }
                     else
                     {
+                        Log.e(TAG, "Request failed");
                         runOnUiThread(this::loadSingInOptions);
+
                     }
                 }
                 catch (JSONException e)
@@ -97,12 +112,10 @@ public class SignInActivity extends AppCompatActivity
                 }
             });
         }
-        else
-        {
-            loadSingInOptions();
-        }
+        loadSingInOptions();
 
     }
+
 
     private void loadSingInOptions()
     {
@@ -132,8 +145,9 @@ public class SignInActivity extends AppCompatActivity
 
         /* Gets the logged inn account
          * returns null if none */
+
         GoogleSignInAccount gsia = GoogleSignIn.getLastSignedInAccount(this);
-        if (gsia != null)
+        if (gsia != null && !Source.ovverideGoogleAutoResignIn)
         {
             /* Needs to provide data for backend challenge
              * This i needed in order to verify the authenticity of the user and session*/
@@ -145,11 +159,11 @@ public class SignInActivity extends AppCompatActivity
                     new Profile(
                             gsia.getGivenName(),
                             gsia.getFamilyName(),
-                            gsia.getEmail()
+                            gsia.getEmail(),
+                            ((gsia.getPhotoUrl() != null) ? gsia.getPhotoUrl().toString() : "")
                     ),
                     Device_ID
             ));
-            //gsia.get
         }
 
         // Enable login button
@@ -233,27 +247,47 @@ public class SignInActivity extends AppCompatActivity
             Api api = new Api();
             AsyncTask.execute(() ->
             {
-                String method = (sic.getProvider() == AuthChallenge.oAuthProvider.FACEBOOK || sic.getProvider() == AuthChallenge.oAuthProvider.GOOGLE) ? "oAuth" : "pAuth";
-                String resp = api.Post(Source.Api, new ArrayList<Pair<String, String>>(){{
-                    add(new Pair<>("request", method));
+                String resp = api.Post(Source.Api, new ArrayList<Pair<String, ?>>(){{
+                    add(new Pair<>("auth", sic.getProvider().toString()));
                     add(new Pair<>("data", jSic));
                 }});
                 boolean success = new jStatus().getStatus(resp);
-                if (success)
+                if (success && sic.getProfile().getEmail() != null && sic.getProfile().getEmail().length() > 0)
                 {
                     try
                     {
                         AuthSession authSession = new jAuthSession().decode(resp);
                         new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, authSession.asList());
+                        boolean profileExists = hasProfile(api, authSession);
+
+                        runOnUiThread(() -> {
+                            if (profileExists)
+                            {
+                                startActivity(new Intent(this, MainActivity.class));
+                                finish();
+                            }
+                            else
+                            {
+                                Intent createProfile = new Intent(this, CreateProfileActivity.class);
+                                Bundle bunde = new Bundle();
+                                bunde.putSerializable("profile", sic.getProfile());
+                                bunde.putString("token", authSession.getToken());
+                                createProfile.putExtras(bunde);
+                                startActivity(createProfile);
+                            }
+                        });
                     }
                     catch (JSONException e) {   e.printStackTrace(); }
                 }
                 else
                 {
+                    if (sic.getProfile().getEmail() == null || sic.getProfile().getEmail().length() == 0)
+                    {
+                        // Notify user that email is required
+                    }
+
                     Log.e(TAG, "Request failed");
                 }
-
-
             });
 
             Log.d(TAG, jSic);
@@ -263,6 +297,24 @@ public class SignInActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+    /**
+     * Run within AsyncTask
+     * @param authSession
+     * @return true if profile exists
+     */
+    private boolean hasProfile(Api api, AuthSession authSession)
+    {
+        String param = api.getData(new ArrayList<Pair<String, ?>>() {{
+            add(new Pair<>("request", "myProfileId"));
+            add(new Pair<>("authId", authSession.getAuthId()));
+        }});
+        String url = Source.Api + "?" + param;
+        String resp = api.Get(url);
+        boolean success = new jStatus().getStatus(resp);
+        return success;
+    }
+
 
     private void GSO_SignInResult(Task<GoogleSignInAccount> completedTask)
     {
@@ -277,7 +329,8 @@ public class SignInActivity extends AppCompatActivity
                     new Profile(
                             gsia.getGivenName(),
                             gsia.getFamilyName(),
-                            gsia.getEmail()
+                            gsia.getEmail(),
+                            ((gsia.getPhotoUrl() != null) ? gsia.getPhotoUrl().toString() : "")
                     ),
                     Device_ID
             ));

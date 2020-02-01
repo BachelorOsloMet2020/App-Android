@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,17 +32,33 @@ public class Api
         if (url != null)
         {
             try {
-                HttpsURLConnection client = (HttpsURLConnection )url.openConnection();
-                client.setSSLSocketFactory(Certificate.sslContext.getSocketFactory());
+                if (Source.ovverideHTTPS)
+                {
+                    HttpURLConnection client = (HttpURLConnection )url.openConnection();
                 /*if (BuildConfig.DEBUG)
                     client.setHostnameVerifier(Certificate.hostnameVerifier());*/
 
-                client.setRequestMethod("GET");
-                client.setReadTimeout(5000);
-                client.setConnectTimeout(5000);
-                client.setDoOutput(false);
-                client.connect();
-                return readStream(new InputStreamReader(url.openStream()));
+                    client.setRequestMethod("GET");
+                    client.setReadTimeout(5000);
+                    client.setConnectTimeout(5000);
+                    client.setDoOutput(false);
+                    client.connect();
+                    return readStream(new InputStreamReader(url.openStream()));
+                }
+                else
+                {
+                    HttpsURLConnection client = (HttpsURLConnection )url.openConnection();
+                    client.setSSLSocketFactory(Certificate.sslContext.getSocketFactory());
+                /*if (BuildConfig.DEBUG)
+                    client.setHostnameVerifier(Certificate.hostnameVerifier());*/
+
+                    client.setRequestMethod("GET");
+                    client.setReadTimeout(5000);
+                    client.setConnectTimeout(5000);
+                    client.setDoOutput(false);
+                    client.connect();
+                    return readStream(new InputStreamReader(url.openStream()));
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -50,7 +67,7 @@ public class Api
         return null;
     }
 
-    public String Post(String _url, ArrayList<Pair<String, String>> alp)
+    public String Post(String _url, ArrayList<Pair<String, ?>> alp)
     {
         String data = getData(alp);
         String res = null;
@@ -58,24 +75,41 @@ public class Api
         if (url != null)
         {
             try {
-                HttpsURLConnection client = (HttpsURLConnection )url.openConnection();
-                client.setSSLSocketFactory(Certificate.sslContext.getSocketFactory());
+                if (Source.ovverideHTTPS)
+                {
+                    HttpURLConnection client = (HttpURLConnection )url.openConnection();
+
+                    client.setDoOutput(true);
+                    client.setRequestMethod("POST");
+
+                    DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                    dos.writeBytes(data);
+                    dos.flush();
+                    //osw.close();
+
+                    InputStreamReader isr = new InputStreamReader(client.getInputStream());
+                    res = readStream(isr);
+                    isr.close();
+                }
+                else
+                {
+                    HttpsURLConnection client = (HttpsURLConnection )url.openConnection();
+                    client.setSSLSocketFactory(Certificate.sslContext.getSocketFactory());
                 /*if (BuildConfig.DEBUG)
                     client.setHostnameVerifier(Certificate.hostnameVerifier());*/
 
-                client.setDoOutput(true);
-                client.setRequestMethod("POST");
+                    client.setDoOutput(true);
+                    client.setRequestMethod("POST");
 
-                DataOutputStream dos = new DataOutputStream(client.getOutputStream());
-                dos.writeBytes(data);
-                dos.flush();
-                //osw.close();
+                    DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                    dos.writeBytes(data);
+                    dos.flush();
+                    //osw.close();
 
-                InputStreamReader isr = new InputStreamReader(client.getInputStream());
-                res = readStream(isr);
-                isr.close();
-
-
+                    InputStreamReader isr = new InputStreamReader(client.getInputStream());
+                    res = readStream(isr);
+                    isr.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -87,12 +121,12 @@ public class Api
         return res;
     }
 
-    public String getData(ArrayList<Pair<String, String>> param)
+    public String getData(ArrayList<Pair<String, ?>> param)
     {
         Uri.Builder builder = new Uri.Builder();
-        for(Pair<String, String> p : param)
+        for(Pair<String, ?> p : param)
         {
-            builder.appendQueryParameter(p.first, p.second);
+            builder.appendQueryParameter(p.first, String.valueOf(p.second));
         }
         String query = builder.build().getEncodedQuery();
         return query;

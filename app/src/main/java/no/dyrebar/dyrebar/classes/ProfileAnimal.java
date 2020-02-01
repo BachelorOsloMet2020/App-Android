@@ -1,7 +1,9 @@
 package no.dyrebar.dyrebar.classes;
 
 
-public class ProfileAnimal
+import java.io.Serializable;
+
+public class ProfileAnimal implements Serializable
 {
     private int _ID;
     private int user_ID;

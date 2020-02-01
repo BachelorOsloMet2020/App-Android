@@ -70,23 +70,24 @@
 
         <Button
             android:id="@+id/btn_contact"
-            android:layout_width="111dp"
-            android:layout_height="39dp"
+            android:layout_width="125dp"
+            android:layout_height="45dp"
             android:layout_marginTop="16dp"
             android:drawableStart="@drawable/ic_mail_outline_black_24dp"
             android:elevation="1dp"
             android:paddingStart="8dp"
             android:paddingEnd="10dp"
+
             android:text="@string/contact"
             app:layout_constraintStart_toStartOf="@+id/txt_address"
             app:layout_constraintTop_toBottomOf="@+id/txt_address" />
 
         <Button
             android:id="@+id/btn_map"
-            android:layout_width="111dp"
-            android:layout_height="39dp"
+            android:layout_width="125dp"
+            android:layout_height="45dp"
             android:layout_marginStart="8dp"
-            android:drawableStart="@drawable/ic_google"
+            android:drawableStart="@drawable/ic_navigation_black_24dp"
             android:elevation="1dp"
             android:paddingStart="8dp"
             android:paddingEnd="10dp"

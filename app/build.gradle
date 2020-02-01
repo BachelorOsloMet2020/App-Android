@@ -39,8 +39,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     testImplementation 'org.robolectric:robolectric:4.3'
 
-    /* Image */
+    /* Image APLv2.0*/
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    /* Image Cropping  APLv2.0*/
+    implementation 'com.github.yalantis:ucrop:2.2.4'
+
 
     /**
      * Sign-in integration

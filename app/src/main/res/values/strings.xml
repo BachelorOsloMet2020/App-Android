@@ -27,6 +27,12 @@
 
     <string name="report_missing_btn">Meld Savnet</string>
 
+    <string name="create_profile_error_firstName">Vennligst fyll inn fornavn</string>
+    <string name="create_profile_error_lastName">Vennligst fyll inn etternavn</string>
+    <string name="create_profile_error_tlf">Vennligst fyll inn telefon nummer</string>
+    <string name="create_profile_error_address">Vennligst fyll inn adresse</string>
+    <string name="create_profile_error_postCode">Vennligst fyll inn postnummer</string>
+
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
 

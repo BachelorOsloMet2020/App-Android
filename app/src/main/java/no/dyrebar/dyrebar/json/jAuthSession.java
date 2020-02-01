@@ -10,9 +10,11 @@ public class jAuthSession
 {
     public AuthSession decode(String json) throws JSONException, IllegalArgumentException
     {
-        JSONObject o = new JSONObject(json);
+        JSONObject root = new JSONObject(json);
+        JSONObject o = root.getJSONObject("data");
         return new AuthSession(
                 o.getString("id"),
+                o.getInt("authId"),
                 o.getString("session_token"),
                 AuthChallenge.oAuthProvider.valueOf(o.getString("provider")),
                 o.getLong("time")
@@ -23,9 +25,9 @@ public class jAuthSession
     {
         JSONObject o = new JSONObject();
         o.put("id", session.getId());
+        o.put("authId", session.getAuthId());
         o.put("session_token", session.getToken());
         o.put("provider", session.getProvider());
-        o.put("action", "VALIDATE");
         return o.toString();
     }
 
