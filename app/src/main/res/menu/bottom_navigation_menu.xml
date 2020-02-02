@@ -6,11 +6,11 @@
         android:title="@string/home"/>
     <item
         android:id="@+id/nav_missing"
-        android:icon="@drawable/ic_dlogo"
+        android:icon="@drawable/ic_missing_pets"
         android:title="@string/missing"/>
     <item
         android:id="@+id/nav_found"
-        android:icon="@drawable/ic_dlogo"
+        android:icon="@drawable/ic_pets_black_24dp"
         android:title="@string/found"/>
     <item
         android:id="@+id/nav_blogg"

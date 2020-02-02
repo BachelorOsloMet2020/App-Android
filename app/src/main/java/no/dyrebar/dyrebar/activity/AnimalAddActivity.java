@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import no.dyrebar.dyrebar.R;
 
-public class AddAnimalActivity extends AppCompatActivity
+public class AnimalAddActivity extends AppCompatActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)

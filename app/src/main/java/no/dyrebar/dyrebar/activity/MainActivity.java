@@ -36,17 +36,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
-        AsyncTask.execute(() ->
-        {
-            Api api = new Api();
-            String data = api.Get(Source.Api + "?request=heartbeat");
-            Log.d("TEST", data);
-        });
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         bottomNavigationView.getMenu().getItem(0).setChecked(true);
-        //LaunchFragment(new HomeFragment(), "");
+        LaunchFragment(new HomeFragment(), "");
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = menuItem ->

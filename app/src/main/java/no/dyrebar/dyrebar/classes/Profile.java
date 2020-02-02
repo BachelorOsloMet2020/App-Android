@@ -33,12 +33,6 @@ public class Profile implements Serializable
      * @param LastName
      * @param Email
      */
-    public Profile(String FirstName, String LastName, String Email)
-    {
-        this.FirstName = FirstName;
-        this.LastName = LastName;
-        this.Email = Email;
-    }
 
     public Profile(String FirstName, String LastName, String Email, String Image)
     {
@@ -48,28 +42,6 @@ public class Profile implements Serializable
         this.Image = Image;
     }
 
-    public Profile(String FirstName, String LastName, String Email, String Tlf, String Address, int ZipCode, String Image)
-    {
-        this.FirstName = FirstName;
-        this.LastName = LastName;
-        this.Email = Email;
-        this.Tlf = Tlf;
-        this.Address = Address;
-        this.Image = Image;
-        this.ZipCode = ZipCode;
-    }
-
-    public Profile(String id, String FirstName, String LastName, String Email, String Tlf, String Address, int ZipCode, String Image)
-    {
-        this.id = id;
-        this.FirstName = FirstName;
-        this.LastName = LastName;
-        this.Email = Email;
-        this.Tlf = Tlf;
-        this.Address = Address;
-        this.Image = Image;
-        this.ZipCode = ZipCode;
-    }
 
     public Profile(String id, int auhtId, String FirstName, String LastName, String Email, String Tlf, String Address, int ZipCode, String Image)
     {

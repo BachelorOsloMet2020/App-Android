@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import no.dyrebar.dyrebar.R;
 
-public class UserProfileActivity extends AppCompatActivity
+public class ProfileActivity extends AppCompatActivity
 {
         ImageView profilePicture;
         ImageView editProfile;
@@ -25,7 +25,7 @@ public class UserProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        profilePicture = (ImageView) findViewById(R.id.user_profile_picture);
+        profilePicture = (ImageView) findViewById(R.id.profile_image_card);
         editProfile = (ImageView) findViewById(R.id.edit_user_profile);
         userName = (TextView) findViewById(R.id.user_profile_name);
         userAddress = (TextView) findViewById(R.id.user_profile_address);
@@ -48,7 +48,7 @@ public class UserProfileActivity extends AppCompatActivity
 
     public void addAnimal()
     {
-        Intent intent = new Intent(this, AddAnimalActivity.class);
+        Intent intent = new Intent(this, AnimalAddActivity.class);
     }
 
     public void editProfile()

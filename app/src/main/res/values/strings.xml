@@ -17,11 +17,19 @@
     <string name="show_map">Vis i kart</string>
 
 
+    <string name="challenge_sign_in_title">Vennligst vent</string>
+    <string name="challenge_sing_in_message">Validerer innloggingen</string>
+
     <string name="create_profile_hint_firstName">Fornavn</string>
     <string name="create_profile_hint_lastName">Etternavn</string>
     <string name="create_profile_hint_phone">Telefonnummer</string>
     <string name="create_profile_hint_address">Adresse</string>
     <string name="create_profile_hint_postCode">Postnummer</string>
+    <string name="create_profile_hint_email">Epost</string>
+
+    <string name="hind_password">Passord</string>
+    <string name="sign_in">Logg inn</string>
+    <string name="register">Opprett</string>
 
     <string name="create_profile_image_desc">Profil bilde</string>
 
@@ -32,6 +40,7 @@
     <string name="create_profile_error_tlf">Vennligst fyll inn telefon nummer</string>
     <string name="create_profile_error_address">Vennligst fyll inn adresse</string>
     <string name="create_profile_error_postCode">Vennligst fyll inn postnummer</string>
+    <string name="create_profile_error_email">Vennligst fyll inn epost</string>
 
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>

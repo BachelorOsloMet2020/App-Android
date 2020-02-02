@@ -8,13 +8,44 @@
     tools:context=".fragment.HomeFragment">
 
     <androidx.appcompat.widget.Toolbar
+        tools:background="@color/colorAccent"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_image_card"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                app:cardCornerRadius="27dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/create_profile_image"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:contentDescription="@string/create_profile_image_desc" />
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:textSize="18sp"
+                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="ProfileName"
+                />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

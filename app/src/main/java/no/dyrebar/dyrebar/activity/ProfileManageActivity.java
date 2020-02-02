@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Pair;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,19 +36,33 @@ import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class CreateProfileActivity extends AppCompatActivity
+public class ProfileManageActivity extends AppCompatActivity
 {
     private Profile profile;
     private AuthSession authSession;
 
     private final int AR_ID_GET_IMAGE = 1001;
-    private final int AR_ID_CROP_IMAGE = 1002;
+
+    private Mode currentMode = Mode.UNDEFINED;
+    enum Mode
+    {
+        UNDEFINED,
+        CREATE,
+        UPDATE
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
+
+
+        currentMode = Mode.valueOf(getIntent().getStringExtra("mode"));
+        if (currentMode == Mode.CREATE)
+        {
+            findViewById(R.id.create_profile_email_text).setVisibility(View.GONE);
+        }
 
         authSession = new AuthSession(new SettingsHandler(getApplicationContext()).getMultilineSetting(S.Dyrebar_Auth));
 
@@ -134,6 +149,7 @@ public class CreateProfileActivity extends AppCompatActivity
         String tlf = ((TextInputEditText)findViewById(R.id.create_profile_phone_text)).getText().toString();
         String address = ((TextInputEditText)findViewById(R.id.create_profile_address_text)).getText().toString();
         String zipcode = ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).getText().toString();
+        String email = ((TextInputEditText)findViewById(R.id.create_profile_email)).getText().toString();
 
 
 
@@ -173,6 +189,16 @@ public class CreateProfileActivity extends AppCompatActivity
         }
         else
             ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setError(null);
+        if (currentMode == Mode.UPDATE)
+        {
+            if (zipcode.length() == 0)
+            {
+                ((TextInputEditText)findViewById(R.id.create_profile_email_text)).setError(getString(R.string.create_profile_error_email));
+                validInfo = false;
+            }
+            else
+                ((TextInputEditText)findViewById(R.id.create_profile_email_text)).setError(null);
+        }
 
         if (validInfo)
         {
@@ -181,6 +207,8 @@ public class CreateProfileActivity extends AppCompatActivity
             profile.setTlf(tlf);
             profile.setAddress(address);
             profile.setZipCode(Integer.valueOf(zipcode));
+            if (currentMode == Mode.UPDATE)
+                profile.setEmail(email);
         }
 
         return validInfo;

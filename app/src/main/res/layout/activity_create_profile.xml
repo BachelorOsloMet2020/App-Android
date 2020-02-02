@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CreateProfileActivity">
+    tools:context=".activity.ProfileManageActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -12,7 +12,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".activity.CreateProfileActivity">
+            tools:context=".activity.ProfileManageActivity">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/create_profile_image_card"
@@ -49,7 +49,8 @@
                     android:id="@+id/create_profile_firstName_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/create_profile_hint_firstName" />
+                    android:hint="@string/create_profile_hint_firstName"
+                    android:inputType="textPersonName|text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +69,8 @@
                     android:id="@+id/create_profile_lastName_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/create_profile_hint_lastName" />
+                    android:hint="@string/create_profile_hint_lastName"
+                    android:inputType="textPersonName|text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,7 +89,8 @@
                     android:id="@+id/create_profile_phone_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/create_profile_hint_phone" />
+                    android:hint="@string/create_profile_hint_phone"
+                    android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +109,8 @@
                     android:id="@+id/create_profile_address_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/create_profile_hint_address" />
+                    android:hint="@string/create_profile_hint_address"
+                    android:inputType="textPostalAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,10 +130,35 @@
                     android:id="@+id/create_profile_postCode_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/create_profile_hint_postCode" />
+                    android:hint="@string/create_profile_hint_postCode"
+                    android:inputType="number"
+                    android:numeric="integer"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_profile_postCode">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_profile_email_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/create_profile_hint_postCode"
+                    android:inputType="number"
+                    android:numeric="integer"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

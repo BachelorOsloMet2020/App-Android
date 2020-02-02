@@ -9,6 +9,7 @@ import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.AuthChallenge;
+import no.dyrebar.dyrebar.dialog.IndicatorDialog;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jAuthSession;
 import no.dyrebar.dyrebar.json.jProfile;
@@ -66,10 +67,14 @@ public class SignInActivity extends AppCompatActivity
 
         SettingsHandler sh = new SettingsHandler(getApplicationContext());
         Map<String, ?> map = sh.getMultilineSetting(S.Dyrebar_Auth);
+        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sing_in_message));
         if (map.size() > 0)
             authSession = new AuthSession(map);
         if (authSession != null && authSession.objVal())
         {
+            setLoginButtonEnabled(false);
+            id.Show();
+
             // Request Token validation
             AsyncTask.execute(() -> {
                 try
@@ -85,23 +90,26 @@ public class SignInActivity extends AppCompatActivity
                         Log.d(TAG, "User is valid and has a session");
                         boolean profileExists = hasProfile(new Api(), authSession);
 
-                        if (profileExists)
-                        {
-                            startActivity(new Intent(this, MainActivity.class));
-                            finish();
-                        }
-                        /*else
-                        {
-                            Intent createProfile = new Intent(this, CreateProfileActivity.class);
-                            Bundle bunde = new Bundle();
-                            bunde.putString("token", authSession.getToken());
-                            startActivity(createProfile);
-                        }*/
+                        runOnUiThread(() -> {
+                            id.Hide();
+                            if (profileExists)
+                            {
+                                startActivity(new Intent(this, MainActivity.class));
+                                finish();
+                            }
+                            else
+                            {
+                                setLoginButtonEnabled(true);
+                            }
+                        });
                     }
                     else
                     {
                         Log.e(TAG, "Request failed");
-                        runOnUiThread(this::loadSingInOptions);
+                        runOnUiThread(() -> {
+                            id.Hide();
+                            loadSingInOptions();
+                        });
 
                     }
                 }
@@ -111,6 +119,8 @@ public class SignInActivity extends AppCompatActivity
                 }
             });
         }
+        if (id.isVisible())
+            id.Hide();
         loadSingInOptions();
 
     }
@@ -120,6 +130,8 @@ public class SignInActivity extends AppCompatActivity
     {
         load_Google_SingIn();
         load_Facebook_SignIn();
+        load_Email_SignIn();
+
 
         findViewById(R.id.login_skip).setOnClickListener(v -> {
             startActivity(new Intent(this, MainActivity.class));
@@ -127,6 +139,22 @@ public class SignInActivity extends AppCompatActivity
         });
     }
 
+    private void load_Email_SignIn()
+    {
+        findViewById(R.id.login_email).setOnClickListener(v -> {
+            Intent email = new Intent(this, SignInEmailActivity.class);
+            startActivity(email);
+        });
+    }
+
+    private void setLoginButtonEnabled(boolean enabled)
+    {
+        findViewById(R.id.login_google).setEnabled(enabled);
+        findViewById(R.id.login_facebook).setEnabled(enabled);
+        findViewById(R.id.login_email).setEnabled(enabled);
+        findViewById(R.id.login_skip).setEnabled(enabled);
+
+    }
 
     private void load_Google_SingIn()
     {
@@ -239,6 +267,10 @@ public class SignInActivity extends AppCompatActivity
 
     private void runLoginChallenge(AuthChallenge sic)
     {
+        setLoginButtonEnabled(false);
+        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sing_in_message));
+        id.Show();
+
         Log.d(TAG, sic.toString());
         try
         {
@@ -260,6 +292,7 @@ public class SignInActivity extends AppCompatActivity
                         boolean profileExists = hasProfile(api, authSession);
 
                         runOnUiThread(() -> {
+                            id.Hide();
                             if (profileExists)
                             {
                                 startActivity(new Intent(this, MainActivity.class));
@@ -267,19 +300,24 @@ public class SignInActivity extends AppCompatActivity
                             }
                             else
                             {
-                                Intent createProfile = new Intent(this, CreateProfileActivity.class);
+                                Intent createProfile = new Intent(this, ProfileManageActivity.class);
                                 Bundle bunde = new Bundle();
                                 bunde.putSerializable("profile", sic.getProfile());
+                                bunde.putString("mode", ProfileManageActivity.Mode.CREATE.toString());
                                 bunde.putString("token", authSession.getToken());
                                 createProfile.putExtras(bunde);
                                 startActivity(createProfile);
                             }
                         });
                     }
-                    catch (JSONException e) {   e.printStackTrace(); }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
                 else
                 {
+
                     if (sic.getProfile().getEmail() == null || sic.getProfile().getEmail().length() == 0)
                     {
                         // Notify user that email is required
