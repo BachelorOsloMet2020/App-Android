@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment
             fifl.onSetToolbar(toolbar);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
