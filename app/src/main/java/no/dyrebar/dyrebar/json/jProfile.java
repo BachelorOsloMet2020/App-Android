@@ -40,7 +40,7 @@ public class jProfile
                     o.getString("email"),
                     o.getString("phoneNumber"),
                     o.getString("address"),
-                    o.getInt("postalCode"),
+                    o.getInt("postNumber"),
                     o.getString("image")
             );
             return profile;
@@ -64,7 +64,7 @@ public class jProfile
             o.put("lastName", profile.getLastName());
             o.put("email", profile.getEmail());
             o.put("address", profile.getAddress());
-            o.put("postnumber", profile.getZipCode());
+            o.put("postNumber", profile.getpostNumber());
             o.put("phone", profile.getTlf());
             o.put("image", profile.getImage());
             if (profile.getImageType() != null && profile.getImageType().length() > 0)

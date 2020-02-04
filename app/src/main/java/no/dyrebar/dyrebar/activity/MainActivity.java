@@ -1,8 +1,12 @@
 package no.dyrebar.dyrebar.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,20 +18,31 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.S;
+import no.dyrebar.dyrebar.classes.AuthSession;
+import no.dyrebar.dyrebar.classes.Profile;
+import no.dyrebar.dyrebar.extlib.PicassoCircleTransform;
 import no.dyrebar.dyrebar.fragment.BloggFragment;
 import no.dyrebar.dyrebar.fragment.FoundFragment;
 import no.dyrebar.dyrebar.fragment.HomeFragment;
 import no.dyrebar.dyrebar.fragment.MissingFragment;
+import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.interfaces.FragmentInterface;
+import no.dyrebar.dyrebar.json.jProfile;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
 public class MainActivity extends AppCompatActivity implements FragmentInterface.FragmentListener
 {
+
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,11 +50,53 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (getIntent().hasExtra("profile"))
+        {
+            profile = (Profile) getIntent().getSerializableExtra("profile");
+            onCreateCompleted();
+        }
+        else
+        {
+            AuthSession authSession;
+            Map<String, ?> map = new SettingsHandler(getApplicationContext()).getMultilineSetting(S.Dyrebar_Auth);
+            if (map.size() > 0)
+                authSession = new AuthSession(map);
+            else
+                authSession = null;
+            if (authSession != null)
+            {
+                AsyncTask.execute(() -> {
+
+                    String presp = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
+                    {{
+                        add(new Pair<>("request", "myProfile"));
+                        add(new Pair<>("token", authSession.getToken()));
+                        add(new Pair<>("authId", authSession.getAuthId()));
+                    }});
+                    runOnUiThread(() -> {
+                        profile = new jProfile().decode(presp);
+                        onCreateCompleted();
+                    });
+
+                });
+            }
+            else
+            {
+                /** Redirecting to sing in if data is missing */
+                startActivity(new Intent(this, SignInActivity.class));
+                finish();
+            }
+        }
+    }
+
+    private void onCreateCompleted()
+    {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         bottomNavigationView.getMenu().getItem(0).setChecked(true);
         LaunchFragment(new HomeFragment(), "");
     }
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = menuItem ->
     {
@@ -68,6 +125,15 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     private void LaunchFragment(Fragment fragment, final String tag)
     {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (fragment instanceof HomeFragment)
+            ((HomeFragment)fragment).setOnMainActivityListener(this);
+        else if (fragment instanceof FoundFragment)
+            ((FoundFragment)fragment).setOnMainActivityListener(this);
+        else if (fragment instanceof MissingFragment)
+            ((MissingFragment)fragment).setOnMainActivityListener(this);
+        else if (fragment instanceof BloggFragment)
+            ((BloggFragment)fragment).setOnMainActivityListener(this);
+
         if (prevFragment == null && fragmentTransaction.isEmpty() && !hasFragments())
         {
             fragmentTransaction.add(R.id.container_fragments, fragment, tag);
@@ -78,14 +144,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
             fragmentTransaction.replace(R.id.container_fragments, fragment, tag);
         }
         fragmentTransaction.commitNow();
-        if (fragment instanceof HomeFragment)
-            ((HomeFragment)fragment).setOnMainActivityListener(this);
-        else if (fragment instanceof FoundFragment)
-            ((FoundFragment)fragment).setOnMainActivityListener(this);
-        else if (fragment instanceof MissingFragment)
-            ((MissingFragment)fragment).setOnMainActivityListener(this);
-        else if (fragment instanceof BloggFragment)
-            ((BloggFragment)fragment).setOnMainActivityListener(this);
+
         prevFragment = fragment;
     }
 
@@ -112,9 +171,26 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     @Override
     public void onSetToolbar(Toolbar toolbar)
     {
-        if (toolbar != null)
-            setSupportActionBar(toolbar);
+        if (toolbar == null)
+            return;
+        setSupportActionBar(toolbar);
+
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        if (toolbar.findViewById(R.id.toolbar_profile_image) != null && profile != null)
+        {
+            ImageView profileImage = toolbar.findViewById(R.id.toolbar_profile_image);
+            Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into(profileImage);
+        }
+        if (toolbar.findViewById(R.id.toolbar_profile_name) != null && profile != null)
+            ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(profile.getFirstName());
+
+    }
+
+    @Override
+    public Profile getProfile()
+    {
+        return profile;
     }
 }

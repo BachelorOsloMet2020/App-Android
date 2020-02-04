@@ -128,6 +128,7 @@ public class SignInActivity extends AppCompatActivity
 
     private void loadSingInOptions()
     {
+        setLoginButtonEnabled(true);
         load_Google_SingIn();
         load_Facebook_SignIn();
         load_Email_SignIn();

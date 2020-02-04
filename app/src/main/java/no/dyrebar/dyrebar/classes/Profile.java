@@ -16,7 +16,7 @@ public class Profile implements Serializable
     private String Email;
     private String Tlf;
     private String Address;
-    private int ZipCode;
+    private int postNumber;
 
     private String Image;
     private String imageType;
@@ -43,7 +43,7 @@ public class Profile implements Serializable
     }
 
 
-    public Profile(String id, int auhtId, String FirstName, String LastName, String Email, String Tlf, String Address, int ZipCode, String Image)
+    public Profile(String id, int auhtId, String FirstName, String LastName, String Email, String Tlf, String Address, int postNumber, String Image)
     {
         this.id = id;
         this.authId = auhtId;
@@ -53,7 +53,7 @@ public class Profile implements Serializable
         this.Tlf = Tlf;
         this.Address = Address;
         this.Image = Image;
-        this.ZipCode = ZipCode;
+        this.postNumber = postNumber;
     }
 
     public Profile(Map<String, ?> map)
@@ -65,7 +65,7 @@ public class Profile implements Serializable
         this.Email = (String) map.get("email");
         this.Tlf = (String) map.get("phoneNumber");
         this.Address = (String) map.get("address");
-        this.ZipCode = (Integer) map.get("postalCode");
+        this.postNumber = (Integer) map.get("postNumber");
         this.Image = (String) map.get("image");
     }
 
@@ -104,9 +104,9 @@ public class Profile implements Serializable
         return Address;
     }
 
-    public int getZipCode()
+    public int getpostNumber()
     {
-        return ZipCode;
+        return postNumber;
     }
 
     public void setAddress(String address)
@@ -144,9 +144,9 @@ public class Profile implements Serializable
         Tlf = tlf;
     }
 
-    public void setZipCode(int zipCode)
+    public void setpostNumber(int postNumber)
     {
-        ZipCode = zipCode;
+        postNumber = postNumber;
     }
 
     public void setImage(String image)
@@ -181,7 +181,7 @@ public class Profile implements Serializable
             add(new Pair<>("email", getEmail()));
             add(new Pair<>("phoneNumber", getTlf()));
             add(new Pair<>("address", getAddress()));
-            add(new Pair<>("postalCode", getZipCode()));
+            add(new Pair<>("postNumber", getpostNumber()));
             add(new Pair<>("image", getImage()));
         }};
         return ls;

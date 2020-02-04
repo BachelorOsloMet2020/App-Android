@@ -16,5 +16,6 @@ public class FragmentInterface
     public interface FragmentListener
     {
         void onSetToolbar(Toolbar toolbar);
+        Profile getProfile();
     }
 }

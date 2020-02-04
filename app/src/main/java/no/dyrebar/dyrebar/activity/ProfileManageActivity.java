@@ -132,8 +132,8 @@ public class ProfileManageActivity extends AppCompatActivity
             ((TextInputEditText)findViewById(R.id.create_profile_phone_text)).setText(p.getTlf());
         if (p.getAddress() != null)
             ((TextInputEditText)findViewById(R.id.create_profile_address_text)).setText(p.getAddress());
-        if (p.getZipCode() > 0)
-            ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setText(p.getZipCode());
+        if (p.getpostNumber() > 0)
+            ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setText(p.getpostNumber());
 
         if (p.getImage().length() > 0)
             Picasso.get().load(p.getImage()).into((ImageView) findViewById(R.id.create_profile_image));
@@ -148,7 +148,7 @@ public class ProfileManageActivity extends AppCompatActivity
         String lastname = ((TextInputEditText)findViewById(R.id.create_profile_lastName_text)).getText().toString();
         String tlf = ((TextInputEditText)findViewById(R.id.create_profile_phone_text)).getText().toString();
         String address = ((TextInputEditText)findViewById(R.id.create_profile_address_text)).getText().toString();
-        String zipcode = ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).getText().toString();
+        String postNumber = ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).getText().toString();
         String email = ((TextInputEditText)findViewById(R.id.create_profile_email)).getText().toString();
 
 
@@ -182,7 +182,7 @@ public class ProfileManageActivity extends AppCompatActivity
         }
         else
             ((TextInputEditText)findViewById(R.id.create_profile_address_text)).setError(null);
-        if (zipcode.length() == 0)
+        if (postNumber.length() == 0)
         {
             ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setError(getString(R.string.create_profile_error_postCode));
             validInfo = false;
@@ -191,7 +191,7 @@ public class ProfileManageActivity extends AppCompatActivity
             ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setError(null);
         if (currentMode == Mode.UPDATE)
         {
-            if (zipcode.length() == 0)
+            if (postNumber.length() == 0)
             {
                 ((TextInputEditText)findViewById(R.id.create_profile_email_text)).setError(getString(R.string.create_profile_error_email));
                 validInfo = false;
@@ -206,7 +206,7 @@ public class ProfileManageActivity extends AppCompatActivity
             profile.setLastName(lastname);
             profile.setTlf(tlf);
             profile.setAddress(address);
-            profile.setZipCode(Integer.valueOf(zipcode));
+            profile.setpostNumber(Integer.valueOf(postNumber));
             if (currentMode == Mode.UPDATE)
                 profile.setEmail(email);
         }

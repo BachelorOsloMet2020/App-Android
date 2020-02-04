@@ -19,9 +19,11 @@ import no.dyrebar.dyrebar.App;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.AuthSession;
+import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.dialog.IndicatorDialog;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jAuthSession;
+import no.dyrebar.dyrebar.json.jProfile;
 import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
@@ -84,12 +86,18 @@ public class SplashActivity extends AppCompatActivity
                        add(new Pair<>("data", json));
                    }});
                    boolean success = new jStatus().getStatus(resp);
-
                    boolean profileExists = hasProfile(new Api(), authSession);
 
                    if (success && new JSONObject(resp).getBoolean("isValid") && profileExists)
                    {
-                       loadMainActivity();
+                       String presp = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
+                       {{
+                           add(new Pair<>("request", "myProfile"));
+                           add(new Pair<>("token", authSession.getToken()));
+                           add(new Pair<>("authId", authSession.getAuthId()));
+                       }});
+                       Profile profile = new jProfile().decode(presp);
+                       loadMainActivity(profile);
                    }
                    else
                    {
@@ -132,9 +140,15 @@ public class SplashActivity extends AppCompatActivity
         finish();
     }
 
-    private void loadMainActivity()
+    private void loadMainActivity(Profile profile)
     {
         Intent intent = new Intent(this, MainActivity.class);
+        if (profile != null)
+        {
+            Bundle b = new Bundle();
+            b.putSerializable("profile", profile);
+            intent.putExtras(b);
+        }
         startActivity(intent);
         finish();
     }

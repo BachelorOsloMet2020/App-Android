@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.squareup.picasso.Picasso;
+
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 
 public class HomeFragment extends Fragment
@@ -20,16 +26,15 @@ public class HomeFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
     }
 
+    /* Interface is being set */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
         Toolbar toolbar = (Toolbar) findView(R.id.toolbar);
-        if (fifl != null && toolbar != null)
-            fifl.onSetToolbar(toolbar);
+        fifl.onSetToolbar(toolbar);
     }
 
 
@@ -44,6 +49,7 @@ public class HomeFragment extends Fragment
     public void setOnMainActivityListener(FragmentInterface.FragmentListener fifl)
     {
         this.fifl = fifl;
+
     }
 
 

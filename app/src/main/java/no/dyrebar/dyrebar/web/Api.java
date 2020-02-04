@@ -24,7 +24,18 @@ public class Api
         return url;
     }
 
-    public String Get(String _url)
+    public String Get(String _url, ArrayList<Pair<String, ?>> alp)
+    {
+        String fullUrl = _url + "?" + getData(alp);
+        return _Get(fullUrl);
+    }
+
+    public String Get(String url)
+    {
+        return _Get(url);
+    }
+
+    private String _Get(String _url)
     {
         URL url = getUrl(_url);
         if (url != null)
