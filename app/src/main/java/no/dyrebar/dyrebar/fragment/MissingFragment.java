@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 
 public class MissingFragment extends Fragment
 {
+    FragmentInterface.FragmentListener fifl;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -25,4 +27,8 @@ public class MissingFragment extends Fragment
         return inflater.inflate(R.layout.fragment_missing, container, false);
     }
 
+    public void setOnMainActivityListener(FragmentInterface.FragmentListener fifl)
+    {
+        this.fifl = fifl;
+    }
 }

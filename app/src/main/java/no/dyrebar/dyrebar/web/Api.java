@@ -14,8 +14,6 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import no.dyrebar.dyrebar.BuildConfig;
-
 public class Api
 {
     public URL getUrl(String _url)
@@ -32,7 +30,7 @@ public class Api
         if (url != null)
         {
             try {
-                if (Source.ovverideHTTPS)
+                if (Source.overrideHTTPS)
                 {
                     HttpURLConnection client = (HttpURLConnection )url.openConnection();
                 /*if (BuildConfig.DEBUG)
@@ -75,7 +73,7 @@ public class Api
         if (url != null)
         {
             try {
-                if (Source.ovverideHTTPS)
+                if (Source.overrideHTTPS)
                 {
                     HttpURLConnection client = (HttpURLConnection )url.openConnection();
 

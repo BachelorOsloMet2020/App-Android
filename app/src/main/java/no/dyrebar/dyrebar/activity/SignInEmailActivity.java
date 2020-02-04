@@ -15,4 +15,16 @@ public class SignInEmailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_email);
     }
+
+    private void attachListeners()
+    {
+        findViewById(R.id.sign_in_email_button).setOnClickListener(v -> {
+
+        });
+        findViewById(R.id.register_email_button).setOnClickListener(v -> {
+
+        });
+    }
+
+
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,20 +22,18 @@ import no.dyrebar.dyrebar.fragment.BloggFragment;
 import no.dyrebar.dyrebar.fragment.FoundFragment;
 import no.dyrebar.dyrebar.fragment.HomeFragment;
 import no.dyrebar.dyrebar.fragment.MissingFragment;
+import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements FragmentInterface.FragmentListener
 {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        AppCenter.start(getApplication(), "43cb4531-7666-41d7-b4d7-b6d62ab299e3",
-                Analytics.class, Crashes.class);
         setContentView(R.layout.activity_main);
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -68,25 +67,32 @@ public class MainActivity extends AppCompatActivity
     private Fragment prevFragment = null;
     private void LaunchFragment(Fragment fragment, final String tag)
     {
-        final Fragment finalFragment = fragment;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (prevFragment == null && fragmentTransaction.isEmpty() && !hasFragments())
         {
-            fragmentTransaction.add(R.id.container_fragments, finalFragment, tag);
+            fragmentTransaction.add(R.id.container_fragments, fragment, tag);
         }
         else
         {
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            fragmentTransaction.replace(R.id.container_fragments, finalFragment, tag);
+            fragmentTransaction.replace(R.id.container_fragments, fragment, tag);
         }
-        fragmentTransaction.commitAllowingStateLoss();
-        prevFragment = finalFragment;
+        fragmentTransaction.commitNow();
+        if (fragment instanceof HomeFragment)
+            ((HomeFragment)fragment).setOnMainActivityListener(this);
+        else if (fragment instanceof FoundFragment)
+            ((FoundFragment)fragment).setOnMainActivityListener(this);
+        else if (fragment instanceof MissingFragment)
+            ((MissingFragment)fragment).setOnMainActivityListener(this);
+        else if (fragment instanceof BloggFragment)
+            ((BloggFragment)fragment).setOnMainActivityListener(this);
+        prevFragment = fragment;
     }
 
     /**
      * Method for checking if fragment already excist in backstack
      * Preventing NPE
-     * @return
+     * @return true if it has fragments
      */
     public boolean hasFragments()
     {
@@ -101,5 +107,14 @@ public class MainActivity extends AppCompatActivity
             return true;
         else
             return false;
+    }
+
+    @Override
+    public void onSetToolbar(Toolbar toolbar)
+    {
+        if (toolbar != null)
+            setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 }

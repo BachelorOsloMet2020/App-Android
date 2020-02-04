@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 
 public class BloggFragment extends Fragment
 {
+    FragmentInterface.FragmentListener fifl;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -23,6 +25,11 @@ public class BloggFragment extends Fragment
     {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_blogg, container, false);
+    }
+
+    public void setOnMainActivityListener(FragmentInterface.FragmentListener fifl)
+    {
+        this.fifl = fifl;
     }
 
 }
