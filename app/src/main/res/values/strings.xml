@@ -18,7 +18,10 @@
 
 
     <string name="challenge_sign_in_title">Vennligst vent</string>
-    <string name="challenge_sing_in_message">Validerer innloggingen</string>
+    <string name="challenge_sign_in_message">Validerer innloggingen</string>
+
+    <string name="challenge_register_title">Vennligst vent</string>
+    <string name="challenge_register_message">Registrerer deg hos Dyrebar</string>
 
     <string name="create_profile_hint_firstName">Fornavn</string>
     <string name="create_profile_hint_lastName">Etternavn</string>
@@ -29,7 +32,8 @@
 
     <string name="hind_password">Passord</string>
     <string name="sign_in">Logg inn</string>
-    <string name="register">Opprett</string>
+    <string name="register">Opprett ny bruker</string>
+    <string name="forgotten_password">Glemt passord?</string>
 
     <string name="create_profile_image_desc">Profil bilde</string>
 
@@ -41,6 +45,11 @@
     <string name="create_profile_error_address">Vennligst fyll inn adresse</string>
     <string name="create_profile_error_postCode">Vennligst fyll inn postnummer</string>
     <string name="create_profile_error_email">Vennligst fyll inn epost</string>
+
+    <string name="register_account_password_short">Vennligst skriv inn et passord som er lengre enn 6 tegn</string>
+    <string name="register_account_password_missing">Vennligst skriv inn et passord</string>
+    <string name="register_account_email_notValid">Vennligst skriv inn en gyldig epost adresse</string>
+    <string name="register_account_email_missing">Vennligst skriv inn en epost adresse</string>
 
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
