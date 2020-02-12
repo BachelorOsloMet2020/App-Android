@@ -67,62 +67,71 @@ public class SignInActivity extends AppCompatActivity
 
         SettingsHandler sh = new SettingsHandler(getApplicationContext());
         Map<String, ?> map = sh.getMultilineSetting(S.Dyrebar_Auth);
-        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sing_in_message));
+
         if (map.size() > 0)
             authSession = new AuthSession(map);
         if (authSession != null && authSession.objVal())
         {
-            setLoginButtonEnabled(false);
-            id.Show();
-
-            // Request Token validation
-            AsyncTask.execute(() -> {
-                try
-                {
-                    String json = new jAuthSession().encode(authSession);
-                    String resp = new Api().Post(Source.Api, new ArrayList<Pair<String, ?>>(){{
-                        add(new Pair<>("auth", "validate"));
-                        add(new Pair<>("data", json));
-                    }});
-                    boolean success = new jStatus().getStatus(resp);
-                    if (success && new JSONObject(resp).getBoolean("isValid"))
-                    {
-                        Log.d(TAG, "User is valid and has a session");
-                        boolean profileExists = hasProfile(new Api(), authSession);
-
-                        runOnUiThread(() -> {
-                            id.Hide();
-                            if (profileExists)
-                            {
-                                startActivity(new Intent(this, MainActivity.class));
-                                finish();
-                            }
-                            else
-                            {
-                                setLoginButtonEnabled(true);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        Log.e(TAG, "Request failed");
-                        runOnUiThread(() -> {
-                            id.Hide();
-                            loadSingInOptions();
-                        });
-
-                    }
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-            });
+            runSessionChallenge();
         }
+        else
+            loadSingInOptions();
+
+    }
+
+    private void runSessionChallenge()
+    {
+        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sign_in_message));
+
+        setLoginButtonEnabled(false);
+        id.Show();
+
+        // Request Token validation
+        AsyncTask.execute(() -> {
+            try
+            {
+                String json = new jAuthSession().encode(authSession);
+                String resp = new Api().Post(Source.Api, new ArrayList<Pair<String, ?>>(){{
+                    add(new Pair<>("auth", "validate"));
+                    add(new Pair<>("data", json));
+                }});
+                boolean success = new jStatus().getStatus(resp);
+                if (success && new JSONObject(resp).getBoolean("isValid"))
+                {
+                    Log.d(TAG, "User is valid and has a session");
+                    boolean profileExists = hasProfile(new Api(), authSession);
+
+                    runOnUiThread(() -> {
+                        id.Hide();
+                        if (profileExists)
+                        {
+                            startActivity(new Intent(this, MainActivity.class));
+                            finish();
+                        }
+                        else
+                        {
+                            challengeFailed();
+                        }
+                    });
+                }
+                else
+                {
+                    Log.e(TAG, "Request failed");
+                    runOnUiThread(() -> {
+                        id.Hide();
+                        loadSingInOptions();
+                    });
+
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+                challengeFailed();
+            }
+        });
         if (id.isVisible())
             id.Hide();
-        loadSingInOptions();
-
     }
 
 
@@ -269,7 +278,7 @@ public class SignInActivity extends AppCompatActivity
     private void runLoginChallenge(AuthChallenge sic)
     {
         setLoginButtonEnabled(false);
-        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sing_in_message));
+        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sign_in_message));
         id.Show();
 
         Log.d(TAG, sic.toString());
@@ -314,6 +323,7 @@ public class SignInActivity extends AppCompatActivity
                     catch (JSONException e)
                     {
                         e.printStackTrace();
+                        challengeFailed();
                     }
                 }
                 else
@@ -323,6 +333,7 @@ public class SignInActivity extends AppCompatActivity
                     {
                         // Notify user that email is required
                     }
+                    challengeFailed();
 
                     Log.e(TAG, "Request failed");
                 }
@@ -335,6 +346,12 @@ public class SignInActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+    private void challengeFailed()
+    {
+        setLoginButtonEnabled(true);
+    }
+
 
     /**
      * Run within AsyncTask
