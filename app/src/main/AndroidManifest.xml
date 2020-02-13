@@ -28,6 +28,13 @@
         </activity>
         <activity android:name=".activity.ProfileManageActivity" />
         <activity android:name=".activity.ProfileActivity" />
+        <activity
+            android:name=".activity.SignInActivity"
+            android:theme="@style/AppTheme.FullSize" />
+        <activity android:name=".activity.MainActivity" android:theme="@style/AppTheme.Fragment" />
+
+        <!-- External Services below -->
+
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -53,10 +60,6 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".activity.SignInActivity"
-            android:theme="@style/AppTheme.FullSize" />
-        <activity android:name=".activity.MainActivity" android:theme="@style/AppTheme.Fragment" />
     </application>
 
 </manifest>

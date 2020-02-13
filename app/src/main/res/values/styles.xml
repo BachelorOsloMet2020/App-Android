@@ -25,7 +25,6 @@
         <item name="colorPrimaryDark">@color/colorBackground</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/colorBackground</item>
-        <item name="android:windowLightNavigationBar">true</item>
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorBlack</item>
@@ -36,6 +35,10 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@color/black_overlay</item>
         <item name="android:navigationBarColor">@color/transparent</item>
+    </style>
+
+    <style name="DialogAlert" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="HintText" parent="TextAppearance.Design.Hint">

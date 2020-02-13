@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity
             else
             {
                 runOnUiThread(() -> {
-                    AlertDialog.Builder adb = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder adb = new AlertDialog.Builder(this, R.style.DialogAlert);
                     adb.setTitle("Error");
                     adb.setMessage("Data from api indicated an issue");
                     adb.setNeutralButton("Ok", (dialog, which) -> dialog.dismiss());

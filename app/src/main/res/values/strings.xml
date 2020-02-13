@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Dyrebar</string>
 
-    <string name="signin">Logg inn med</string>
+    <string name="signin">Logg inn</string>
+    <string name="signinwith">Logg inn med</string>
     <string name="signin_google">Google</string>
     <string name="signin_facebook">Facebook</string>
     <string name="or">eller</string>

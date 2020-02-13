@@ -20,6 +20,7 @@ public class Profile implements Serializable
 
     private String Image;
     private String imageType;
+    private boolean isGuest;
 
     public Profile()
     {
@@ -169,6 +170,15 @@ public class Profile implements Serializable
         return Image;
     }
 
+    public boolean isGuest()
+    {
+        return isGuest;
+    }
+
+    public void setGuest(boolean guest)
+    {
+        isGuest = guest;
+    }
 
     public ArrayList<Pair<String, ?>> asList()
     {

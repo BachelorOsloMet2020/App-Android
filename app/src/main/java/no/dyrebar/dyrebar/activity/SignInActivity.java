@@ -394,7 +394,7 @@ public class SignInActivity extends AppCompatActivity
         }
         catch (ApiException e)
         {
-            Log.w(TAG, "handleSignInResult:error", e);
+            Log.e(TAG, "Google SignIn Resulted in an error: ", e);
         }
         catch (Exception e)
         {
