@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ProfileManageActivity" />
-        <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.ProfileActivity" android:label="@string/activity_label_my_profile" />
         <activity
             android:name=".activity.SignInActivity"
             android:theme="@style/AppTheme.FullSize" />
@@ -35,6 +35,10 @@
 
         <!-- External Services below -->
 
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAWV_CDRkEaOyoo1hwtOcwotnPnO9SHiGA" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
