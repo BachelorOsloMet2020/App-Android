@@ -55,6 +55,50 @@
     <string name="register_account_email_notValid">Vennligst skriv inn en gyldig epost adresse</string>
     <string name="register_account_email_missing">Vennligst skriv inn en epost adresse</string>
 
+
+    <string name="create_animal_profile_hint_name">Dyrets navn</string>
+    <string name="create_animal_profile_hint_idTag">Id tag (Valgfritt)</string>
+    <string name="create_animal_profile_hint_animalType">Type dyr</string>
+    <string name="create_animal_profile_hint_sex">Dyrets kjønn</string>
+    <string name="create_animal_profile_hint_sterilized">Er dyret sterilisert/kastrert</string>
+
+    <string name="create_animal_profile_animal_type_dog">Hund</string>
+    <string name="create_animal_profile_animal_type_cat">Katt</string>
+    <string name="create_animal_profile_animal_type_rabbit">Kanin</string>
+    <string name="create_animal_profile_animal_type_bird">Fugl</string>
+    <string name="create_animal_profile_animal_type_other">Annet</string>
+
+    <string name="create_animal_profile_animal_type_extra">Rase eller utvidet info</string>
+
+    <string name="create_animal_profile_animal_sex_male">Hann</string>
+    <string name="create_animal_profile_animal_sex_female">Hunn</string>
+    <string name="create_animal_profile_animal_sex_unknown">Ukjent</string>
+
+    <string name="yes">Ja</string>
+    <string name="no">Nei</string>
+    <string name="unknown">Ukjent</string>
+
+    <string name="create_animal_profile_animal_fur_color">Pelsfarge</string>
+    <string name="create_animal_profile_animal_fur_length">Pelslengde</string>
+    <string name="create_animal_profile_animal_fur_pattern">Pelsmønster</string>
+
+
+    <string name="create_animal_profile_animal_fur_length_short">Kort</string>
+    <string name="create_animal_profile_animal_fur_length_half">Halvlangt</string>
+    <string name="create_animal_profile_animal_fur_length_long">Langt</string>
+
+    
+    <string name="create_animal_profile_animal_fur_pattern_single">Ensfarget</string>
+    <string name="create_animal_profile_animal_fur_pattern_duo">Tofarget</string>
+    <string name="create_animal_profile_animal_fur_pattern_trio">Tricolour</string>
+    <string name="create_animal_profile_animal_fur_pattern_tiger_stripes">Tigerstripet</string>
+    <string name="create_animal_profile_animal_fur_pattern_turtle">Skilpaddemønstret</string>
+    <string name="create_animal_profile_animal_fur_pattern_variegated">Spraglete</string>
+    <string name="create_animal_profile_animal_fur_pattern_other">Annet</string>
+
+    
+
+
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
 
