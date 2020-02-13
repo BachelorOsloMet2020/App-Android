@@ -82,9 +82,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
             }
             else
             {
-                /** Redirecting to sing in if data is missing */
-                startActivity(new Intent(this, SignInActivity.class));
-                finish();
+                /** Set a custom profile for guests */
+
+                // TODO: Accept if session is guest
+                profile = new Profile();
+                profile.setGuest(true);
+                onCreateCompleted();
+
             }
         }
     }
@@ -178,10 +182,27 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if (toolbar.findViewById(R.id.toolbar_profile_image) != null && profile != null)
+        if (profile.isGuest())
         {
-            ImageView profileImage = toolbar.findViewById(R.id.toolbar_profile_image);
-            Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into(profileImage);
+            ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(getString(R.string.signin));
+            ((ImageView)toolbar.findViewById(R.id.toolbar_profile_image)).setImageResource(R.drawable.ic_account_circle_black_24dp);
+            toolbar.findViewById(R.id.toolbar_profile).setOnClickListener(v -> {
+                startActivity(new Intent(this, SignInActivity.class));
+                finish();
+            });
+        }
+        else
+        {
+            if (toolbar.findViewById(R.id.toolbar_profile_image) != null && profile != null)
+            {
+                ImageView profileImage = toolbar.findViewById(R.id.toolbar_profile_image);
+                Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into(profileImage);
+            }
+            if (toolbar.findViewById(R.id.toolbar_profile_name) != null && profile != null)
+                ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(profile.getFirstName());
+            toolbar.findViewById(R.id.toolbar_profile).setOnClickListener(v -> {
+                startActivity(new Intent(this, ProfileActivity.class));
+            });
         }
         if (toolbar.findViewById(R.id.toolbar_profile_name) != null && profile != null)
             ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(profile.getFirstName());

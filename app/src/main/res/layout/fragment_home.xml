@@ -7,39 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        tools:background="@color/colorAccent"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <LinearLayout
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/toolbar_profile_image"
-                android:layout_width="50dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="4dp"
-                android:layout_height="50dp"
-                android:contentDescription="@string/create_profile_image_desc" />
-
-            <TextView
-                android:id="@+id/toolbar_profile_name"
-                android:textSize="18sp"
-                android:layout_marginStart="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="ProfileName"
-                />
-        </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
+    <include layout="@layout/toolbar_main" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

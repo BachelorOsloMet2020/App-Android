@@ -25,7 +25,7 @@ public class ProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        profilePicture = (ImageView) findViewById(R.id.profile_image_card);
+        profilePicture = (ImageView) findViewById(R.id.create_profile_image);
         editProfile = (ImageView) findViewById(R.id.edit_user_profile);
         userName = (TextView) findViewById(R.id.user_profile_name);
         userAddress = (TextView) findViewById(R.id.user_profile_address);
