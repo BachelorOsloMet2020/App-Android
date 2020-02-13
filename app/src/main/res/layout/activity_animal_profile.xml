@@ -45,80 +45,138 @@
     <ImageView
         android:id="@+id/animal_profile_image"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="225dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_id">
     </ImageView>
 
     <TextView
+        android:id="@+id/animal_type_static"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animal_profile_image"
+        tools:text="Type: "></TextView>
+
+    <TextView
         android:id="@+id/animal_type"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/animal_type_static"
         app:layout_constraintTop_toBottomOf="@+id/animal_profile_image"
-        tools:text="Type: Hund">
+        tools:text="Hund"></TextView>
+
+    <TextView
+        android:id="@+id/animal_sex_static"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animal_type"
+        tools:text="Kjønn: ">
     </TextView>
 
     <TextView
         android:id="@+id/animal_sex"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/animal_sex_static"
         app:layout_constraintTop_toBottomOf="@+id/animal_type"
-        tools:text="Kjønn: Hann">
+        tools:text="Hann">
+    </TextView>
+
+    <TextView
+        android:id="@+id/animal_sterilized_static"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animal_sex"
+        tools:text="Sterilisert/Kastrert: ">
     </TextView>
 
     <TextView
         android:id="@+id/animal_sterilized"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        app:layout_constraintStart_toEndOf="@+id/animal_sterilized_static"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_sex"
-        tools:text="Sterilisert/Kastrert: Nei">
+        tools:text="Nei">
+    </TextView>
+
+    <TextView
+        android:id="@+id/animal_color_static"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animal_sterilized"
+        tools:text="Farge: ">
     </TextView>
 
     <TextView
         android:id="@+id/animal_color"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        app:layout_constraintStart_toEndOf="@+id/animal_color_static"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_sterilized"
-        tools:text="Farge: Brun">
+        tools:text="Brun">
+    </TextView>
+
+    <TextView
+        android:id="@+id/animal_fur_length_static"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animal_color"
+        tools:text="Pelslengde: ">
     </TextView>
 
     <TextView
         android:id="@+id/animal_fur_length"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        app:layout_constraintStart_toEndOf="@+id/animal_fur_length_static"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_color"
-        tools:text="Pelslengde: Kort">
+        tools:text="Kort">
+    </TextView>
+
+    <TextView
+        android:id="@+id/animal_fur_pattern_static"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animal_fur_length"
+        tools:text="Pelsmønster: ">
     </TextView>
 
     <TextView
         android:id="@+id/animal_fur_pattern"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        app:layout_constraintStart_toEndOf="@+id/animal_fur_pattern_static"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_fur_length"
-        tools:text="Pelsmønster: Ingen">
+        tools:text="Ingen">
     </TextView>
 
     <TextView
-        android:id="@+id/description_header"
+        android:id="@+id/animal_description_static"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -130,26 +188,33 @@
         tools:text="Beskrivelse:">
     </TextView>
 
-    <TextView
-        android:id="@+id/animal_description"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_header"
-        tools:text="Rolig hund og nysgjerrig hund ">
-    </TextView>
+        app:layout_constraintTop_toBottomOf="@+id/animal_description_static">
+
+        <TextView
+            android:id="@+id/animal_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            tools:text="Rolig hund og nysgjerrig hund "></TextView>
+    </ScrollView>
+
 
     <Button
+        android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:background="@color/colorAccent"
         android:text="@string/report_missing_btn"
-        android:textColor="@color/colorWhite">
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
     </Button>
 
