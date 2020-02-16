@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Pair;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,7 +46,8 @@ public class ProfileManageActivity extends AppCompatActivity
     {
         UNDEFINED,
         CREATE,
-        UPDATE
+        UPDATE,
+        RESTORE
     }
 
     @Override
@@ -91,8 +90,15 @@ public class ProfileManageActivity extends AppCompatActivity
                     if(success)
                     {
                         runOnUiThread(() -> {
-                            Intent homeIntent = new Intent(this, MainActivity.class);
-                            startActivity(homeIntent);
+                            if (currentMode == Mode.CREATE || currentMode == Mode.RESTORE)
+                            {
+                                Intent homeIntent = new Intent(this, MainActivity.class);
+                                startActivity(homeIntent);
+                            }
+                            else
+                            {
+                                finish();
+                            }
                         });
                     }
                 });
@@ -124,6 +130,8 @@ public class ProfileManageActivity extends AppCompatActivity
 
     private void applyProfile(Profile p)
     {
+        if (p == null)
+            return;
         if (p.getFirstName() != null)
             ((TextInputEditText)findViewById(R.id.create_profile_firstName_text)).setText(p.getFirstName());
         if (p.getLastName() != null)
@@ -132,10 +140,13 @@ public class ProfileManageActivity extends AppCompatActivity
             ((TextInputEditText)findViewById(R.id.create_profile_phone_text)).setText(p.getTlf());
         if (p.getAddress() != null)
             ((TextInputEditText)findViewById(R.id.create_profile_address_text)).setText(p.getAddress());
-        if (p.getpostNumber() > 0)
-            ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setText(p.getpostNumber());
+        if (p.getPostNumber() != null)
+            ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setText(String.valueOf(p.getPostNumber()));
 
-        if (p.getImage().length() > 0)
+        if (p.getEmail() != null && p.getEmail().length() > 0)
+            ((TextInputEditText)findViewById(R.id.create_profile_email_text)).setText(p.getEmail());
+
+        if (p.getEmail() != null && p.getImage().length() > 0)
             Picasso.get().load(p.getImage()).into((ImageView) findViewById(R.id.create_profile_image));
 
     }
@@ -149,7 +160,7 @@ public class ProfileManageActivity extends AppCompatActivity
         String tlf = ((TextInputEditText)findViewById(R.id.create_profile_phone_text)).getText().toString();
         String address = ((TextInputEditText)findViewById(R.id.create_profile_address_text)).getText().toString();
         String postNumber = ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).getText().toString();
-        String email = ((TextInputEditText)findViewById(R.id.create_profile_email)).getText().toString();
+        String email = ((TextInputEditText)findViewById(R.id.create_profile_email_text)).getText().toString();
 
 
 
@@ -182,7 +193,7 @@ public class ProfileManageActivity extends AppCompatActivity
         }
         else
             ((TextInputEditText)findViewById(R.id.create_profile_address_text)).setError(null);
-        if (postNumber.length() == 0)
+        if ( postNumber.length() == 0)
         {
             ((TextInputEditText)findViewById(R.id.create_profile_postCode_text)).setError(getString(R.string.create_profile_error_postCode));
             validInfo = false;
@@ -206,7 +217,7 @@ public class ProfileManageActivity extends AppCompatActivity
             profile.setLastName(lastname);
             profile.setTlf(tlf);
             profile.setAddress(address);
-            profile.setpostNumber(Integer.valueOf(postNumber));
+            profile.setPostNumber(postNumber);
             if (currentMode == Mode.UPDATE)
                 profile.setEmail(email);
         }
