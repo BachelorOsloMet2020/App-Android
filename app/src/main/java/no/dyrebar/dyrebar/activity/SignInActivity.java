@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import no.dyrebar.dyrebar.App;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.AuthChallenge;
 import no.dyrebar.dyrebar.dialog.IndicatorDialog;
+import no.dyrebar.dyrebar.handler.PermissionHandler;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jAuthSession;
 import no.dyrebar.dyrebar.json.jProfile;
@@ -53,9 +55,11 @@ public class SignInActivity extends AppCompatActivity
     private final String TAG = this.getClass().getName();
 
     private final int AR_ID_GSO = 666; /* Google sign in id for activity result*/
+    private final int AR_ID_PEMS = 849;
     private String Device_ID = "";
 
     private AuthSession authSession;
+    private AuthChallenge authChallenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -81,7 +85,7 @@ public class SignInActivity extends AppCompatActivity
 
     private void runSessionChallenge()
     {
-        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sign_in_message));
+        id = new IndicatorDialog(this, getString(R.string.please_wait), getString(R.string.challenge_sign_in_message));
 
         setLoginButtonEnabled(false);
         id.Show();
@@ -100,19 +104,14 @@ public class SignInActivity extends AppCompatActivity
                 {
                     Log.d(TAG, "User is valid and has a session");
                     boolean profileExists = hasProfile(new Api(), authSession);
-
-                    runOnUiThread(() -> {
-                        id.Hide();
-                        if (profileExists)
-                        {
-                            startActivity(new Intent(this, MainActivity.class));
-                            finish();
-                        }
-                        else
-                        {
-                            challengeFailed();
-                        }
-                    });
+                    if (!profileExists)
+                    {
+                        runOnUiThread(this::challengeFailed);
+                    }
+                    else
+                    {
+                        prepareForNewActivity();
+                    }
                 }
                 else
                 {
@@ -274,11 +273,12 @@ public class SignInActivity extends AppCompatActivity
 
     }
 
-
+    private IndicatorDialog id;
     private void runLoginChallenge(AuthChallenge sic)
     {
+        authChallenge = sic;
         setLoginButtonEnabled(false);
-        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.challenge_sign_in_title), getString(R.string.challenge_sign_in_message));
+        id = new IndicatorDialog(this, getString(R.string.please_wait), getString(R.string.challenge_sign_in_message));
         id.Show();
 
         Log.d(TAG, sic.toString());
@@ -298,27 +298,10 @@ public class SignInActivity extends AppCompatActivity
                     try
                     {
                         AuthSession authSession = new jAuthSession().decode(resp);
+                        /** Storing auth session to enable future use */
                         new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, authSession.asList());
-                        boolean profileExists = hasProfile(api, authSession);
 
-                        runOnUiThread(() -> {
-                            id.Hide();
-                            if (profileExists)
-                            {
-                                startActivity(new Intent(this, MainActivity.class));
-                                finish();
-                            }
-                            else
-                            {
-                                Intent createProfile = new Intent(this, ProfileManageActivity.class);
-                                Bundle bunde = new Bundle();
-                                bunde.putSerializable("profile", sic.getProfile());
-                                bunde.putString("mode", ProfileManageActivity.Mode.CREATE.toString());
-                                bunde.putString("token", authSession.getToken());
-                                createProfile.putExtras(bunde);
-                                startActivity(createProfile);
-                            }
-                        });
+                        prepareForNewActivity();
                     }
                     catch (JSONException e)
                     {
@@ -402,6 +385,44 @@ public class SignInActivity extends AppCompatActivity
         }
     }
 
+    private void prepareForNewActivity()
+    {
+        App.authSession = authSession;
+        PermissionHandler pems = new PermissionHandler(this);
+        if (!pems.hasRequiredPermissions())
+        {
+            Intent intent = new Intent(this, PermissionsActivity.class);
+            startActivityForResult(intent, AR_ID_PEMS);
+        }
+        else
+            continueToNewActivity();
+    }
+
+    private void continueToNewActivity()
+    {
+        boolean profileExists = hasProfile(new Api(), authSession);
+
+        runOnUiThread(() -> {
+            id.Hide();
+            if (profileExists)
+            {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
+            else
+            {
+                Intent createProfile = new Intent(this, ProfileManageActivity.class);
+                Bundle bunde = new Bundle();
+                bunde.putSerializable("profile", authChallenge.getProfile());
+                bunde.putString("mode", ProfileManageActivity.Mode.CREATE.toString());
+                bunde.putString("token", authSession.getToken());
+                createProfile.putExtras(bunde);
+                startActivity(createProfile);
+            }
+        });
+    }
+
+
 
     /**
      * Standard android impmentasjon for å sjekke resultatet fra aktiviteten som ble startet
@@ -420,6 +441,15 @@ public class SignInActivity extends AppCompatActivity
         }
         else if (FacebookSdk.isFacebookRequestCode(requestCode))
             facebook_CallBackManager.onActivityResult(requestCode, resultCode, data);
+        else if (requestCode == AR_ID_PEMS)
+        {
+            if (resultCode == RESULT_OK)
+                AsyncTask.execute(this::continueToNewActivity); //Gets on main thread, async to prevent Network on Main Thread
+            else
+            {
+                Log.e(getClass().getName(), "Not success");
+            }
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package no.dyrebar.dyrebar.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 
 import org.json.JSONException;
@@ -21,6 +23,7 @@ import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.dialog.IndicatorDialog;
+import no.dyrebar.dyrebar.handler.PermissionHandler;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jAuthSession;
 import no.dyrebar.dyrebar.json.jProfile;
@@ -73,10 +76,12 @@ public class SplashActivity extends AppCompatActivity
             return null;
     }
 
+    private Profile profile;
     private void validateSession(AuthSession authSession)
     {
         if (authSession != null && authSession.objVal())
         {
+            App.authSession = authSession;
             AsyncTask.execute(() -> {
                try
                {
@@ -96,8 +101,9 @@ public class SplashActivity extends AppCompatActivity
                            add(new Pair<>("token", authSession.getToken()));
                            add(new Pair<>("authId", authSession.getAuthId()));
                        }});
-                       Profile profile = new jProfile().decode(presp);
-                       loadMainActivity(profile);
+                       profile = new jProfile().decode(presp);
+                       prepareForMainActivity();
+                       //loadMainActivity(profile);
                    }
                    else
                    {
@@ -140,6 +146,20 @@ public class SplashActivity extends AppCompatActivity
         finish();
     }
 
+    private void prepareForMainActivity()
+    {
+        PermissionHandler pems = new PermissionHandler(this);
+        if (!pems.hasRequiredPermissions())
+        {
+            Intent intent = new Intent(this, PermissionsActivity.class);
+            startActivityForResult(intent, AR_ID_PEMS);
+        }
+        else
+            loadMainActivity(profile);
+    }
+
+
+
     private void loadMainActivity(Profile profile)
     {
         Intent intent = new Intent(this, MainActivity.class);
@@ -153,5 +173,19 @@ public class SplashActivity extends AppCompatActivity
         finish();
     }
 
-
+    private final int AR_ID_PEMS = 849;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AR_ID_PEMS)
+        {
+            if (resultCode == RESULT_OK)
+                loadMainActivity(profile);
+            else
+            {
+                Log.e(getClass().getName(), "Not success");
+            }
+        }
+    }
 }
