@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import no.dyrebar.dyrebar.App;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.AuthSession;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         if (getIntent().hasExtra("profile"))
         {
             profile = (Profile) getIntent().getSerializableExtra("profile");
+            App.profile = profile;
             onCreateCompleted();
         }
         else
@@ -73,11 +75,37 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
                         add(new Pair<>("token", authSession.getToken()));
                         add(new Pair<>("authId", authSession.getAuthId()));
                     }});
-                    runOnUiThread(() -> {
-                        profile = new jProfile().decode(presp);
-                        onCreateCompleted();
-                    });
-
+                    Profile _p = new jProfile().decode(presp);
+                    if (_p == null)
+                    {
+                        presp = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>() {{
+                            add(new Pair<>("request", "myProfileId"));
+                            add(new Pair<>("authId", authSession.getAuthId()));
+                        }});
+                        String uid = new jProfile().getPrivateProfileId(presp);
+                        if (uid != null)
+                        {
+                            profile = new Profile();
+                            profile.setId(uid);
+                            Bundle b = new Bundle();
+                            b.putSerializable("profile", profile);
+                            b.putString("mode", ProfileManageActivity.Mode.RESTORE.toString());
+                            Intent intent = new Intent(this, ProfileManageActivity.class);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            // Du blir gjest
+                            // TODO: Handle fatal
+                        }
+                    }
+                    else
+                        runOnUiThread(() -> {
+                            profile = _p;
+                            onCreateCompleted();
+                        });
+                    App.profile = profile;
                 });
             }
             else
@@ -88,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
                 profile = new Profile();
                 profile.setGuest(true);
                 onCreateCompleted();
-
+                App.profile = profile;
             }
         }
     }
@@ -204,8 +232,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
                 startActivity(new Intent(this, ProfileActivity.class));
             });
         }
-        if (toolbar.findViewById(R.id.toolbar_profile_name) != null && profile != null)
-            ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(profile.getFirstName());
+
+
 
     }
 

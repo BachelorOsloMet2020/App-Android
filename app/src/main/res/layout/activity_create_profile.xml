@@ -153,7 +153,7 @@
                     android:id="@+id/create_profile_email_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/create_profile_hint_postCode"
+                    android:hint="@string/create_profile_hint_email"
                     android:inputType="number"
                     android:numeric="integer"
                     android:singleLine="true" />

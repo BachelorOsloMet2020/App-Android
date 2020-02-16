@@ -40,7 +40,7 @@ public class jProfile
                     o.getString("email"),
                     o.getString("phoneNumber"),
                     o.getString("address"),
-                    o.getInt("postNumber"),
+                    o.getString("postNumber"),
                     o.getString("image")
             );
             return profile;
@@ -59,17 +59,34 @@ public class jProfile
         {
             if (token != null)
                 o.put("token", token);
+            if (profile.getId() != null && profile.getId().length() > 0)
+                o.put("id", profile.getId());
             o.put("authId", profile.getAuthId());
             o.put("firstName", profile.getFirstName());
             o.put("lastName", profile.getLastName());
             o.put("email", profile.getEmail());
             o.put("address", profile.getAddress());
-            o.put("postNumber", profile.getpostNumber());
+            o.put("postNumber", profile.getPostNumber());
             o.put("phone", profile.getTlf());
             o.put("image", profile.getImage());
             if (profile.getImageType() != null && profile.getImageType().length() > 0)
                 o.put("imageType", profile.getImageType());
             return o.toString();
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getPrivateProfileId(String json)
+    {
+        try
+        {
+            JSONObject o = new JSONObject(json);
+            if (o.has("data"))
+                return o.getString("data");
         }
         catch (JSONException e)
         {

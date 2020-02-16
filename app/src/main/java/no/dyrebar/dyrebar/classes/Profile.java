@@ -1,6 +1,5 @@
 package no.dyrebar.dyrebar.classes;
 
-import android.content.Intent;
 import android.util.Pair;
 
 import java.io.Serializable;
@@ -16,7 +15,7 @@ public class Profile implements Serializable
     private String Email;
     private String Tlf;
     private String Address;
-    private int postNumber;
+    private String postNumber;
 
     private String Image;
     private String imageType;
@@ -44,7 +43,7 @@ public class Profile implements Serializable
     }
 
 
-    public Profile(String id, int auhtId, String FirstName, String LastName, String Email, String Tlf, String Address, int postNumber, String Image)
+    public Profile(String id, int auhtId, String FirstName, String LastName, String Email, String Tlf, String Address, String postNumber, String Image)
     {
         this.id = id;
         this.authId = auhtId;
@@ -66,7 +65,7 @@ public class Profile implements Serializable
         this.Email = (String) map.get("email");
         this.Tlf = (String) map.get("phoneNumber");
         this.Address = (String) map.get("address");
-        this.postNumber = (Integer) map.get("postNumber");
+        this.postNumber = (String)map.get("postNumber");
         this.Image = (String) map.get("image");
     }
 
@@ -105,7 +104,7 @@ public class Profile implements Serializable
         return Address;
     }
 
-    public int getpostNumber()
+    public String getPostNumber()
     {
         return postNumber;
     }
@@ -145,9 +144,9 @@ public class Profile implements Serializable
         Tlf = tlf;
     }
 
-    public void setpostNumber(int postNumber)
+    public void setPostNumber(String postNumber)
     {
-        postNumber = postNumber;
+        this.postNumber = postNumber;
     }
 
     public void setImage(String image)
@@ -191,7 +190,7 @@ public class Profile implements Serializable
             add(new Pair<>("email", getEmail()));
             add(new Pair<>("phoneNumber", getTlf()));
             add(new Pair<>("address", getAddress()));
-            add(new Pair<>("postNumber", getpostNumber()));
+            add(new Pair<>("postNumber", getPostNumber()));
             add(new Pair<>("image", getImage()));
         }};
         return ls;
