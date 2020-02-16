@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="no.dyrebar.dyrebar">
-
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".App"
@@ -15,6 +18,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:authorities="${applicationId}"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <activity android:name=".activity.PermissionsActivity"></activity>
         <activity
             android:name=".activity.SignInEmailActivity"
             android:theme="@style/AppTheme.FullSize" />
@@ -23,23 +37,24 @@
             android:theme="@style/AppTheme.FullSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.ProfileManageActivity" />
-        <activity android:name=".activity.ProfileActivity" android:label="@string/activity_label_my_profile" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label="@string/activity_label_my_profile" />
         <activity
             android:name=".activity.SignInActivity"
             android:theme="@style/AppTheme.FullSize" />
-        <activity android:name=".activity.MainActivity" android:theme="@style/AppTheme.Fragment" />
-
-        <!-- External Services below -->
-
-
+        <activity
+            android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.Fragment" />
+        <activity android:name=".activity.AnimalAddActivity" /> <!-- External Services below -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAWV_CDRkEaOyoo1hwtOcwotnPnO9SHiGA" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

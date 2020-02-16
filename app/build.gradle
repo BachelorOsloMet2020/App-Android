@@ -47,6 +47,8 @@ dependencies {
     /* Image Cropping  APLv2.0*/
     implementation 'com.github.yalantis:ucrop:2.2.4'
 
+    /* Stepper bibliotek APLv2 */
+    implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:2.2.3'
 
     /**
      * Sign-in integration

@@ -20,9 +20,12 @@
     <string name="contact">Kontakt</string>
     <string name="show_map">Vis i kart</string>
 
+    <string name="spinner_please_select">Vennligst velg</string>
 
-    <string name="challenge_sign_in_title">Vennligst vent</string>
+    <string name="please_wait">Vennligst vent</string>
     <string name="challenge_sign_in_message">Validerer innloggingen</string>
+
+    <string name="upload_animal_profile">Laster opp dyrets profil</string>
 
     <string name="challenge_register_title">Vennligst vent</string>
     <string name="challenge_register_message">Registrerer deg hos Dyrebar</string>
@@ -56,11 +59,31 @@
     <string name="register_account_email_missing">Vennligst skriv inn en epost adresse</string>
 
 
+    <string name="create_animal_profile_step_basic">Grunnleggende</string>
+    <string name="create_animal_profile_step_extended">Utvidet</string>
+    <string name="create_animal_profile_step_appearance">Utseende</string>
+    <string name="create_animal_profile_step_image">Bilde</string>
+    <string name="create_animal_profile_step_desc">Beskrivelse</string>
+
+
     <string name="create_animal_profile_hint_name">Dyrets navn</string>
     <string name="create_animal_profile_hint_idTag">Id tag (Valgfritt)</string>
     <string name="create_animal_profile_hint_animalType">Type dyr</string>
     <string name="create_animal_profile_hint_sex">Dyrets kjønn</string>
     <string name="create_animal_profile_hint_sterilized">Er dyret sterilisert/kastrert</string>
+
+    <string name="create_animal_profile_error_name">Vennligst skriv inn navn</string>
+    <string name="create_animal_profile_error_animalType">Vennligst velg type dyr</string>
+
+    <string name="create_animal_profile_error_sex">Vennligst velg kjønn</string>
+    <string name="create_animal_profile_error_sterilized">Vennligst velg om dyret er kastrert/sterilisert</string>
+
+    <string name="create_animal_profile_error_furLength">Vennligst velg pelslengde</string>
+    <string name="create_animal_profile_error_furPattern">Vennligst velg pelsmønster</string>
+    <string name="create_animal_profile_error_furColor">Vennligst velg pelsfarge</string>
+    <string name="create_animal_profile_error_image">Vennligst velg et bilde av dyret ditt</string>
+
+
 
     <string name="create_animal_profile_animal_type_dog">Hund</string>
     <string name="create_animal_profile_animal_type_cat">Katt</string>
@@ -77,17 +100,20 @@
     <string name="yes">Ja</string>
     <string name="no">Nei</string>
     <string name="unknown">Ukjent</string>
+    <string name="continue_">Fortsett</string>
+    <string name="complete_">Fullfør</string>
 
     <string name="create_animal_profile_animal_fur_color">Pelsfarge</string>
     <string name="create_animal_profile_animal_fur_length">Pelslengde</string>
     <string name="create_animal_profile_animal_fur_pattern">Pelsmønster</string>
 
 
+    <string name="create_animal_profile_animal_fur_length_unknown">Uvvist</string>
     <string name="create_animal_profile_animal_fur_length_short">Kort</string>
     <string name="create_animal_profile_animal_fur_length_half">Halvlangt</string>
     <string name="create_animal_profile_animal_fur_length_long">Langt</string>
 
-    
+
     <string name="create_animal_profile_animal_fur_pattern_single">Ensfarget</string>
     <string name="create_animal_profile_animal_fur_pattern_duo">Tofarget</string>
     <string name="create_animal_profile_animal_fur_pattern_trio">Tricolour</string>
@@ -96,10 +122,27 @@
     <string name="create_animal_profile_animal_fur_pattern_variegated">Spraglete</string>
     <string name="create_animal_profile_animal_fur_pattern_other">Annet</string>
 
-    
+    <string name="create_animal_profile_animal_description">Beskrivelse av utseende og kjennetegn</string>
 
+    <string name="dialog_image_source_title">Hvor vil du hente bilet i fra?</string>
+    <string name="dialog_image_source_use_camera">Bruk kamera</string>
+    <string name="dialog_image_source_use_library">Dine bilder</string>
+
+    <string name="permission_camera_title">Kamera rettigheter</string>
+    <string name="permission_camera_desc">For å få penest mulig bildet av dyret ditt trenger vi tilgang til kameraet ditt.</string>
+
+    <string name="permission_location_title">Posisjons tillatelse</string>
+    <string name="permission_location_desc">For å kunne filtrere og gi deg relevant innhold trenger appen tilgang til posisjonen din.</string>
+
+    <string name="permission_storage_title">Lagrings tilgang</string>
+    <string name="permission_storage_desc">For å kunne lagre kvalitetsbilder av deg og dyret ditt trenger vi et sted for å lagre bildene.</string>
+
+    <string name="permission_permit">Tillat</string>
 
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

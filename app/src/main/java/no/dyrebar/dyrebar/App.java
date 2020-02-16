@@ -6,10 +6,14 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
 
 public class App extends Application
 {
+
+    public static Profile profile;
+    public static AuthSession authSession;
 
     @Override
     public void onCreate()
