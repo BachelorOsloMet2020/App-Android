@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -32,6 +34,12 @@ import no.dyrebar.dyrebar.web.Source;
 public class SignInEmailActivity extends AppCompatActivity
 {
     private final int AR_ID_PEMS = 849;
+    enum EmailState
+    {
+        SignIn,
+        Register
+    }
+    private EmailState state;
 
     private AuthSession authSession;
 
@@ -40,6 +48,7 @@ public class SignInEmailActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_email);
+        state = EmailState.SignIn;
         attachListeners();
     }
 
@@ -91,9 +100,33 @@ public class SignInEmailActivity extends AppCompatActivity
 
     private void register()
     {
-        AuthChallenge ac = getAuthChallenge();
-        requestRegister(ac);
+        if (state == EmailState.SignIn)
+        {
+            findViewById(R.id.sign_in_email_button).setOnClickListener(v -> {
+                register();
+            });
+            ((Button)findViewById(R.id.sign_in_email_button)).setText(getString(R.string.register));
+            findViewById(R.id.register_email_button).setVisibility(View.INVISIBLE);
+            findViewById(R.id.forgotten_password_button).setVisibility(View.GONE);
+            state = EmailState.Register;
+        }
+        else
+        {
+            AuthChallenge ac = getAuthChallenge();
+            if (ac != null)
+                requestRegister(ac);
+        }
     }
+
+    private void showSignIn()
+    {
+        state = EmailState.SignIn;
+        attachListeners();
+        findViewById(R.id.register_email_button).setVisibility(View.VISIBLE);
+        findViewById(R.id.forgotten_password_button).setVisibility(View.VISIBLE);
+        ((Button)findViewById(R.id.sign_in_email_button)).setText(getString(R.string.sign_in));
+    }
+
 
     private AuthChallenge getAuthChallenge()
     {
@@ -244,5 +277,15 @@ public class SignInEmailActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if (state == EmailState.Register)
+        {
+            showSignIn();
+        }
+        else
+            super.onBackPressed();
 
+    }
 }

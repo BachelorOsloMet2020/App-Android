@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import no.dyrebar.dyrebar.fragment.MissingFragment;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 import no.dyrebar.dyrebar.json.jProfile;
+import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
@@ -51,75 +53,94 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        getMyProfile();
+        onCreateCompleted();
+    }
+
+    private void getMyProfile()
+    {
         if (getIntent().hasExtra("profile"))
         {
             profile = (Profile) getIntent().getSerializableExtra("profile");
             App.profile = profile;
-            onCreateCompleted();
+            setToolbarProfile();
+        }
+        else if (App.authSession != null)
+        {
+           AsyncTask.execute(() -> {
+               String presp = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
+               {{
+                   add(new Pair<>("request", "myProfile"));
+                   add(new Pair<>("token", App.authSession.getToken()));
+                   add(new Pair<>("authId", App.authSession.getAuthId()));
+               }});
+               boolean success = new jStatus().getStatus(presp);
+               if (!success)
+               {
+                   runOnUiThread(this::setGuestMode);
+                   return;
+               }
+               Profile _profile = new jProfile().decode(presp);
+               runOnUiThread(() -> {
+                   profile = _profile;
+                   App.profile = profile;
+                   setToolbarProfile();
+               });
+           });
         }
         else
         {
-            AuthSession authSession;
-            Map<String, ?> map = new SettingsHandler(getApplicationContext()).getMultilineSetting(S.Dyrebar_Auth);
-            if (map.size() > 0)
-                authSession = new AuthSession(map);
-            else
-                authSession = null;
-            if (authSession != null)
-            {
-                AsyncTask.execute(() -> {
-
-                    String presp = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
-                    {{
-                        add(new Pair<>("request", "myProfile"));
-                        add(new Pair<>("token", authSession.getToken()));
-                        add(new Pair<>("authId", authSession.getAuthId()));
-                    }});
-                    Profile _p = new jProfile().decode(presp);
-                    if (_p == null)
-                    {
-                        presp = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>() {{
-                            add(new Pair<>("request", "myProfileId"));
-                            add(new Pair<>("authId", authSession.getAuthId()));
-                        }});
-                        String uid = new jProfile().getPrivateProfileId(presp);
-                        if (uid != null)
-                        {
-                            profile = new Profile();
-                            profile.setId(uid);
-                            Bundle b = new Bundle();
-                            b.putSerializable("profile", profile);
-                            b.putString("mode", ProfileManageActivity.Mode.RESTORE.toString());
-                            Intent intent = new Intent(this, ProfileManageActivity.class);
-                            intent.putExtras(b);
-                            startActivity(intent);
-                        }
-                        else
-                        {
-                            // Du blir gjest
-                            // TODO: Handle fatal
-                        }
-                    }
-                    else
-                        runOnUiThread(() -> {
-                            profile = _p;
-                            onCreateCompleted();
-                        });
-                    App.profile = profile;
-                });
-            }
-            else
-            {
-                /** Set a custom profile for guests */
-
-                // TODO: Accept if session is guest
-                profile = new Profile();
-                profile.setGuest(true);
-                onCreateCompleted();
-                App.profile = profile;
-            }
+            setGuestMode();
         }
     }
+
+    private void setGuestMode()
+    {
+        profile = new Profile();
+        profile.setGuest(true);
+        App.profile = profile;
+        setToolbarProfile();
+    }
+
+
+    private void setToolbarProfile()
+    {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        if (profile.isGuest())
+        {
+            ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(getString(R.string.signin));
+            ((ImageView)toolbar.findViewById(R.id.toolbar_profile_image)).setImageResource(R.drawable.ic_account_circle_black_24dp);
+            toolbar.findViewById(R.id.toolbar_profile).setOnClickListener(v -> {
+                startActivity(new Intent(this, SignInActivity.class));
+                finish();
+            });
+        }
+        else
+        {
+            if (toolbar.findViewById(R.id.toolbar_profile_image) != null && profile != null)
+            {
+                ImageView profileImage = toolbar.findViewById(R.id.toolbar_profile_image);
+                Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into(profileImage);
+            }
+            if (toolbar.findViewById(R.id.toolbar_profile_name) != null && profile != null)
+                ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(profile.getFirstName());
+            toolbar.findViewById(R.id.toolbar_profile).setOnClickListener(v -> {
+                startActivity(new Intent(this, ProfileActivity.class));
+            });
+        }
+    }
+
+
 
     private void onCreateCompleted()
     {
@@ -157,15 +178,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     private void LaunchFragment(Fragment fragment, final String tag)
     {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (fragment instanceof HomeFragment)
-            ((HomeFragment)fragment).setOnMainActivityListener(this);
-        else if (fragment instanceof FoundFragment)
-            ((FoundFragment)fragment).setOnMainActivityListener(this);
-        else if (fragment instanceof MissingFragment)
-            ((MissingFragment)fragment).setOnMainActivityListener(this);
-        else if (fragment instanceof BloggFragment)
-            ((BloggFragment)fragment).setOnMainActivityListener(this);
-
         if (prevFragment == null && fragmentTransaction.isEmpty() && !hasFragments())
         {
             fragmentTransaction.add(R.id.container_fragments, fragment, tag);
@@ -207,31 +219,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
             return;
         setSupportActionBar(toolbar);
 
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if (profile.isGuest())
-        {
-            ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(getString(R.string.signin));
-            ((ImageView)toolbar.findViewById(R.id.toolbar_profile_image)).setImageResource(R.drawable.ic_account_circle_black_24dp);
-            toolbar.findViewById(R.id.toolbar_profile).setOnClickListener(v -> {
-                startActivity(new Intent(this, SignInActivity.class));
-                finish();
-            });
-        }
-        else
-        {
-            if (toolbar.findViewById(R.id.toolbar_profile_image) != null && profile != null)
-            {
-                ImageView profileImage = toolbar.findViewById(R.id.toolbar_profile_image);
-                Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into(profileImage);
-            }
-            if (toolbar.findViewById(R.id.toolbar_profile_name) != null && profile != null)
-                ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(profile.getFirstName());
-            toolbar.findViewById(R.id.toolbar_profile).setOnClickListener(v -> {
-                startActivity(new Intent(this, ProfileActivity.class));
-            });
-        }
 
 
 

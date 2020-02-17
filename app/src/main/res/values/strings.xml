@@ -39,8 +39,9 @@
 
     <string name="hind_password">Passord</string>
     <string name="sign_in">Logg inn</string>
-    <string name="register">Opprett ny bruker</string>
+    <string name="register_new_user">Opprett ny bruker</string>
     <string name="forgotten_password">Glemt passord?</string>
+    <string name="register">Registrer</string>
 
     <string name="create_profile_image_desc">Profil bilde</string>
 
@@ -124,6 +125,15 @@
 
     <string name="not_given">Ikke oppgitt</string>
     <string name="edit">Rediger</string>
+
+    <string name="id_tag_">ID-Merke:</string>
+    <string name="type_">Type:</string>
+    <string name="sex_">Kjønn:</string>
+    <string name="sterilized_">Sterilisert:</string>
+    <string name="color_">Farge:</string>
+    <string name="furLength_">Pelslengde</string>
+    <string name="furPattern_">Pelsmønster:</string>
+    <string name="description_">Beskrivelse:</string>
 
     <string name="create_animal_profile_animal_description">Beskrivelse av utseende og kjennetegn</string>
 

@@ -1,5 +1,6 @@
 package no.dyrebar.dyrebar.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,22 @@ import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 
 public class HomeFragment extends Fragment
 {
-    FragmentInterface.FragmentListener fifl;
+    private FragmentInterface.FragmentListener mListener;
+
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+        if (context instanceof FragmentInterface.FragmentListener)
+        {
+            mListener = (FragmentInterface.FragmentListener) context;
+        }
+        else
+        {
+            throw new RuntimeException(context.toString()
+                                               + " must implement PermissionInterfaceListener");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -33,8 +49,6 @@ public class HomeFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        Toolbar toolbar = (Toolbar) findView(R.id.toolbar);
-        fifl.onSetToolbar(toolbar);
     }
 
 
@@ -46,11 +60,7 @@ public class HomeFragment extends Fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
-    public void setOnMainActivityListener(FragmentInterface.FragmentListener fifl)
-    {
-        this.fifl = fifl;
 
-    }
 
 
 

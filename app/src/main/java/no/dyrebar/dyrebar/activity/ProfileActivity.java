@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import no.dyrebar.dyrebar.App;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.adapter.MyAnimalAdapter;
@@ -33,7 +34,6 @@ import no.dyrebar.dyrebar.web.Source;
 
 public class ProfileActivity extends AppCompatActivity
 {
-    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -77,13 +77,13 @@ public class ProfileActivity extends AppCompatActivity
                 // TODO: Show critical dialog here
                 return;
             }
-            profile = new jProfile().decode(presp);
+            App.profile = new jProfile().decode(presp);
             runOnUiThread(() -> {
-                Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into((ImageView) findViewById(R.id.create_profile_image));
-                ((TextView)findViewById(R.id.user_profile_name)).setText(profile.getFirstName() + ", " + profile.getLastName());
-                ((TextView)findViewById(R.id.user_profile_email)).setText(profile.getEmail());
-                ((TextView)findViewById(R.id.user_profile_address)).setText(profile.getAddress() + ", " + profile.getPostNumber());
-                ((TextView)findViewById(R.id.user_profile_phone)).setText(profile.getTlf());
+                Picasso.get().load(App.profile.getImage()).transform(new PicassoCircleTransform()).into((ImageView) findViewById(R.id.create_profile_image));
+                ((TextView)findViewById(R.id.user_profile_name)).setText(App.profile.getFirstName() + ", " + App.profile.getLastName());
+                ((TextView)findViewById(R.id.user_profile_email)).setText(App.profile.getEmail());
+                ((TextView)findViewById(R.id.user_profile_address)).setText(App.profile.getAddress() + ", " + App.profile.getPostNumber());
+                ((TextView)findViewById(R.id.user_profile_phone)).setText(App.profile.getTlf());
 
                 startKeyListener();
             });
@@ -91,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity
             String ani = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
             {{
                 add(new Pair<>("request", "animals"));
-                add(new Pair<>("uid", profile.getId()));
+                add(new Pair<>("uid", App.profile.getId()));
             }});
             ArrayList<ProfileAnimal> animals = new jProfileAnimal().decodeArray(ani);
             runOnUiThread(() -> loadMyAnimals(animals));
@@ -117,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity
     public void editProfile()
     {
         Bundle b = new Bundle();
-        b.putSerializable("profile", profile);
+        b.putSerializable("profile", App.profile);
         b.putString("mode", ProfileManageActivity.Mode.UPDATE.toString());
         Intent intent = new Intent(this, ProfileManageActivity.class);
         intent.putExtras(b);
