@@ -32,13 +32,17 @@ public class AuthSession
 
     public AuthSession(Map<String, ?> map)
     {
-        this.id = (String) map.get("id");
-        this.authId = (Integer) map.get("authId");
-        this.token = (String) map.get("token");
-        if (map.get("time") instanceof Long)
-            this.time = (Long) map.get("time");
-        this.provider = AuthChallenge.oAuthProvider.valueOf((String)map.get("provider"));
+        if (map.containsKey("id") && map.containsKey("authId") && map.containsKey("token"))
+        {
+            this.id = (String) map.get("id");
+            this.authId = (Integer) map.get("authId");
+            this.token = (String) map.get("token");
+            if (map.containsKey("time") && map.get("time") instanceof Long)
+                this.time = (Long) map.get("time");
+            this.provider = AuthChallenge.oAuthProvider.valueOf((String)map.get("provider"));
+        }
     }
+
 
     public String getId()
     {

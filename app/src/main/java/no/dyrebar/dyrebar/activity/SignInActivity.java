@@ -58,7 +58,6 @@ public class SignInActivity extends AppCompatActivity
     private final int AR_ID_PEMS = 849;
     private String Device_ID = "";
 
-    private AuthSession authSession;
     private AuthChallenge authChallenge;
 
     @Override
@@ -73,8 +72,8 @@ public class SignInActivity extends AppCompatActivity
         Map<String, ?> map = sh.getMultilineSetting(S.Dyrebar_Auth);
 
         if (map.size() > 0)
-            authSession = new AuthSession(map);
-        if (authSession != null && authSession.objVal())
+            App.authSession = new AuthSession(map);
+        if (App.authSession != null && App.authSession.objVal())
         {
             runSessionChallenge();
         }
@@ -94,7 +93,7 @@ public class SignInActivity extends AppCompatActivity
         AsyncTask.execute(() -> {
             try
             {
-                String json = new jAuthSession().encode(authSession);
+                String json = new jAuthSession().encode(App.authSession);
                 String resp = new Api().Post(Source.Api, new ArrayList<Pair<String, ?>>(){{
                     add(new Pair<>("auth", "validate"));
                     add(new Pair<>("data", json));
@@ -103,7 +102,7 @@ public class SignInActivity extends AppCompatActivity
                 if (success && new JSONObject(resp).getBoolean("isValid"))
                 {
                     Log.d(TAG, "User is valid and has a session");
-                    boolean profileExists = hasProfile(new Api(), authSession);
+                    boolean profileExists = hasProfile(new Api(), App.authSession);
                     if (!profileExists)
                     {
                         runOnUiThread(this::challengeFailed);
@@ -387,7 +386,6 @@ public class SignInActivity extends AppCompatActivity
 
     private void prepareForNewActivity()
     {
-        App.authSession = authSession;
         PermissionHandler pems = new PermissionHandler(this);
         if (!pems.hasRequiredPermissions())
         {
@@ -400,7 +398,7 @@ public class SignInActivity extends AppCompatActivity
 
     private void continueToNewActivity()
     {
-        boolean profileExists = hasProfile(new Api(), authSession);
+        boolean profileExists = hasProfile(new Api(), App.authSession);
 
         runOnUiThread(() -> {
             id.Hide();
@@ -415,7 +413,7 @@ public class SignInActivity extends AppCompatActivity
                 Bundle bunde = new Bundle();
                 bunde.putSerializable("profile", authChallenge.getProfile());
                 bunde.putString("mode", ProfileManageActivity.Mode.CREATE.toString());
-                bunde.putString("token", authSession.getToken());
+                bunde.putString("token", App.authSession.getToken());
                 createProfile.putExtras(bunde);
                 startActivity(createProfile);
             }

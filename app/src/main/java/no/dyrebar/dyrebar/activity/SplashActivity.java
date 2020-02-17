@@ -71,7 +71,18 @@ public class SplashActivity extends AppCompatActivity
     {
         Map<String, ?> map = new SettingsHandler(getApplicationContext()).getMultilineSetting(S.Dyrebar_Auth);
         if (map.size() > 0)
-            return new AuthSession(map);
+        {
+            AuthSession authSession = new AuthSession(map);
+            if (!authSession.objVal())
+            {
+                // Clear data, inclomplete or corrupted
+                new SettingsHandler(getApplicationContext()).deleteSetting(S.Dyrebar_Auth);
+                return null;
+            }
+            else
+                return authSession;
+
+        }
         else
             return null;
     }
