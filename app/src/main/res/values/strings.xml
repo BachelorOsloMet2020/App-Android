@@ -114,13 +114,16 @@
     <string name="create_animal_profile_animal_fur_length_long">Langt</string>
 
 
-    <string name="create_animal_profile_animal_fur_pattern_single">Ensfarget</string>
-    <string name="create_animal_profile_animal_fur_pattern_duo">Tofarget</string>
-    <string name="create_animal_profile_animal_fur_pattern_trio">Tricolour</string>
-    <string name="create_animal_profile_animal_fur_pattern_tiger_stripes">Tigerstripet</string>
-    <string name="create_animal_profile_animal_fur_pattern_turtle">Skilpaddemønstret</string>
-    <string name="create_animal_profile_animal_fur_pattern_variegated">Spraglete</string>
-    <string name="create_animal_profile_animal_fur_pattern_other">Annet</string>
+    <string name="animal_profile_animal_fur_pattern_single">Ensfarget</string>
+    <string name="animal_profile_animal_fur_pattern_duo">Tofarget</string>
+    <string name="animal_profile_animal_fur_pattern_trio">Tricolour</string>
+    <string name="animal_profile_animal_fur_pattern_tiger_stripes">Tigerstripet</string>
+    <string name="animal_profile_animal_fur_pattern_turtle">Skilpaddemønstret</string>
+    <string name="animal_profile_animal_fur_pattern_variegated">Spraglete</string>
+    <string name="animal_profile_animal_fur_pattern_other">Annet</string>
+
+    <string name="not_given">Ikke oppgitt</string>
+    <string name="edit">Rediger</string>
 
     <string name="create_animal_profile_animal_description">Beskrivelse av utseende og kjennetegn</string>
 

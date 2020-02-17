@@ -29,6 +29,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         <activity android:name=".activity.PermissionsActivity"></activity>
+        <activity android:name=".activity.AnimalProfileActivity"/>
         <activity
             android:name=".activity.SignInEmailActivity"
             android:theme="@style/AppTheme.FullSize" />
@@ -51,7 +52,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/AppTheme.Fragment" />
-        <activity android:name=".activity.AnimalAddActivity" /> <!-- External Services below -->
+        <activity android:name=".activity.AnimalManageActivity" /> <!-- External Services below -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAWV_CDRkEaOyoo1hwtOcwotnPnO9SHiGA" />

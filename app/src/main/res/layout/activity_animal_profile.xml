@@ -7,6 +7,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
@@ -46,13 +65,14 @@
         android:id="@+id/animal_profile_image"
         android:layout_width="match_parent"
         android:layout_height="225dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_id">
-    </ImageView>
+        app:layout_constraintTop_toBottomOf="@+id/animal_id"></ImageView>
 
     <TextView
         android:id="@+id/animal_type_static"
+        android:textStyle="bold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -65,12 +85,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/animal_type_static"
-        app:layout_constraintTop_toBottomOf="@+id/animal_profile_image"
+        app:layout_constraintBottom_toBottomOf="@+id/animal_type_static"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guidelineleft"
+        app:layout_constraintTop_toTopOf="@+id/animal_type_static"
         tools:text="Hund"></TextView>
 
     <TextView
+        android:textStyle="bold"
         android:id="@+id/animal_sex_static"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -85,20 +107,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/animal_sex_static"
-        app:layout_constraintTop_toBottomOf="@+id/animal_type"
-        tools:text="Hann">
-    </TextView>
+        app:layout_constraintBottom_toBottomOf="@+id/animal_sex_static"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guidelineleft"
+        app:layout_constraintTop_toTopOf="@+id/animal_sex_static"
+        tools:text="Hann"></TextView>
 
     <TextView
+        android:textStyle="bold"
         android:id="@+id/animal_sterilized_static"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_sex"
-        tools:text="Sterilisert/Kastrert: ">
+        tools:text="Sterilisert:">
     </TextView>
 
     <TextView
@@ -106,80 +129,82 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintStart_toEndOf="@+id/animal_sterilized_static"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_sex"
-        tools:text="Nei">
-    </TextView>
+        app:layout_constraintBottom_toBottomOf="@+id/animal_sterilized_static"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guidelineleft"
+        app:layout_constraintTop_toTopOf="@+id/animal_sterilized_static"
+        tools:text="Nei"></TextView>
 
     <TextView
+        android:textStyle="bold"
         android:id="@+id/animal_color_static"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_sterilized"
-        tools:text="Farge: ">
-    </TextView>
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/animal_profile_image"
+        tools:text="Farge: "></TextView>
 
     <TextView
         android:id="@+id/animal_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintStart_toEndOf="@+id/animal_color_static"
+        app:layout_constraintBottom_toBottomOf="@+id/animal_color_static"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_sterilized"
-        tools:text="Brun">
-    </TextView>
+        app:layout_constraintStart_toStartOf="@+id/guidelineright"
+        app:layout_constraintTop_toTopOf="@+id/animal_color_static"
+        tools:text="Brun"></TextView>
 
     <TextView
+        android:textStyle="bold"
         android:id="@+id/animal_fur_length_static"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_color"
-        tools:text="Pelslengde: ">
-    </TextView>
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/animal_color_static"
+        tools:text="Pelslengde: "></TextView>
 
     <TextView
         android:id="@+id/animal_fur_length"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintStart_toEndOf="@+id/animal_fur_length_static"
+        app:layout_constraintBottom_toBottomOf="@+id/animal_fur_length_static"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_color"
-        tools:text="Kort">
-    </TextView>
+        app:layout_constraintStart_toStartOf="@+id/guidelineright"
+        app:layout_constraintTop_toTopOf="@+id/animal_fur_length_static"
+        tools:text="Kort"></TextView>
 
     <TextView
+        android:textStyle="bold"
         android:id="@+id/animal_fur_pattern_static"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_fur_length"
-        tools:text="Pelsmønster: ">
-    </TextView>
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/animal_fur_length_static"
+        tools:text="Pelsmønster: "></TextView>
 
     <TextView
         android:id="@+id/animal_fur_pattern"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:layout_constraintStart_toEndOf="@+id/animal_fur_pattern_static"
+        app:layout_constraintBottom_toBottomOf="@+id/animal_fur_pattern_static"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_fur_length"
-        tools:text="Ingen">
-    </TextView>
+        app:layout_constraintStart_toStartOf="@+id/guidelineright"
+        app:layout_constraintTop_toTopOf="@+id/animal_fur_pattern_static"
+        tools:text="Ingen"></TextView>
 
     <TextView
         android:id="@+id/animal_description_static"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_fur_pattern"
@@ -190,6 +215,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_marginTop="4dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"

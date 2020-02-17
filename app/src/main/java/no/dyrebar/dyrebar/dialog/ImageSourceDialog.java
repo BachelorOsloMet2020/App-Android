@@ -10,7 +10,6 @@ import android.view.Window;
 import android.widget.TextView;
 
 import no.dyrebar.dyrebar.R;
-import no.dyrebar.dyrebar.activity.AnimalAddActivity;
 
 public class ImageSourceDialog
 {
@@ -62,5 +61,10 @@ public class ImageSourceDialog
         if (dialog == null)
             return false;
         return dialog.isShowing();
+    }
+
+    public void Destroy()
+    {
+        dialog.dismiss();
     }
 }

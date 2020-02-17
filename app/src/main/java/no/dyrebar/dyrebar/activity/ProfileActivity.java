@@ -3,12 +3,15 @@ package no.dyrebar.dyrebar.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -16,11 +19,15 @@ import java.util.ArrayList;
 
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
+import no.dyrebar.dyrebar.adapter.MyAnimalAdapter;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
+import no.dyrebar.dyrebar.classes.ProfileAnimal;
 import no.dyrebar.dyrebar.extlib.PicassoCircleTransform;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jProfile;
+import no.dyrebar.dyrebar.json.jProfileAnimal;
+import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
@@ -63,8 +70,15 @@ public class ProfileActivity extends AppCompatActivity
                 add(new Pair<>("token", authSession.getToken()));
                 add(new Pair<>("authId", authSession.getAuthId()));
             }});
+            boolean success = new jStatus().getStatus(presp);
+            if (!success)
+            {
+                Log.e(getClass().getName(), "API:" + presp);
+                // TODO: Show critical dialog here
+                return;
+            }
+            profile = new jProfile().decode(presp);
             runOnUiThread(() -> {
-                profile = new jProfile().decode(presp);
                 Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into((ImageView) findViewById(R.id.create_profile_image));
                 ((TextView)findViewById(R.id.user_profile_name)).setText(profile.getFirstName() + ", " + profile.getLastName());
                 ((TextView)findViewById(R.id.user_profile_email)).setText(profile.getEmail());
@@ -74,12 +88,29 @@ public class ProfileActivity extends AppCompatActivity
                 startKeyListener();
             });
 
+            String ani = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
+            {{
+                add(new Pair<>("request", "animals"));
+                add(new Pair<>("uid", profile.getId()));
+            }});
+            ArrayList<ProfileAnimal> animals = new jProfileAnimal().decodeArray(ani);
+            runOnUiThread(() -> loadMyAnimals(animals));
+
         });
     }
 
+    private void loadMyAnimals(ArrayList<ProfileAnimal> items)
+    {
+        RecyclerView rv = findViewById(R.id.recyclerView_user_profile);
+        MyAnimalAdapter maa = new MyAnimalAdapter(items, this);
+        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
+        rv.setAdapter(maa);
+    }
+
+
     public void addAnimal()
     {
-        Intent intent = new Intent(this, AnimalAddActivity.class);
+        Intent intent = new Intent(this, AnimalManageActivity.class);
         startActivity(intent);
     }
 

@@ -29,6 +29,8 @@ public class jProfile
 
     public Profile decode(String json)
     {
+        if (json == null || json.length() == 0)
+            return null;
         try
         {
             JSONObject o = new JSONObject(json).getJSONObject("profile");

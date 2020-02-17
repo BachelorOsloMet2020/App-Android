@@ -51,6 +51,10 @@ public class IndicatorDialog
         return dialog.isShowing();
     }
 
+    public void Destroy()
+    {
+        dialog.dismiss();
+    }
 
 
 }

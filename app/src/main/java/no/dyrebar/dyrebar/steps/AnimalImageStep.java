@@ -1,8 +1,6 @@
 package no.dyrebar.dyrebar.steps;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +8,14 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 
 import java.util.UUID;
 
 import ernestoyaquello.com.verticalstepperform.Step;
 import no.dyrebar.dyrebar.R;
-import no.dyrebar.dyrebar.activity.AnimalAddActivity;
+import no.dyrebar.dyrebar.activity.AnimalManageActivity;
 import no.dyrebar.dyrebar.dialog.ImageSourceDialog;
 import no.dyrebar.dyrebar.handler.FileHandler;
 import no.dyrebar.dyrebar.interfaces.DialogImageSourceInterface;
@@ -27,7 +26,7 @@ public class AnimalImageStep extends Step<Object> implements DialogImageSourceIn
     private View v;
     private String fileName;
 
-    Uri capture = null;
+    Object capture = null;
 
     public AnimalImageStep(Activity activity, String stepTitle)
     {
@@ -45,7 +44,7 @@ public class AnimalImageStep extends Step<Object> implements DialogImageSourceIn
             fileName = UUID.randomUUID().toString() + ".png";
             Uri out = fh.getUriFromFile(activity, fh.getImageFile(fh.getExternalImagesFolder(), fileName));
             capture = out;
-            ImageSourceDialog isd = new ImageSourceDialog(activity, activity.getString(R.string.dialog_image_source_title), AnimalAddActivity.ARC_Camera, AnimalAddActivity.ARC_Gallery, out);
+            ImageSourceDialog isd = new ImageSourceDialog(activity, activity.getString(R.string.dialog_image_source_title), AnimalManageActivity.ARC_Camera, AnimalManageActivity.ARC_Gallery, out);
             isd.Show();
         });
         return v;
@@ -68,7 +67,17 @@ public class AnimalImageStep extends Step<Object> implements DialogImageSourceIn
     @Override
     public void restoreStepData(Object data)
     {
-
+        if (data instanceof String && data.toString().substring(0, 4).equals("http"))
+        {
+            Picasso.get().load(data.toString()).into((ImageView)v.findViewById(R.id.stepper_animal_image_image));
+            capture = data;
+        }
+        else if (data instanceof Uri)
+        {
+            ((ImageView)v.findViewById(R.id.stepper_animal_image_image)).setImageURI((Uri) data);
+            capture = (Uri) data;
+        }
+        markAsCompletedOrUncompleted(true);
     }
 
     @Override
@@ -122,7 +131,7 @@ public class AnimalImageStep extends Step<Object> implements DialogImageSourceIn
     public void onCameraCapture()
     {
         if (capture != null)
-            requestCrop(capture);
+            requestCrop((Uri) capture);
     }
 
     @Override
@@ -131,7 +140,7 @@ public class AnimalImageStep extends Step<Object> implements DialogImageSourceIn
         if (uri != null)
         {
             capture = uri;
-            requestCrop(capture);
+            requestCrop((Uri) capture);
         }
     }
 
@@ -141,7 +150,7 @@ public class AnimalImageStep extends Step<Object> implements DialogImageSourceIn
         if (uri != null)
         {
             capture = uri;
-            ((ImageView)v.findViewById(R.id.stepper_animal_image_image)).setImageURI(capture);
+            ((ImageView)v.findViewById(R.id.stepper_animal_image_image)).setImageURI((Uri) capture);
         }
         markAsCompletedOrUncompleted(true);
     }

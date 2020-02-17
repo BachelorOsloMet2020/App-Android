@@ -119,7 +119,17 @@ public class AnimalBasicStep extends Step<AnimalBasic>
     @Override
     public void restoreStepData(AnimalBasic data)
     {
-        // TODO: add restore
+        ((TextInputEditText)v.findViewById(R.id.create_animal_profile_name_text)).setText(data.getName());
+        ((TextInputEditText)v.findViewById(R.id.create_animal_profile_idtag_text)).setText(data.getIdTag());
+        ((TextInputEditText)v.findViewById(R.id.create_animal_profile_animal_type_extra_text)).setText(data.getExtras());
+
+        AnimalTypeAdapter aat = (AnimalTypeAdapter) ((Spinner)v.findViewById(R.id.create_animal_profile_animal_type_spinner)).getAdapter();
+        for (int i = 0; i < aat.getCount(); i++)
+        {
+            Pair<Integer, String> p = (Pair<Integer, String>) aat.getItem(i);
+            if (p.first == data.getAnimalType())
+                ((Spinner)v.findViewById(R.id.create_animal_profile_animal_type_spinner)).setSelection(i, true);
+        }
     }
 
     private TextWatcher textWatcher = new TextWatcher() {

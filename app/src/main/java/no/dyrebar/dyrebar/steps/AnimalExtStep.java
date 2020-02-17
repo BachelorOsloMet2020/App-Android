@@ -93,6 +93,22 @@ public class AnimalExtStep extends Step<AnimalExt>
     public void restoreStepData(AnimalExt data)
     {
         // TODO: add restore
+        if (data.getSex() == 0)
+            ((RadioButton)v.findViewById(R.id.stepper_animal_ext_sex_male)).setChecked(true);
+        else if (data.getSex() == 1)
+            ((RadioButton)v.findViewById(R.id.stepper_animal_ext_sex_female)).setChecked(true);
+        else if (data.getSex() == 2)
+            ((RadioButton)v.findViewById(R.id.stepper_animal_ext_sex_unknown)).setChecked(true);
+
+        if (data.getSterilized() == 0)
+            ((RadioButton)v.findViewById(R.id.stepper_animal_ext_sterilized_no)).setChecked(true);
+        else if (data.getSterilized() == 1)
+            ((RadioButton)v.findViewById(R.id.stepper_animal_ext_sterilized_yes)).setChecked(true);
+        else if (data.getSterilized() == 2)
+            ((RadioButton)v.findViewById(R.id.stepper_animal_ext_sterilized_unknown)).setChecked(true);
+        animalExt = data;
+        markAsCompletedOrUncompleted(true);
+
     }
 
     private View.OnClickListener onSexRadioClick = v ->

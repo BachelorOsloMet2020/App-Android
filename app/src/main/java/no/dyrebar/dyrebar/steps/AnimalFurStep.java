@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import ernestoyaquello.com.verticalstepperform.Step;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.adapter.AnimalTypeAdapter;
-import no.dyrebar.dyrebar.classes.AnimalBasic;
 import no.dyrebar.dyrebar.classes.AnimalFur;
 
 public class AnimalFurStep extends Step<AnimalFur>
@@ -40,19 +39,20 @@ public class AnimalFurStep extends Step<AnimalFur>
             add(new Pair<>(1, context.getString(R.string.create_animal_profile_animal_fur_length_short)));
             add(new Pair<>(2, context.getString(R.string.create_animal_profile_animal_fur_length_half)));
             add(new Pair<>(3, context.getString(R.string.create_animal_profile_animal_fur_length_long)));
+
             add(new Pair<>(0, context.getString(R.string.create_animal_profile_animal_fur_length_unknown)));
         }}));
 
         ((Spinner)v.findViewById(R.id.create_animal_profile_animal_fur_pattern_spinner)).setAdapter(new AnimalTypeAdapter(context, new ArrayList<Pair<Integer, String>>(){{
             add(new Pair<>(-1, context.getString(R.string.spinner_please_select)));
-            add(new Pair<>(1, context.getString(R.string.create_animal_profile_animal_fur_pattern_single)));
-            add(new Pair<>(2, context.getString(R.string.create_animal_profile_animal_fur_pattern_duo)));
-            add(new Pair<>(3, context.getString(R.string.create_animal_profile_animal_fur_pattern_trio)));
-            add(new Pair<>(4, context.getString(R.string.create_animal_profile_animal_fur_pattern_tiger_stripes)));
-            add(new Pair<>(5, context.getString(R.string.create_animal_profile_animal_fur_pattern_turtle)));
-            add(new Pair<>(6, context.getString(R.string.create_animal_profile_animal_fur_pattern_variegated)));
+            add(new Pair<>(1, context.getString(R.string.animal_profile_animal_fur_pattern_single)));
+            add(new Pair<>(2, context.getString(R.string.animal_profile_animal_fur_pattern_duo)));
+            add(new Pair<>(3, context.getString(R.string.animal_profile_animal_fur_pattern_trio)));
+            add(new Pair<>(4, context.getString(R.string.animal_profile_animal_fur_pattern_tiger_stripes)));
+            add(new Pair<>(5, context.getString(R.string.animal_profile_animal_fur_pattern_turtle)));
+            add(new Pair<>(6, context.getString(R.string.animal_profile_animal_fur_pattern_variegated)));
 
-            add(new Pair<>(0, context.getString(R.string.create_animal_profile_animal_fur_pattern_other)));
+            add(new Pair<>(0, context.getString(R.string.animal_profile_animal_fur_pattern_other)));
         }}));
 
         ((Spinner)v.findViewById(R.id.create_animal_profile_animal_fur_length_spinner)).setOnItemSelectedListener(oisl);
@@ -133,6 +133,25 @@ public class AnimalFurStep extends Step<AnimalFur>
     public void restoreStepData(AnimalFur data)
     {
         // TODO: add restore
+        ((TextInputEditText)v.findViewById(R.id.create_animal_profile_animal_fur_color_text)).setText(data.getColor());
+
+        AnimalTypeAdapter aat = (AnimalTypeAdapter) ((Spinner)v.findViewById(R.id.create_animal_profile_animal_fur_length_spinner)).getAdapter();
+        for (int i = 0; i < aat.getCount(); i++)
+        {
+            Pair<Integer, String> p = (Pair<Integer, String>) aat.getItem(i);
+            if (p.first == data.getFurLength())
+                ((Spinner)v.findViewById(R.id.create_animal_profile_animal_fur_length_spinner)).setSelection(i, true);
+        }
+
+        AnimalTypeAdapter aat2 = (AnimalTypeAdapter) ((Spinner)v.findViewById(R.id.create_animal_profile_animal_fur_pattern_spinner)).getAdapter();
+        for (int i = 0; i < aat.getCount(); i++)
+        {
+            Pair<Integer, String> p = (Pair<Integer, String>) aat2.getItem(i);
+            if (p.first == data.getFurLength())
+                ((Spinner)v.findViewById(R.id.create_animal_profile_animal_fur_pattern_spinner)).setSelection(i, true);
+        }
+
+
     }
 
     private TextWatcher textWatcher = new TextWatcher() {

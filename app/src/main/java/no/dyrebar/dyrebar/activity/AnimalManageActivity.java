@@ -20,6 +20,7 @@ import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 import no.dyrebar.dyrebar.App;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.classes.AnimalExt;
+import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.ProfileAnimal;
 import no.dyrebar.dyrebar.dialog.IndicatorDialog;
 import no.dyrebar.dyrebar.handler.ImageHandler;
@@ -33,12 +34,13 @@ import no.dyrebar.dyrebar.steps.AnimalImageStep;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class AnimalAddActivity extends AppCompatActivity implements StepperFormListener
+public class AnimalManageActivity extends AppCompatActivity implements StepperFormListener
 {
     private final String TAG = getClass().getName();
     public static final int ARC_Camera = 483;
     public static final int ARC_Gallery = 583;
 
+    private ProfileAnimal animal;
 
     //https://github.com/ernestoyaquello/VerticalStepperForm
 
@@ -72,13 +74,29 @@ public class AnimalAddActivity extends AppCompatActivity implements StepperFormL
                 .displayBottomNavigation(false)
                 .init();
 
+        if (getIntent().getExtras() != null && getIntent().hasExtra("animal_profile"))
+        {
+            animal = (ProfileAnimal) getIntent().getExtras().getSerializable("animal_profile");
+            animalBasicStep.restoreStepData(animal.getAnimalBasic());
+            animalExtStep.restoreStepData(animal.getAnimalExt());
+            animalFurStep.restoreStepData(animal.getAnimalFur());
+            animalImageStep.restoreStepData(animal.getImage());
+            animalDescriptionStep.restoreStepData(animal.getDescription());
+
+        }
+
     }
+
+    private IndicatorDialog id;
 
     @Override
     public void onCompletedForm()
     {
+        id = new IndicatorDialog(this, getString(R.string.please_wait), getString(R.string.upload_animal_profile));
+        id.Show();
         ImageHandler imageHandler = new ImageHandler();
-        ProfileAnimal animal = new ProfileAnimal();
+        if (animal == null)
+            animal = new ProfileAnimal();
         animal.fromAnimalBasic(animalBasicStep.getStepData());
         animal.fromAnimalExt(animalExtStep.getStepData());
         animal.fromAnimalFur(animalFurStep.getStepData());
@@ -102,8 +120,7 @@ public class AnimalAddActivity extends AppCompatActivity implements StepperFormL
 
 
 
-        IndicatorDialog id = new IndicatorDialog(this, getString(R.string.please_wait), getString(R.string.upload_animal_profile));
-        id.Show();
+
 
         AsyncTask.execute(() -> {
             String jAnimal = new jProfileAnimal().encode(App.profile.getId(), animal);
@@ -129,6 +146,22 @@ public class AnimalAddActivity extends AppCompatActivity implements StepperFormL
 
 
 
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        if (id != null)
+            id.Destroy();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if (id != null)
+            id.Destroy();
     }
 
     @Override

@@ -25,6 +25,22 @@ public class ProfileAnimal implements Serializable
     {
     }
 
+    /**
+     *
+     * @param _ID Auto given id
+     * @param user_ID User id of owner
+     * @param tag_ID Animal Tag id
+     * @param image Url of animal
+     * @param name Name of animal
+     * @param animalType Type of animal 0, 1, 2 ,3 etc
+     * @param extra AnimalTypeExtras, ex: Alaskan Husky
+     * @param sex Gender of animal 0/1
+     * @param sterilized
+     * @param color
+     * @param furLength
+     * @param furPattern
+     * @param description
+     */
     public ProfileAnimal(int _ID, int user_ID, String tag_ID, String image, String name, int animalType, String extra, int sex, int sterilized, String color, int furLength, int furPattern, String description)
     {
         this._ID = _ID;
@@ -202,5 +218,33 @@ public class ProfileAnimal implements Serializable
         this.furLength = fur.getFurLength();
         this.furPattern = fur.getFurPattern();
     }
+
+    public AnimalBasic getAnimalBasic()
+    {
+        return new AnimalBasic(
+                getName(),
+                getTag_ID(),
+                getAnimalType(),
+                getExtras()
+        );
+    }
+
+    public AnimalExt getAnimalExt()
+    {
+        return new AnimalExt(
+                getSex(),
+                getSterilized()
+        );
+    }
+
+    public AnimalFur getAnimalFur()
+    {
+        return new AnimalFur(
+                getColor(),
+                getFurLength(),
+                getFurPattern()
+        );
+    }
+
 
 }

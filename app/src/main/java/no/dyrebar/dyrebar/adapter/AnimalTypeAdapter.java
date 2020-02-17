@@ -23,7 +23,10 @@ public class AnimalTypeAdapter extends BaseAdapter
         this.items = items;
     }
 
-
+    public ArrayList<Pair<Integer, String>> getItems()
+    {
+        return this.items;
+    }
 
     @Override
     public int getCount()
