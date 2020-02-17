@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,26 +23,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.S;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
+import no.dyrebar.dyrebar.dialog.ImageSourceDialog;
 import no.dyrebar.dyrebar.handler.FileHandler;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
+import no.dyrebar.dyrebar.interfaces.DialogImageSourceInterface;
 import no.dyrebar.dyrebar.json.jProfile;
 import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class ProfileManageActivity extends AppCompatActivity
+public class ProfileManageActivity extends AppCompatActivity implements DialogImageSourceInterface.DialogImageSourceListener
 {
     private Profile profile;
     private AuthSession authSession;
 
-    private final int AR_ID_GET_IMAGE = 1001;
 
     private Mode currentMode = Mode.UNDEFINED;
+
     enum Mode
     {
         UNDEFINED,
@@ -107,13 +111,17 @@ public class ProfileManageActivity extends AppCompatActivity
         attachListeners();
     }
 
+    private String fileName;
+    private Uri capture = null;
     private void attachListeners()
     {
+        FileHandler fh = new FileHandler();
         findViewById(R.id.create_profile_image).setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_PICK);
-            startActivityForResult(intent, AR_ID_GET_IMAGE);
+            fileName = UUID.randomUUID().toString() + ".png";
+            Uri out = fh.getUriFromFile(this, fh.getImageFile(fh.getExternalImagesFolder(), fileName));
+            capture = out;
+            ImageSourceDialog isd = new ImageSourceDialog(this, getString(R.string.dialog_image_source_title), AnimalManageActivity.ARC_Camera, AnimalManageActivity.ARC_Gallery, out);
+            isd.Show();
         });
     }
 
@@ -229,24 +237,31 @@ public class ProfileManageActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == AR_ID_GET_IMAGE)
-        {
-            // Apply image
-            Uri selectedImage = data.getData();
-            //((ImageView)findViewById(R.id.create_profile_image)).setImageURI(selectedImage);
-            requestCropping(selectedImage);
-        }
-        else if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP)
-        {
-            Uri result = UCrop.getOutput(data);
-            Bitmap bitmap = getBitmap(result);
-            if (bitmap != null)
+        if (requestCode == AnimalManageActivity.ARC_Camera)
+            if (resultCode == RESULT_OK)
             {
-                profile.setImage(getImageAsString(bitmap));
-                profile.setImageType("base64");
-                ((ImageView)findViewById(R.id.create_profile_image)).setImageURI(result);
+                onCameraCapture();
             }
+            else
+                Log.e(getClass().getName(), "Image Capture failed");
+        else if (requestCode == AnimalManageActivity.ARC_Gallery)
+            if (resultCode == RESULT_OK)
+            {
+                if (data != null && data.getExtras() != null)
+                {
+                    Log.d(getClass().getName(), data.getExtras().toString());
+                }
+                Log.d(getClass().getName(), data.getData().toString());
+                onGalleryCapture(data.getData());
+            }
+            else
+                Log.e(getClass().getName(), "Image Gallery failed");
+        else if (requestCode == UCrop.REQUEST_CROP)
+        {
+            if (resultCode == RESULT_OK)
+                onImageCrop(UCrop.getOutput(data));
         }
+
     }
 
     private Bitmap getBitmap(Uri uri)
@@ -272,5 +287,39 @@ public class ProfileManageActivity extends AppCompatActivity
         byte[] imageBytes = baos.toByteArray();
         String encImg = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encImg;
+    }
+
+
+    @Override
+    public void onCameraCapture()
+    {
+        if (capture != null)
+            requestCropping((Uri) capture);
+    }
+
+    @Override
+    public void onGalleryCapture(Uri uri)
+    {
+        if (uri != null)
+        {
+            capture = uri;
+            requestCropping((Uri) capture);
+        }
+    }
+
+    @Override
+    public void onImageCrop(Uri uri)
+    {
+        if (uri != null)
+        {
+            capture = uri;
+            Bitmap bitmap = getBitmap(capture);
+            if (bitmap != null)
+            {
+                profile.setImage(getImageAsString(bitmap));
+                profile.setImageType("base64");
+                ((ImageView)findViewById(R.id.create_profile_image)).setImageURI(capture);
+            }
+        }
     }
 }
