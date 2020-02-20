@@ -28,5 +28,5 @@
         android:tint="@color/colorWhite"
         android:src="@drawable/ic_add_black_24dp">
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>

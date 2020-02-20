@@ -137,6 +137,13 @@
 
     <string name="create_animal_profile_animal_description">Beskrivelse av utseende og kjennetegn</string>
 
+    <string name="notifications">Notifikasjoner</string>
+    <string name="info">Info</string>
+    <string name="license">Lisenser</string>
+    <string name="terms_of_service">Vilkår for bruk</string>
+    <string name="privacy_policy">Personvernregler</string>
+    <string name="logout_btn">Logg ut</string>
+
     <string name="dialog_image_source_title">Hvor vil du hente bilet i fra?</string>
     <string name="dialog_image_source_use_camera">Bruk kamera</string>
     <string name="dialog_image_source_use_library">Dine bilder</string>
