@@ -20,7 +20,7 @@ public class jMissing
             JSONArray a = o.getJSONArray("data");
             for (int i = 0; i < a.length(); i++)
             {
-                Missing m = decode(a.getJSONObject(i).toString());
+                Missing m = decodeItems(a.getJSONObject(i).toString());
                 if (m != null)
                     missings.add(m);
             }
@@ -33,7 +33,39 @@ public class jMissing
         return missings;
     }
 
-    public Missing decode(String j) throws JSONException
+    /**
+     * For simple items
+     * @param j
+     * @return
+     * @throws JSONException
+     */
+    public Missing decodeItems(String j) throws JSONException
+    {
+        JSONObject o = new JSONObject(j);
+        return new Missing(
+                o.getInt("missingId"),
+                o.getDouble("lat"),
+                o.getDouble("long"),
+                o.getLong("timeDate"),
+
+                o.getInt("animalId"),
+                o.getString("name"),
+                o.getString("image"),
+
+                o.getInt("animalType"),
+                o.getString("animalTypeExtras"),
+                o.getString("color"),
+                o.getString("area")
+        );
+    }
+
+    /**
+     * For complete item
+     * @param j
+     * @return
+     * @throws JSONException
+     */
+    public Missing decodeItem(String j) throws JSONException
     {
         JSONObject o = new JSONObject(j);
         return new Missing(

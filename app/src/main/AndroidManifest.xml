@@ -29,6 +29,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         <activity android:name=".activity.PermissionsActivity"></activity>
+        <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.AnimalProfileActivity"/>
         <activity
             android:name=".activity.SignInEmailActivity"

@@ -1,6 +1,6 @@
 package no.dyrebar.dyrebar.classes;
 
-public class Poster
+public class Poster extends ProfileAnimal
 {
     private int _ID;
     private double lat;
@@ -19,43 +19,5 @@ public class Poster
         this.time = time;
     }
 
-    public int get_ID()
-    {
-        return _ID;
-    }
 
-    public void set_ID(int _ID)
-    {
-        this._ID = _ID;
-    }
-
-    public double getLat()
-    {
-        return lat;
-    }
-
-    public void setLat(double lat)
-    {
-        this.lat = lat;
-    }
-
-    public double getLng()
-    {
-        return lng;
-    }
-
-    public void setLng(double lng)
-    {
-        this.lng = lng;
-    }
-
-    public long getTime()
-    {
-        return time;
-    }
-
-    public void setTime(long time)
-    {
-        this.time = time;
-    }
 }
