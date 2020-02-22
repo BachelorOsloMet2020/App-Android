@@ -10,6 +10,28 @@ import no.dyrebar.dyrebar.classes.Missing;
 
 public class jMissing
 {
+
+    public String encode(Missing missing)
+    {
+        JSONObject o = new JSONObject();
+        try
+        {
+            o.put("animalId", missing.getAnimalId());
+            o.put("lat", missing.getLat());
+            o.put("lng", missing.getLng());
+            o.put("timeDate", missing.getTime());
+            o.put("area", missing.getArea());
+            return o.toString();
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
     public ArrayList<Missing> decodeArray(String j)
     {
         ArrayList<Missing> missings = new ArrayList<>();

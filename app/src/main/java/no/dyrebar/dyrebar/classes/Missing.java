@@ -64,6 +64,22 @@ public class Missing extends ProfileAnimal
         super.setExtras(animalTypeExtras);
     }
 
+    /**
+     * @Warning Only for posting missing
+     * @param lat
+     * @param lng
+     * @param timeDate
+     * @param area
+     */
+    public Missing(int animalId, double lat, double lng, long timeDate, String area)
+    {
+        super.set_ID(animalId);
+        this.lat = lat;
+        this.lng = lng;
+        this.time = timeDate;
+        this.area = area;
+    }
+
     public String getArea()
     {
         return area;
