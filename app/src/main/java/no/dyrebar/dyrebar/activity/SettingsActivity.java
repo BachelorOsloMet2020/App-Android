@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
@@ -88,6 +89,7 @@ public class SettingsActivity extends AppCompatActivity
             runOnUiThread(() -> {
                 if (!success)
                 {
+                    Log.e(getClass().getName(), "Api -> " + result);
                     Toast.makeText(getApplicationContext(), getString(R.string.settings_sign_out_error_message), Toast.LENGTH_LONG).show();
                 }
                 Intent i = new Intent(this, SplashActivity.class);
