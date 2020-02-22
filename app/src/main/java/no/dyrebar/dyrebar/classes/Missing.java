@@ -64,6 +64,11 @@ public class Missing extends ProfileAnimal
         super.setExtras(animalTypeExtras);
     }
 
+    public String getArea()
+    {
+        return area;
+    }
+
     public String getName()
     {
         return super.getName();

@@ -45,7 +45,7 @@ public class jMissing
         return new Missing(
                 o.getInt("missingId"),
                 o.getDouble("lat"),
-                o.getDouble("long"),
+                o.getDouble("lng"),
                 o.getLong("timeDate"),
 
                 o.getInt("animalId"),
@@ -53,9 +53,9 @@ public class jMissing
                 o.getString("image"),
 
                 o.getInt("animalType"),
-                o.getString("animalTypeExtras"),
+                (!o.isNull("animalTypeExtras") ? o.getString("animalTypeExtras") : null),
                 o.getString("color"),
-                o.getString("area")
+                (!o.isNull("area") ? o.getString("area") : null)
         );
     }
 
@@ -71,7 +71,7 @@ public class jMissing
         return new Missing(
             o.getInt("missingId"),
             o.getDouble("lat"),
-            o.getDouble("long"),
+            o.getDouble("lng"),
             o.getLong("timeDate"),
 
             o.getInt("animalId"),
