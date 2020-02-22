@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-        android:id="@+id/view_settingswitch_imageview"
+        android:id="@+id/view_settingclick_imageview"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:padding="5dp"
@@ -18,25 +18,24 @@
         tools:src="@drawable/ic_add_black_24dp" />
 
     <TextView
-        android:id="@+id/view_settingswitch_textview"
+        android:id="@+id/view_settingclick_textview"
         android:layout_width="0dp"
-        android:textSize="18sp"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/view_settingswitch_swtich"
-        app:layout_constraintStart_toEndOf="@+id/view_settingswitch_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/view_settingclick_imageclick"
+        app:layout_constraintStart_toEndOf="@+id/view_settingclick_imageview"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Line" />
 
-    <Switch
-        android:id="@+id/view_settingswitch_swtich"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+    <ImageView
+        android:id="@+id/view_settingclick_imageclick"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="5dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

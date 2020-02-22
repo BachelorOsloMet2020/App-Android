@@ -162,9 +162,15 @@
 
     <string name="settings">Innstillinger</string>
 
+    <string name="settings_app_version">Applikasjons versjon</string>
+
+
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>
 
+
+    <string name="link_privacy_policy">https://dyrebar.no/personvern/</string>
+    <string name="link_terms_of_use">https://dyrebar.no/brukervilk%C3%A5r/</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

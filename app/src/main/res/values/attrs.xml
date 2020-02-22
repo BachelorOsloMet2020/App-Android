@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="text" format="reference|string" />
+    <attr name="textColor"  />
+    <attr name="src" format="reference" />
+    <attr name="clickSrc" format="reference" />
+    <attr name="DrawableTint" />
+
     <declare-styleable name="SettingSwitchView">
-        <attr name="text" format="reference|string" />
+        <attr name="text"/>
         <attr name="textColor"  />
-        <attr name="src" format="reference" />
+        <attr name="src" />
+        <attr name="DrawableTint"/>
+    </declare-styleable>
+
+    <declare-styleable name="SettingTextView">
+        <attr name="textTop" format="string|reference" />
+        <attr name="textTopColor"  />
+        <attr name="textBottom" format="string|reference" />
+        <attr name="textBottomColor" />
+        <attr name="src"/>
         <attr name="DrawableTint" />
     </declare-styleable>
+
+    <declare-styleable name="SettingClickView">
+        <attr name="text" />
+        <attr name="textColor" />
+        <attr name="src" />
+        <attr name="clickSrc" />
+        <attr name="DrawableTint" />
+        <attr name="DrawableClickTint" />
+    </declare-styleable>
+
 </resources>
