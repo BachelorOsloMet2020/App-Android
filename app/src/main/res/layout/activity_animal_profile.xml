@@ -43,9 +43,25 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textSize="26sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_profile_image"
+        tools:text="Bruno"></TextView>
+
+    <TextView
+        android:id="@+id/animal_typeExtras"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="0dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animal_name"
         tools:text="Bruno"></TextView>
 
     <TextView
@@ -55,7 +71,7 @@
         android:layout_margin="5dp"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animal_name"
+        app:layout_constraintTop_toBottomOf="@+id/animal_typeExtras"
         android:text="@string/id_tag_"></TextView>
 
     <TextView
@@ -64,9 +80,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/animal_idTag_static"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/animal_idTag_static"
-        app:layout_constraintTop_toBottomOf="@+id/animal_name"
+        app:layout_constraintTop_toTopOf="@+id/animal_idTag_static"
         tools:text="0242542365261357-39432960291"></TextView>
 
 
@@ -230,7 +247,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="4dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/animal_report_missing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animal_description_static">
@@ -245,7 +262,7 @@
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/animal_report_missing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"

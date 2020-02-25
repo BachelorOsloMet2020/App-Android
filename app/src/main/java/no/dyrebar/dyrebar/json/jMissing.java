@@ -10,6 +10,28 @@ import no.dyrebar.dyrebar.classes.Missing;
 
 public class jMissing
 {
+
+    public String encode(Missing missing)
+    {
+        JSONObject o = new JSONObject();
+        try
+        {
+            o.put("animalId", missing.getAnimalId());
+            o.put("lat", missing.getLat());
+            o.put("lng", missing.getLng());
+            o.put("timeDate", missing.getTime());
+            o.put("area", missing.getArea());
+            return o.toString();
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
     public ArrayList<Missing> decodeArray(String j)
     {
         ArrayList<Missing> missings = new ArrayList<>();
@@ -45,7 +67,7 @@ public class jMissing
         return new Missing(
                 o.getInt("missingId"),
                 o.getDouble("lat"),
-                o.getDouble("long"),
+                o.getDouble("lng"),
                 o.getLong("timeDate"),
 
                 o.getInt("animalId"),
@@ -53,9 +75,9 @@ public class jMissing
                 o.getString("image"),
 
                 o.getInt("animalType"),
-                o.getString("animalTypeExtras"),
+                (!o.isNull("animalTypeExtras") ? o.getString("animalTypeExtras") : null),
                 o.getString("color"),
-                o.getString("area")
+                (!o.isNull("area") ? o.getString("area") : null)
         );
     }
 
@@ -71,7 +93,7 @@ public class jMissing
         return new Missing(
             o.getInt("missingId"),
             o.getDouble("lat"),
-            o.getDouble("long"),
+            o.getDouble("lng"),
             o.getLong("timeDate"),
 
             o.getInt("animalId"),

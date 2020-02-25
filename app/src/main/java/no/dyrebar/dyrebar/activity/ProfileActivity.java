@@ -48,6 +48,15 @@ public class ProfileActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        try
+        {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        catch (NullPointerException npe)
+        {
+            npe.printStackTrace();
+        }
     }
 
     @Override
@@ -61,9 +70,14 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-        return true;
+
+        if (item.getItemId() == R.id.profile_toolbar_menu_settings)
+        {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -142,5 +156,12 @@ public class ProfileActivity extends AppCompatActivity
         Intent intent = new Intent(this, ProfileManageActivity.class);
         intent.putExtras(b);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp()
+    {
+        onBackPressed();
+        return true;
     }
 }

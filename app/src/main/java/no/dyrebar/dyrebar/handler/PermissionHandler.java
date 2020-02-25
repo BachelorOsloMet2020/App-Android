@@ -104,6 +104,11 @@ public class PermissionHandler
     {
         ActivityCompat.requestPermissions(activity, PEMS_Camera, PEMC_CAMERA);
     }
+
+    /**
+     * It is highly recommended to implement "PermissionInterface.PermissionListener" in the activity
+     *
+     */
     public void getGpsPermission()
     {
         ActivityCompat.requestPermissions(activity, PEMS_GPS, PEMC_GPS);
