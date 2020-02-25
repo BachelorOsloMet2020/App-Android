@@ -5,18 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-
-import com.squareup.picasso.Picasso;
-
 import no.dyrebar.dyrebar.R;
-import no.dyrebar.dyrebar.classes.Profile;
+import no.dyrebar.dyrebar.dialog.MissingDialog;
 import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 
 public class HomeFragment extends Fragment
@@ -49,6 +43,7 @@ public class HomeFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        attachListeners();
     }
 
 
@@ -58,6 +53,16 @@ public class HomeFragment extends Fragment
     {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    private MissingDialog missingDialog;
+    private void attachListeners()
+    {
+         this.findView(R.id.btn_missing).setOnClickListener(view ->
+         {
+             missingDialog = new MissingDialog(getActivity(), getString(R.string.missing));
+             missingDialog.Show();
+         });
     }
 
 
