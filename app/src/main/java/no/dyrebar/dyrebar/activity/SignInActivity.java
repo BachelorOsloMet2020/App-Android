@@ -296,9 +296,9 @@ public class SignInActivity extends AppCompatActivity
                 {
                     try
                     {
-                        AuthSession authSession = new jAuthSession().decode(resp);
+                        App.authSession = new jAuthSession().decode(resp);
                         /** Storing auth session to enable future use */
-                        new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, authSession.asList());
+                        new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, App.authSession.asList());
 
                         prepareForNewActivity();
                     }
