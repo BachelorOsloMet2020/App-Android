@@ -31,7 +31,7 @@ public class PermissionsActivity extends AppCompatActivity implements Permission
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permissions);
-        permissionHandler = new PermissionHandler(this);
+        permissionHandler = new PermissionHandler(this, this);
         loadPems();
     }
 

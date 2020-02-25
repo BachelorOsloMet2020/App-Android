@@ -38,6 +38,7 @@ import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Missing;
 import no.dyrebar.dyrebar.classes.ProfileAnimal;
+import no.dyrebar.dyrebar.handler.MissingHandler;
 import no.dyrebar.dyrebar.handler.PermissionHandler;
 import no.dyrebar.dyrebar.handler.TypeHandler;
 import no.dyrebar.dyrebar.interfaces.PermissionInterface;
@@ -46,18 +47,17 @@ import no.dyrebar.dyrebar.json.jMissing;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class AnimalProfileActivity extends AppCompatActivity implements PermissionInterface.PermissionListener, LocationListener
+public class AnimalProfileActivity extends AppCompatActivity implements MissingHandler.MissingListener
 {
     private ProfileAnimal animal;
-    private PermissionHandler ph;
+    private MissingHandler missingHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_animal_profile);
-        ph = new PermissionHandler(this);
-
+        missingHandler = new MissingHandler(this, this);
         if (getIntent().getExtras() != null && getIntent().hasExtra("animal"))
         {
             Bundle b = getIntent().getExtras();
@@ -100,64 +100,9 @@ public class AnimalProfileActivity extends AppCompatActivity implements Permissi
         findViewById(R.id.animal_report_missing).setOnClickListener(v -> {
             if (App.authSession != null && animal != null)
             {
-                PermissionHandler ph = new PermissionHandler(this);
-                if (!ph.isGpsPermitted())
-                {
-                    ph.getGpsPermission();
-                }
-                else
-                {
-                    requestGps();
-                }
+                missingHandler.RequestMissing(animal);
             }
         });
-    }
-
-    private LocationManager locationManager;
-    @SuppressLint("MissingPermission")
-    private void requestGps()
-    {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,0, this);
-    }
-
-    private void createMissingWithGps(Location location)
-    {
-        long time = Calendar.getInstance(TimeZone.getDefault()).getTimeInMillis();
-        List<Address> addressList = null;
-        try
-        {
-            addressList = new Geocoder(getApplicationContext(), Locale.getDefault()).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-
-        Missing m = new Missing(
-            animal.get_ID(),
-            location.getLatitude(),
-            location.getLongitude(),
-            time,
-            ((addressList != null && addressList.size() == 1) ? addressList.get(0).getLocality() : null)
-        );
-        if (m.getArea() == null)
-        {
-            // TODO: Request input
-        }
-        else
-        {
-            publishMissing(App.authSession, m);
-        }
-
-
-    }
-
-    private void createMissingWithoutGps()
-    {
-
     }
 
     private void publishMissing(AuthSession authSession, Missing missing)
@@ -186,78 +131,12 @@ public class AnimalProfileActivity extends AppCompatActivity implements Permissi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        ph.onPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-
-    @Override
-    public void onRequestGpsPermission()
-    {
-
-    }
-
-
-    @Override
-    public void onGpsPermitted(boolean permitted)
-    {
-        if (permitted)
-            requestGps();
-        else
-            createMissingWithoutGps();
+        missingHandler.onPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
-    public void onLocationChanged(Location location)
+    public void onMissingRequestCreated(Missing missing)
     {
-        locationManager.removeUpdates(this);
-        createMissingWithGps(location);
+        publishMissing(App.authSession, missing);
     }
-
-    //region ###Please collapse me### Not needed permissions
-
-    @Override
-    public void onRequestFilePermission()
-    {
-
-    }
-
-    @Override
-    public void onRequestCameraPermission()
-    {
-
-    }
-
-    @Override
-    public void onStoragePermitted(boolean permitted)
-    {
-
-    }
-
-    @Override
-    public void onCameraPermitted(boolean permitted)
-    {
-
-    }
-
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras)
-    {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider)
-    {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider)
-    {
-
-    }
-
-    //endregion
 }

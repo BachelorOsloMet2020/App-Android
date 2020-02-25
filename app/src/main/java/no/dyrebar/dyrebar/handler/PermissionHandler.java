@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import no.dyrebar.dyrebar.interfaces.PermissionInterface;
 
@@ -35,12 +36,12 @@ public class PermissionHandler
     public PermissionHandler(Activity activity)
     {
         this.activity = activity;
-        if (activity instanceof PermissionInterface.PermissionListener)
-            this.mListener = (PermissionInterface.PermissionListener) activity;
-        else
-        {
-            Log.e(getClass().getName(), "Listener not implemented!");
-        }
+    }
+
+    public PermissionHandler(Activity activity, PermissionInterface.PermissionListener mListener)
+    {
+        this.mListener = mListener;
+        this.activity = activity;
     }
 
     public boolean isStoragePermitted()
@@ -87,7 +88,7 @@ public class PermissionHandler
 
     private boolean isPermitted(String permission)
     {
-        return activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+        return activity.getApplicationContext().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     public boolean hasRequiredPermissions()
