@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/DarkToolbar"
+        android:background="@color/colorPrimary">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <ScrollView
+        android:id="@+id/animal_missing_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline6">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="500dp"
+            app:layout_constraintTop_toTopOf="@+id/guideline6">
+
+            <TextView
+                android:id="@+id/missing_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Bruno" />
+
+            <include
+                android:id="@+id/include2"
+                layout="@layout/view_animal_information"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/missing_title" />
+
+            <TextView
+                android:id="@+id/animal_description_static"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/description_"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include2"></TextView>
+
+            <TextView
+                android:id="@+id/animal_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@+id/animal_description_static"
+                tools:layout_editor_absoluteX="5dp"
+                tools:text="@string/ok"></TextView>
+
+            <Button
+                android:id="@+id/animal_description_show_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:text="@string/show_more"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="@+id/animal_description"
+                app:layout_constraintEnd_toEndOf="@+id/animal_description"
+                app:layout_constraintStart_toStartOf="@+id/animal_description" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="0dp"
+                android:layout_height="420dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/animal_description" />
+
+            <View
+                android:id="@+id/mapView_scrollHelper"
+                android:layout_width="0dp"
+                android:layout_height="340dp"
+                app:layout_constraintBottom_toBottomOf="@+id/mapView"
+                app:layout_constraintEnd_toEndOf="@+id/mapView"
+                app:layout_constraintStart_toStartOf="@+id/mapView"
+                app:layout_constraintTop_toTopOf="@+id/mapView"
+                app:layout_constraintVertical_bias="0.60" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="200dp" />
+
+
+    <androidx.cardview.widget.CardView
+        android:elevation="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/contact_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+
+                tools:text="Ola Nordmann" />
+
+            <ImageButton
+                android:id="@+id/contact_phone"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:background="@drawable/ef_ripple_round_primary"
+                android:src="@drawable/ic_phone_black_24dp"
+                android:tint="@color/colorWhite"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/contact_name"
+                app:layout_constraintTop_toBottomOf="@+id/contact_name" />
+
+            <ImageButton
+                android:id="@+id/contact_mail"
+                android:background="@drawable/ef_ripple_round_primary"
+                android:tint="@color/colorWhite"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_mail_outline_black_24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/contact_phone"
+                app:layout_constraintStart_toEndOf="@+id/contact_phone"
+                app:layout_constraintTop_toTopOf="@+id/contact_phone" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

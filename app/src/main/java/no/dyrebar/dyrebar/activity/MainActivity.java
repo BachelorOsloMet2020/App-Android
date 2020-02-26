@@ -55,12 +55,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
         getMyProfile();
         onCreateCompleted();
     }
@@ -218,11 +212,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         if (toolbar == null)
             return;
         setSupportActionBar(toolbar);
-
-
-
-
-
     }
 
     @Override
@@ -230,4 +219,12 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     {
         return profile;
     }
+
+    @Override
+    public void launchActivity(Intent i)
+    {
+        startActivity(i);
+    }
+
+
 }

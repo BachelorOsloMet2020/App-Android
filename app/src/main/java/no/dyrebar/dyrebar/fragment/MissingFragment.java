@@ -1,6 +1,7 @@
 package no.dyrebar.dyrebar.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.activity.AnimalMissingActivity;
 import no.dyrebar.dyrebar.adapter.MissingAnimalAdapter;
 import no.dyrebar.dyrebar.classes.Missing;
 import no.dyrebar.dyrebar.interfaces.FragmentInterface;
@@ -25,7 +27,7 @@ import no.dyrebar.dyrebar.json.jMissing;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class MissingFragment extends Fragment
+public class MissingFragment extends Fragment implements MissingAnimalAdapter.ItemClickListener
 {
     FragmentInterface.FragmentListener mListener;
 
@@ -74,11 +76,23 @@ public class MissingFragment extends Fragment
             ArrayList<Missing> missings = new jMissing().decodeArray(resp);
 
             new Handler(Looper.getMainLooper()).post(() -> {
-                MissingAnimalAdapter maa = new MissingAnimalAdapter(getContext(), missings);
+                MissingAnimalAdapter maa = new MissingAnimalAdapter(getContext(), this, missings);
                 rv.setAdapter(maa); });
         });
 
 
 
+
+
+    }
+
+    @Override
+    public void onItemClicked(Missing missing)
+    {
+        Intent i = new Intent(getActivity(), AnimalMissingActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("missing", missing);
+        i.putExtras(b);
+        mListener.launchActivity(i);
     }
 }

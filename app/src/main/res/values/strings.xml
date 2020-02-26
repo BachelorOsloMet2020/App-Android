@@ -103,6 +103,7 @@
     <string name="unknown">Ukjent</string>
     <string name="continue_">Fortsett</string>
     <string name="complete_">Fullfør</string>
+    <string name="ok">Ok</string>
 
     <string name="unknown_location">Ukjent plassering</string>
 
@@ -145,6 +146,7 @@
     <string name="terms_of_service">Vilkår for bruk</string>
     <string name="privacy_policy">Personvernregler</string>
     <string name="logout_btn">Logg ut</string>
+    <string name="show_more">Vis mer</string>
 
     <string name="dialog_image_source_title">Hvor vil du hente bilet i fra?</string>
     <string name="dialog_image_source_use_camera">Bruk kamera</string>
@@ -176,7 +178,8 @@
 
     <string name="link_privacy_policy">https://dyrebar.no/personvern/</string>
     <string name="link_terms_of_use">https://dyrebar.no/brukervilk%C3%A5r/</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat nisl pretium fusce id velit ut tortor pretium. Ac odio tempor orci dapibus ultrices in iaculis nunc sed. Fermentum posuere urna nec tincidunt. Sit amet risus nullam eget felis eget nunc lobortis. Mattis molestie a iaculis at erat pellentesque adipiscing. Nullam eget felis eget nunc. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Morbi quis commodo odio aenean sed adipiscing diam donec adipiscing. Urna nunc id cursus metus aliquam eleifend mi in. Quam elementum pulvinar etiam non quam lacus suspendisse. Dui faucibus in ornare quam viverra orci. Vulputate ut pharetra sit amet aliquam id diam. Eget est lorem ipsum dolor sit amet. Donec adipiscing tristique risus nec feugiat in fermentum posuere. Et netus et malesuada fames ac turpis egestas.</string>
 
 </resources>

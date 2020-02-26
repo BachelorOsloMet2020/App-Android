@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".App"
@@ -18,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".adapter.SimpleMissingPosterAdapter"></activity>
+        <activity android:name=".activity.AnimalMissingActivity"></activity>
+        <activity android:name=".adapter.SimpleMissingPosterAdapter" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

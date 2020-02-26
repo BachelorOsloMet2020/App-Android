@@ -142,6 +142,12 @@ public class PermissionsActivity extends AppCompatActivity implements Permission
     }
 
     @Override
+    public void onRequestPhonePermission()
+    {
+        permissionHandler.getPhonePermission();
+    }
+
+    @Override
     public void onStoragePermitted(boolean permitted)
     {
         loadPems();
@@ -157,5 +163,10 @@ public class PermissionsActivity extends AppCompatActivity implements Permission
     public void onGpsPermitted(boolean permitted)
     {
         loadPems();
+    }
+
+    @Override
+    public void onPhonePermitted(boolean permitted)
+    {
     }
 }

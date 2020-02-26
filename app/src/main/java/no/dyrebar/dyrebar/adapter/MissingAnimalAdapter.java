@@ -25,11 +25,23 @@ public class MissingAnimalAdapter extends RecyclerView.Adapter<MissingAnimalAdap
 {
     private ArrayList<Missing> items;
     private Context context;
+    private ItemClickListener mListener;
 
     public MissingAnimalAdapter(Context context, ArrayList<Missing> items)
     {
         this.context = context;
         this.items = items;
+        if (context instanceof MissingAnimalAdapter.ItemClickListener)
+            mListener = (MissingAnimalAdapter.ItemClickListener)context;
+        else
+            throw new RuntimeException("ItemClickListener not implemented in context");
+    }
+
+    public MissingAnimalAdapter(Context context, ItemClickListener mListener, ArrayList<Missing> items)
+    {
+        this.context = context;
+        this.items = items;
+        this.mListener = mListener;
     }
 
     @NonNull
@@ -96,6 +108,16 @@ public class MissingAnimalAdapter extends RecyclerView.Adapter<MissingAnimalAdap
             sex = view.findViewById(R.id.adapter_missing_sex);
             area = view.findViewById(R.id.adapter_missing_area);
             date = view.findViewById(R.id.adapter_missing_date);
+            view.setOnClickListener(v -> {
+                Missing m = items.get(getAdapterPosition());
+                mListener.onItemClicked(m);
+            });
         }
     }
+
+    public interface ItemClickListener
+    {
+        void onItemClicked(Missing missing);
+    }
+
 }

@@ -136,6 +136,12 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
     }
 
     @Override
+    public void onRequestPhonePermission()
+    {
+
+    }
+
+    @Override
     public void onStoragePermitted(boolean permitted)
     {
 
@@ -152,6 +158,12 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
     {
         if (permitted)
             requestLocation();
+    }
+
+    @Override
+    public void onPhonePermitted(boolean permitted)
+    {
+
     }
 
 

@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import no.dyrebar.dyrebar.classes.Profile;
+import no.dyrebar.dyrebar.classes.PublicProfile;
 
 public class jProfile
 {
@@ -53,6 +54,31 @@ public class jProfile
         }
         return null;
     }
+
+    public PublicProfile decodePublic(String json)
+    {
+        if (json == null || json.length() == 0)
+            return null;
+        try
+        {
+            JSONObject o = new JSONObject(json).getJSONObject("profile");
+            PublicProfile profile = new PublicProfile(
+                    o.getString("id"),
+                    o.getString("firstName"),
+                    o.getString("lastName"),
+                    o.getString("email"),
+                    o.getString("phoneNumber"),
+                    o.getString("image")
+            );
+            return profile;
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public String encode(Profile profile, String token)
     {

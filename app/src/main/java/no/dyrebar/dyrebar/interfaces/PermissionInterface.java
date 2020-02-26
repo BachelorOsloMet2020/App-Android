@@ -15,9 +15,11 @@ public class PermissionInterface
         void onRequestFilePermission();
         void onRequestGpsPermission();
         void onRequestCameraPermission();
+        void onRequestPhonePermission();
 
         void onStoragePermitted(boolean permitted);
         void onCameraPermitted(boolean permitted);
         void onGpsPermitted(boolean permitted);
+        void onPhonePermitted(boolean permitted);
     }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.classes.ProfileAnimal;
+import no.dyrebar.dyrebar.extlib.PicassoCircleTransform;
 
 public class SimpleMissingPosterAdapter extends BaseAdapter
 {
@@ -56,6 +57,7 @@ public class SimpleMissingPosterAdapter extends BaseAdapter
         Picasso.get().load(profileAnimal.getImage())
                 .placeholder(R.drawable.chili)
                 .error(R.drawable.ic_broken_image_black_24dp)
+                .transform(new PicassoCircleTransform())
                 .into(img);
         ((TextView) view.findViewById(R.id.txt_animal_name)).setText(profileAnimal.getName());
         return view;

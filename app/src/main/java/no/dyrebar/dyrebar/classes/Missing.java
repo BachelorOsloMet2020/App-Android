@@ -1,6 +1,8 @@
 package no.dyrebar.dyrebar.classes;
 
-public class Missing extends ProfileAnimal
+import java.io.Serializable;
+
+public class Missing extends ProfileAnimal implements Serializable
 {
     private int _ID;
     private double lat;

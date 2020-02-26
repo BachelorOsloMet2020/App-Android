@@ -81,6 +81,21 @@ public class jMissing
         );
     }
 
+    public Missing decode(String j)
+    {
+        try
+        {
+            JSONObject o = new JSONObject(j);
+            JSONObject m = o.getJSONObject("missing");
+            return decodeItem(m.toString());
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * For complete item
      * @param j

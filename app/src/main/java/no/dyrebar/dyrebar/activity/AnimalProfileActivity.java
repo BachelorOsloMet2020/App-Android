@@ -69,7 +69,7 @@ public class AnimalProfileActivity extends AppCompatActivity implements MissingH
     private void loadAnimal()
     {
         ((TextView)findViewById(R.id.animal_name)).setText(animal.getName());
-        ((TextView)findViewById(R.id.animal_idTag_text)).setText((animal.getTag_ID() == null || animal.getTag_ID().length() == 0) ? getString(R.string.not_given) : animal.getTag_ID());
+        ((TextView)findViewById(R.id.animal_idTag_text)).setText((animal.getTag_ID() == null || animal.getTag_ID().equals("null") || animal.getTag_ID().length() == 0) ? getString(R.string.not_given) : animal.getTag_ID());
         Picasso.get().load(animal.getImage()).placeholder(R.drawable.ic_dyrebarlogo).into((ImageView) findViewById(R.id.animal_profile_image), new Callback() {
             @Override
             public void onSuccess()
@@ -92,7 +92,7 @@ public class AnimalProfileActivity extends AppCompatActivity implements MissingH
         ((TextView)findViewById(R.id.animal_fur_pattern)).setText(types.getFurPattern(this, animal.getFurPattern()));
         ((TextView)findViewById(R.id.animal_color)).setText(animal.getColor());
         ((TextView)findViewById(R.id.animal_description)).setText(animal.getDescription());
-        if (animal.getExtras() == null || animal.getExtras().length() == 0)
+        if (animal.getExtras() == null || animal.getExtras().equals("null") || animal.getExtras().length() == 0)
             ((TextView)findViewById(R.id.animal_typeExtras)).setVisibility(View.GONE);
         else
             ((TextView)findViewById(R.id.animal_typeExtras)).setText(animal.getExtras());
