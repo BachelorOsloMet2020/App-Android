@@ -15,6 +15,9 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +36,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -116,6 +121,9 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
         findViewById(R.id.contact_mail).setOnClickListener(v -> {
             mail();
         });
+        ((TextView)findViewById(R.id.contact_phone_text)).setText(profileData.getTlf());
+        ((TextView)findViewById(R.id.contact_mail_text)).setText(profileData.getEmail());
+
     }
 
 
@@ -123,6 +131,13 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
     private void setMissingData(Missing missing)
     {
         animal = missing;
+        try
+        {
+            getSupportActionBar().setTitle(missing.getName());
+        }catch (NullPointerException npe)
+        {
+            npe.printStackTrace();
+        }
         ((TextView) findViewById(R.id.animal_name)).setText(missing.getName());
         ((TextView) findViewById(R.id.animal_idTag_text)).setText((animal.getTag_ID() == null || animal.getTag_ID().equals("null") || animal.getTag_ID().length() == 0) ? getString(R.string.not_given) : animal.getTag_ID());
         ((TextView) findViewById(R.id.missing_title)).setText(getString(R.string.missing) + " " + missing.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), missing.getAnimalType()));
@@ -239,6 +254,33 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
         gmap.animateCamera(cu);
         gmap.addMarker(new MarkerOptions().position(missingLoc).title(animal.getName()));
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.animal_contact_owner_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+
+        if (item.getItemId() == R.id.animal_contact_owner_menu_phone)
+        {
+            call();
+            return true;
+        }
+        else if (item.getItemId() == R.id.animal_contact_owner_menu_mail)
+        {
+            mail();
+            return true;
+        }
+        return false;
+    }
+
 
     @SuppressLint("MissingPermission")
     private void call()
