@@ -14,12 +14,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import no.dyrebar.dyrebar.App;
 import no.dyrebar.dyrebar.R;
@@ -29,14 +34,21 @@ import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.ProfileAnimal;
 import no.dyrebar.dyrebar.extlib.PicassoCircleTransform;
+import no.dyrebar.dyrebar.fragment.BloggFragment;
+import no.dyrebar.dyrebar.fragment.FoundFragment;
+import no.dyrebar.dyrebar.fragment.HomeFragment;
+import no.dyrebar.dyrebar.fragment.MissingFragment;
+import no.dyrebar.dyrebar.fragment.MyAnimalsFragment;
+import no.dyrebar.dyrebar.fragment.MyPostersFragment;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
+import no.dyrebar.dyrebar.interfaces.FragmentInterface;
 import no.dyrebar.dyrebar.json.jProfile;
 import no.dyrebar.dyrebar.json.jProfileAnimal;
 import no.dyrebar.dyrebar.json.jStatus;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class ProfileActivity extends AppCompatActivity
+public class ProfileActivity extends AppCompatActivity implements FragmentInterface.FragmentListener
 {
 
     @Override
@@ -57,6 +69,11 @@ public class ProfileActivity extends AppCompatActivity
         {
             npe.printStackTrace();
         }
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        bottomNavigationView.getMenu().getItem(0).setChecked(true);
+        LaunchFragment(new MyAnimalsFragment(), "");
     }
 
     @Override
@@ -89,7 +106,6 @@ public class ProfileActivity extends AppCompatActivity
 
     public void startKeyListener()
     {
-        findViewById(R.id.add_animal_fab).setOnClickListener(view -> addAnimal());
         findViewById(R.id.edit_user_profile).setOnClickListener(view -> editProfile());
     }
 
@@ -122,31 +138,10 @@ public class ProfileActivity extends AppCompatActivity
                 startKeyListener();
             });
 
-            String ani = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
-            {{
-                add(new Pair<>("request", "animals"));
-                add(new Pair<>("uid", App.profile.getId()));
-            }});
-            ArrayList<ProfileAnimal> animals = new jProfileAnimal().decodeArray(ani);
-            runOnUiThread(() -> loadMyAnimals(animals));
-
         });
     }
 
-    private void loadMyAnimals(ArrayList<ProfileAnimal> items)
-    {
-        RecyclerView rv = findViewById(R.id.recyclerView_user_profile);
-        MyAnimalAdapter maa = new MyAnimalAdapter(items, this);
-        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
-        rv.setAdapter(maa);
-    }
 
-
-    public void addAnimal()
-    {
-        Intent intent = new Intent(this, AnimalManageActivity.class);
-        startActivity(intent);
-    }
 
     public void editProfile()
     {
@@ -163,5 +158,78 @@ public class ProfileActivity extends AppCompatActivity
     {
         onBackPressed();
         return true;
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener = menuItem ->
+    {
+        switch (menuItem.getItemId())
+        {
+            case R.id.nav_my_animals:
+                LaunchFragment(new MyAnimalsFragment(), "");
+                break;
+            case R.id.nav_my_posters:
+                LaunchFragment(new MyPostersFragment(), "");
+                break;
+        }
+        return true;
+    };
+
+    /**
+     * Method for replacing of existing and launching new fragments
+     */
+    private Fragment prevFragment = null;
+    private void LaunchFragment(Fragment fragment, final String tag)
+    {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (prevFragment == null && fragmentTransaction.isEmpty() && !hasFragments())
+        {
+            fragmentTransaction.add(R.id.container_fragments, fragment, tag);
+        }
+        else
+        {
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+            fragmentTransaction.replace(R.id.container_fragments, fragment, tag);
+        }
+        fragmentTransaction.commitNow();
+
+        prevFragment = fragment;
+    }
+
+    /**
+     * Method for checking if fragment already excist in backstack
+     * Preventing NPE
+     * @return true if it has fragments
+     */
+    public boolean hasFragments()
+    {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            fragments = fragmentManager.getFragments();
+        }
+        else
+            return true;
+        if (fragmentManager.getBackStackEntryCount() > 0 || fragments.size() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public void onSetToolbar(Toolbar toolbar)
+    {
+
+    }
+
+    @Override
+    public Profile getProfile()
+    {
+        return null;
+    }
+
+    @Override
+    public void launchActivity(Intent i)
+    {
+
     }
 }

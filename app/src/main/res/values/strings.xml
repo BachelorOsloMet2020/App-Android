@@ -3,7 +3,6 @@
 
     <string name="activity_label_my_profile">Min Profil</string>
 
-
     <string name="signin">Logg inn</string>
     <string name="signinwith">Logg inn med</string>
     <string name="signin_google">Google</string>
@@ -19,6 +18,9 @@
     <string name="adp_home_poster_distance">Avstand</string>
     <string name="contact">Kontakt</string>
     <string name="show_map">Vis i kart</string>
+
+    <string name="my_animals">Mine dyr</string>
+    <string name="my_posters">Mine annonser</string>
 
     <string name="spinner_please_select">Vennligst velg</string>
 
@@ -42,6 +44,8 @@
     <string name="register_new_user">Opprett ny bruker</string>
     <string name="forgotten_password">Glemt passord?</string>
     <string name="register">Registrer</string>
+    <string name="call">Ring</string>
+    <string name="sendmail">Send epost</string>
 
     <string name="create_profile_image_desc">Profil bilde</string>
 

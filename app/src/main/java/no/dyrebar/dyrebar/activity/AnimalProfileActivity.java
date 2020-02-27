@@ -120,6 +120,7 @@ public class AnimalProfileActivity extends AppCompatActivity implements MissingH
                 add(new Pair<>("request", "missing"));
                 add(new Pair<>("authId", authSession.getAuthId()));
                 add(new Pair<>("token", authSession.getToken()));
+                add(new Pair<>("uid", App.profile.getId()));
                 add(new Pair<>("data", data));
             }});
             Log.d(getClass().getName(), "API -> " + res);

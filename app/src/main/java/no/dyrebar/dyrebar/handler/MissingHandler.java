@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import no.dyrebar.dyrebar.App;
 import no.dyrebar.dyrebar.classes.Missing;
 import no.dyrebar.dyrebar.classes.ProfileAnimal;
 import no.dyrebar.dyrebar.interfaces.PermissionInterface;
@@ -52,6 +53,7 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
 
         Missing m = new Missing(
                 animal.get_ID(),
+                Integer.valueOf(App.profile.getId()),
                 location.getLatitude(),
                 location.getLongitude(),
                 time,

@@ -17,6 +17,7 @@ public class jMissing
         try
         {
             o.put("animalId", missing.getAnimalId());
+            o.put("userId", missing.getUser_ID());
             o.put("lat", missing.getLat());
             o.put("lng", missing.getLng());
             o.put("timeDate", missing.getTime());

@@ -73,9 +73,10 @@ public class Missing extends ProfileAnimal implements Serializable
      * @param timeDate
      * @param area
      */
-    public Missing(int animalId, double lat, double lng, long timeDate, String area)
+    public Missing(int animalId, int userId, double lat, double lng, long timeDate, String area)
     {
         super.set_ID(animalId);
+        super.setUser_ID(userId);
         this.lat = lat;
         this.lng = lng;
         this.time = timeDate;
