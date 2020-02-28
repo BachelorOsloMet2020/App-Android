@@ -83,7 +83,7 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
         if (b != null && b.containsKey("missing"))
         {
             Missing m = (Missing) b.getSerializable("missing");
-            loadData(m.getAnimalId());
+            loadData(m.get_ID());
         }
         else
             finish();
