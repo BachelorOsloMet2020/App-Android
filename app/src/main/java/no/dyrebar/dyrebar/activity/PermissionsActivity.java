@@ -38,7 +38,7 @@ public class PermissionsActivity extends AppCompatActivity implements Permission
     private void loadPems()
     {
         permFrags = new ArrayList<Pair<PermissionHandler.Permissions, Boolean>>(){{
-            add(new Pair<>(PermissionHandler.Permissions.Camera, permissionHandler.isCameraPermitted()));
+            //add(new Pair<>(PermissionHandler.Permissions.Camera, permissionHandler.isCameraPermitted()));
             add(new Pair<>(PermissionHandler.Permissions.Storage, permissionHandler.isStoragePermitted()));
             add(new Pair<>(PermissionHandler.Permissions.Gps, permissionHandler.isGpsPermitted()));
         }};
