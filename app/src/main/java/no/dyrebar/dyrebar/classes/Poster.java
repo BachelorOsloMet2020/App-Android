@@ -2,7 +2,8 @@ package no.dyrebar.dyrebar.classes;
 
 public class Poster extends ProfileAnimal
 {
-    private int _ID;
+    private int Id;
+    private int userId;
     private double lat;
     private double lng;
     private long time;
@@ -11,9 +12,10 @@ public class Poster extends ProfileAnimal
     {
     }
 
-    public Poster(int _ID, double lat, double lng, long time)
+    public Poster(int _ID, int userId, double lat, double lng, long time)
     {
-        this._ID = _ID;
+        this.Id = _ID;
+        this.userId = userId;
         this.lat = lat;
         this.lng = lng;
         this.time = time;
