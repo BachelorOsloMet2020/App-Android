@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="350dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="16dp">
+    android:padding="5dp"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/img_pet"
+            android:id="@+id/adapter_home_image"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:minHeight="30dp"
@@ -22,54 +24,54 @@
             tools:src="@drawable/ic_dlogo"/>
 
         <TextView
-            android:id="@+id/txt_title"
+            android:id="@+id/adapter_home_txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@string/found"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/txt_name"
+            app:layout_constraintBottom_toTopOf="@+id/adapter_home_txt_color_animalType"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_pet" />
+            app:layout_constraintTop_toBottomOf="@+id/adapter_home_image"
+            tools:text="Funnet/Savnet"/>
 
         <TextView
-            android:id="@+id/txt_distance_title"
+            android:id="@+id/txt_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/adp_home_poster_distance"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txt_title" />
+            app:layout_constraintTop_toTopOf="@+id/adapter_home_txt_title" />
 
         <TextView
-            android:id="@+id/txt_name"
+            android:id="@+id/adapter_home_txt_color_animalType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/txt_title"
-            app:layout_constraintTop_toBottomOf="@+id/txt_title"
-            tools:text="Ola Nordman" />
+            app:layout_constraintStart_toStartOf="@+id/adapter_home_txt_title"
+            app:layout_constraintTop_toBottomOf="@+id/adapter_home_txt_title"
+            tools:text="Color.Hund" />
 
         <TextView
-            android:id="@+id/txt_distance"
+            android:id="@+id/adapter_home_txt_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/txt_distance_title"
-            app:layout_constraintTop_toBottomOf="@+id/txt_distance_title"
+            app:layout_constraintStart_toStartOf="@+id/txt_distance"
+            app:layout_constraintTop_toBottomOf="@+id/txt_distance"
             tools:text="500m" />
 
         <TextView
-            android:id="@+id/txt_address"
+            android:id="@+id/adapter_home_txt_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/txt_name"
-            app:layout_constraintTop_toBottomOf="@+id/txt_name"
+            app:layout_constraintStart_toStartOf="@+id/adapter_home_txt_color_animalType"
+            app:layout_constraintTop_toBottomOf="@+id/adapter_home_txt_color_animalType"
             tools:text="Frogner, Oslo" />
 
         <Button
-            android:id="@+id/btn_contact"
+            android:id="@+id/adapter_home_btn_contact"
             android:layout_width="125dp"
             android:layout_height="45dp"
             android:layout_marginTop="16dp"
@@ -77,23 +79,9 @@
             android:elevation="1dp"
             android:paddingStart="8dp"
             android:paddingEnd="10dp"
-
             android:text="@string/contact"
-            app:layout_constraintStart_toStartOf="@+id/txt_address"
-            app:layout_constraintTop_toBottomOf="@+id/txt_address" />
-
-        <Button
-            android:id="@+id/btn_map"
-            android:layout_width="125dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="8dp"
-            android:drawableStart="@drawable/ic_navigation_black_24dp"
-            android:elevation="1dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="10dp"
-            android:text="@string/show_map"
-            app:layout_constraintStart_toEndOf="@+id/btn_contact"
-            app:layout_constraintTop_toTopOf="@+id/btn_contact" />
+            app:layout_constraintStart_toStartOf="@+id/adapter_home_txt_location"
+            app:layout_constraintTop_toBottomOf="@+id/adapter_home_txt_location" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

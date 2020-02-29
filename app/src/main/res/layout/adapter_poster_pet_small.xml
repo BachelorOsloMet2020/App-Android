@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/img_pet"
+            android:id="@+id/adapter_home_image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
             android:layout_marginTop="8dp"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_pet"
+            app:layout_constraintTop_toBottomOf="@+id/adapter_home_image"
             tools:text="Svart og hvit" />
 
         <TextView
@@ -72,7 +72,7 @@
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_bookmark_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_pet" />
+            app:layout_constraintTop_toBottomOf="@+id/adapter_home_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
