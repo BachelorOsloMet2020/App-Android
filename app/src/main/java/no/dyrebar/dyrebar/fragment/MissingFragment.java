@@ -75,9 +75,10 @@ public class MissingFragment extends Fragment implements MissingAnimalAdapter.It
             }});
             ArrayList<Missing> missings = new jMissing().decodeArray(resp);
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 MissingAnimalAdapter maa = new MissingAnimalAdapter(getContext(), this, missings);
-                rv.setAdapter(maa); });
+                rv.setAdapter(maa); }, 150
+                );
         });
 
 

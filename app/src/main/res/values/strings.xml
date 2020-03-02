@@ -22,6 +22,9 @@
     <string name="my_animals">Mine dyr</string>
     <string name="my_posters">Mine annonser</string>
 
+    <string name="solved">Løst</string>
+    <string name="delete">Slett</string>
+
     <string name="spinner_please_select">Vennligst velg</string>
 
     <string name="please_wait">Vennligst vent</string>
