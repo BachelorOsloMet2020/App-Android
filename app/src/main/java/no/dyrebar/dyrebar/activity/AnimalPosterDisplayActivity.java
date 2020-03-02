@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.Pair;
@@ -24,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Scroller;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,24 +34,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.classes.Found;
 import no.dyrebar.dyrebar.classes.Missing;
-import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.ProfileAnimal;
 import no.dyrebar.dyrebar.classes.PublicProfile;
 import no.dyrebar.dyrebar.handler.PermissionHandler;
 import no.dyrebar.dyrebar.handler.TypeHandler;
 import no.dyrebar.dyrebar.interfaces.PermissionInterface;
+import no.dyrebar.dyrebar.json.jFound;
 import no.dyrebar.dyrebar.json.jMissing;
 import no.dyrebar.dyrebar.json.jProfile;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class AnimalMissingActivity extends AppCompatActivity implements OnMapReadyCallback, PermissionInterface.PermissionListener
+public class AnimalPosterDisplayActivity extends AppCompatActivity implements OnMapReadyCallback, PermissionInterface.PermissionListener
 {
     private GoogleMap gmap;
     private ScrollView mainScrollView;
@@ -83,13 +79,18 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
         if (b != null && b.containsKey("missing"))
         {
             Missing m = (Missing) b.getSerializable("missing");
-            loadData(m.get_ID());
+            loadMissingData(m.get_ID());
+        }
+        else if (b != null && b.containsKey("found"))
+        {
+            Found f = (Found)b.getSerializable("found");
+            loadFoundData(f.get_ID());
         }
         else
             finish();
     }
 
-    private void loadData(int id)
+    private void loadMissingData(int id)
     {
         AsyncTask.execute(() ->
                           {
@@ -103,6 +104,24 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
 
                               runOnUiThread(() -> setProfileData(publicProfile));
                               runOnUiThread(() -> setMissingData(m));
+
+                          });
+    }
+
+    private void loadFoundData(int id)
+    {
+        AsyncTask.execute(() ->
+                          {
+                              String res = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
+                              {{
+                                  add(new Pair<>("request", "found"));
+                                  add(new Pair<>("id", id));
+                              }});
+                              publicProfile = new jProfile().decodePublic(res);
+                              Found f = new jFound().decode(res);
+
+                              runOnUiThread(() -> setProfileData(publicProfile));
+                              runOnUiThread(() -> setFoundData(f));
 
                           });
     }
@@ -138,10 +157,68 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
         {
             npe.printStackTrace();
         }
+
+        setImage(animal.getImage());
+        setTypeData(animal.getAnimalType(), animal.getSex(), animal.getSterilized(), animal.getFurLength(), animal.getFurPattern(), animal.getColor());
+        setTitle(getString(R.string.missing) + " " + missing.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), missing.getAnimalType()));
+        setDescription(animal.getDescription());
+
+
         ((TextView) findViewById(R.id.animal_name)).setText(missing.getName());
         ((TextView) findViewById(R.id.animal_idTag_text)).setText((animal.getTag_ID() == null || animal.getTag_ID().equals("null") || animal.getTag_ID().length() == 0) ? getString(R.string.not_given) : animal.getTag_ID());
-        ((TextView) findViewById(R.id.missing_title)).setText(getString(R.string.missing) + " " + missing.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), missing.getAnimalType()));
-        Picasso.get().load(missing.getImage()).placeholder(R.drawable.ic_dyrebarlogo).into((ImageView) findViewById(R.id.animal_profile_image), new Callback()
+
+
+        if (animal.getExtras() == null || animal.getExtras().equals("null") || animal.getExtras().length() == 0)
+            ((TextView) findViewById(R.id.animal_typeExtras)).setVisibility(View.GONE);
+        else
+            ((TextView) findViewById(R.id.animal_typeExtras)).setText(missing.getExtras());
+        setMap(new LatLng(missing.getLat(), (missing.getLng())));
+    }
+
+    private void setFoundData(Found found)
+    {
+        animal = found;
+
+        try
+        {
+            String title = (found.getName() != null && found.getName().length() > 0 && !found.getName().equalsIgnoreCase("null") ? found.getName() : getString(R.string.missing) + " " + found.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), found.getAnimalType()));
+
+            getSupportActionBar().setTitle(title);
+        }catch (NullPointerException npe)
+        {
+            npe.printStackTrace();
+        }
+
+        setImage(animal.getImage());
+        setTypeData(animal.getAnimalType(), animal.getSex(), animal.getSterilized(), animal.getFurLength(), animal.getFurPattern(), animal.getColor());
+        setTitle(getString(R.string.missing) + " " + found.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), found.getAnimalType()));
+        setDescription(animal.getDescription());
+
+        setTitle(getString(R.string.missing) + " " + found.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), found.getAnimalType()));
+
+        if (found.getName() != null && !found.getName().equalsIgnoreCase("null") && found.getName().length() > 0)
+            ((TextView) findViewById(R.id.animal_name)).setText(found.getName());
+        else
+            findViewById(R.id.animal_name).setVisibility(View.GONE);
+        ((TextView) findViewById(R.id.animal_idTag_text)).setText((animal.getTag_ID() == null || animal.getTag_ID().equals("null") || animal.getTag_ID().length() == 0) ? getString(R.string.not_given) : animal.getTag_ID());
+
+        if (animal.getExtras() == null || animal.getExtras().equals("null") || animal.getExtras().length() == 0)
+            ((TextView) findViewById(R.id.animal_typeExtras)).setVisibility(View.GONE);
+        else
+            ((TextView) findViewById(R.id.animal_typeExtras)).setText(found.getExtras());
+
+        setMap(new LatLng(found.getLat(), (found.getLng())));
+    }
+
+
+    private void setTitle(String title)
+    {
+        ((TextView) findViewById(R.id.missing_title)).setText(title);
+    }
+
+    private void setImage(String imageUrl)
+    {
+        Picasso.get().load(imageUrl).placeholder(R.drawable.ic_dyrebarlogo).into((ImageView) findViewById(R.id.animal_profile_image), new Callback()
         {
             @Override
             public void onSuccess()
@@ -155,30 +232,23 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
                 e.printStackTrace();
             }
         });
+    }
 
+    private void setTypeData(int animalType, int animalSex, int animalSterilized, int furLength, int furPattern, String color)
+    {
         TypeHandler types = new TypeHandler();
-        ((TextView) findViewById(R.id.animal_type)).setText(types.getAnimalType(this, missing.getAnimalType()));
-        ((TextView) findViewById(R.id.animal_sex)).setText(types.getSex(this, missing.getSex()));
-        ((TextView) findViewById(R.id.animal_sterilized)).setText(types.getSterilized(this, missing.getSterilized()));
-        ((TextView) findViewById(R.id.animal_fur_length)).setText(types.getFurLength(this, missing.getFurLength()));
-        ((TextView) findViewById(R.id.animal_fur_pattern)).setText(types.getFurPattern(this, missing.getFurPattern()));
-        ((TextView) findViewById(R.id.animal_color)).setText(missing.getColor());
-        ((TextView) findViewById(R.id.animal_description)).setText(missing.getDescription());
-        TextView description = findViewById(R.id.animal_description);
-        Log.d(getClass().getName(), "Line count: " + description.getLineCount());
-        if (description.getLineCount() > 7)
-        {
-            description.setMaxLines(7);
-            findViewById(R.id.animal_description_show_more).setVisibility(View.VISIBLE);
-            findViewById(R.id.animal_description_show_more).setOnClickListener(showMore);
-        }
+        ((TextView) findViewById(R.id.animal_type)).setText(types.getAnimalType(this, animalType));
+        ((TextView) findViewById(R.id.animal_sex)).setText(types.getSex(this, animalSex));
+        ((TextView) findViewById(R.id.animal_sterilized)).setText(types.getSterilized(this, animalSterilized));
+        ((TextView) findViewById(R.id.animal_fur_length)).setText(types.getFurLength(this, furLength));
+        ((TextView) findViewById(R.id.animal_fur_pattern)).setText(types.getFurPattern(this, furPattern));
+        ((TextView) findViewById(R.id.animal_color)).setText(color);
+    }
 
-
-        if (animal.getExtras() == null || animal.getExtras().equals("null") || animal.getExtras().length() == 0)
-            ((TextView) findViewById(R.id.animal_typeExtras)).setVisibility(View.GONE);
-        else
-            ((TextView) findViewById(R.id.animal_typeExtras)).setText(missing.getExtras());
-
+    private LatLng animalLoc;
+    private void setMap(LatLng ll)
+    {
+        animalLoc = ll;
         mainScrollView = findViewById(R.id.animal_missing_scrollview);
 
         MapView mapView = (MapView)findViewById(R.id.mapView);
@@ -222,8 +292,25 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
                 }
             }
         });
-
     }
+
+    private void setDescription(String desc)
+    {
+        ((TextView) findViewById(R.id.animal_description)).setText(desc);
+        TextView description = findViewById(R.id.animal_description);
+        Log.d(getClass().getName(), "Line count: " + description.getLineCount());
+        if (description.getLineCount() > 7)
+        {
+            description.setMaxLines(7);
+            findViewById(R.id.animal_description_show_more).setVisibility(View.VISIBLE);
+            findViewById(R.id.animal_description_show_more).setOnClickListener(showMore);
+        }
+    }
+
+
+
+
+
 
 
     View.OnClickListener showMore = new View.OnClickListener()
@@ -231,7 +318,7 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
         @Override
         public void onClick(View v)
         {
-            AlertDialog ad = new AlertDialog.Builder(AnimalMissingActivity.this)
+            AlertDialog ad = new AlertDialog.Builder(AnimalPosterDisplayActivity.this)
                     .setTitle(animal.getName())
                     .setMessage(animal.getDescription())
                     .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
@@ -248,11 +335,10 @@ public class AnimalMissingActivity extends AppCompatActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap)
     {
         gmap = googleMap;
-        LatLng missingLoc = new LatLng(((Missing)animal).getLat(), ((Missing)animal).getLng());
-        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(missingLoc, 10);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(animalLoc, 10);
         //gMap.addMarker(new MarkerOptions().position(meth).title("Maker in Ass"));
         gmap.animateCamera(cu);
-        gmap.addMarker(new MarkerOptions().position(missingLoc).title(animal.getName()));
+        gmap.addMarker(new MarkerOptions().position(animalLoc).title(animal.getName()));
     }
 
 

@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import no.dyrebar.dyrebar.R;
-import no.dyrebar.dyrebar.activity.AnimalMissingActivity;
+import no.dyrebar.dyrebar.activity.AnimalPosterDisplayActivity;
 import no.dyrebar.dyrebar.adapter.PetPosterAdapter;
 import no.dyrebar.dyrebar.classes.Found;
 import no.dyrebar.dyrebar.classes.Missing;
@@ -144,7 +144,7 @@ public class HomeFragment extends Fragment implements PetPosterAdapter.ItemClick
     @Override
     public void onMissingItemClicked(Missing missing)
     {
-        Intent i = new Intent(getActivity(), AnimalMissingActivity.class);
+        Intent i = new Intent(getActivity(), AnimalPosterDisplayActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("missing", missing);
         i.putExtras(b);

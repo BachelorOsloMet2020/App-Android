@@ -1,6 +1,7 @@
 package no.dyrebar.dyrebar.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.activity.AnimalPosterDisplayActivity;
 import no.dyrebar.dyrebar.adapter.FoundAnimalAdapter;
 import no.dyrebar.dyrebar.classes.Found;
 import no.dyrebar.dyrebar.interfaces.FragmentInterface;
@@ -82,6 +84,10 @@ public class FoundFragment extends Fragment implements FoundAnimalAdapter.ItemCl
     @Override
     public void onItemClicked(Found found)
     {
-        // TODO: Start data displaying Activity
+        Intent i = new Intent(getActivity(), AnimalPosterDisplayActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("found", found);
+        i.putExtras(b);
+        mListener.launchActivity(i);
     }
 }

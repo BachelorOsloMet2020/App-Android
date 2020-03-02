@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import no.dyrebar.dyrebar.R;
-import no.dyrebar.dyrebar.activity.AnimalMissingActivity;
+import no.dyrebar.dyrebar.activity.AnimalPosterDisplayActivity;
 import no.dyrebar.dyrebar.adapter.MissingAnimalAdapter;
 import no.dyrebar.dyrebar.classes.Missing;
 import no.dyrebar.dyrebar.interfaces.FragmentInterface;
@@ -90,7 +90,7 @@ public class MissingFragment extends Fragment implements MissingAnimalAdapter.It
     @Override
     public void onItemClicked(Missing missing)
     {
-        Intent i = new Intent(getActivity(), AnimalMissingActivity.class);
+        Intent i = new Intent(getActivity(), AnimalPosterDisplayActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("missing", missing);
         i.putExtras(b);

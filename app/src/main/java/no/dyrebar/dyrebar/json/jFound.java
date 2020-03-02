@@ -53,6 +53,22 @@ public class jFound
         );
     }
 
+
+    public Found decode(String j)
+    {
+        try
+        {
+            JSONObject o = new JSONObject(j);
+            JSONObject m = o.getJSONObject("found");
+            return decodeItem(m.toString());
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Found decodeItem(String j) throws JSONException
     {
         JSONObject o = new JSONObject(j);
@@ -62,7 +78,7 @@ public class jFound
                 o.getDouble("lng"),
                 o.getLong("timeDate"),
 
-                o.getInt("animalId"),
+                (o.has("animalId") ? o.getInt("animalId") : 0),
                 o.getInt("userId"),
                 o.getString("image"),
                 o.getString("idTag"),
