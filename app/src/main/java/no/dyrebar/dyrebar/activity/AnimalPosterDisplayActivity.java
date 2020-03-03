@@ -194,7 +194,7 @@ public class AnimalPosterDisplayActivity extends AppCompatActivity implements On
         setTitle(getString(R.string.missing) + " " + found.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), found.getAnimalType()));
         setDescription(animal.getDescription());
 
-        setTitle(getString(R.string.missing) + " " + found.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), found.getAnimalType()));
+        setTitle(getString(R.string.found) + " " + found.getColor() + " " + new TypeHandler().getAnimalType(getApplicationContext(), found.getAnimalType()));
 
         if (found.getName() != null && !found.getName().equalsIgnoreCase("null") && found.getName().length() > 0)
             ((TextView) findViewById(R.id.animal_name)).setText(found.getName());
