@@ -37,9 +37,11 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
     }
 
     private ProfileAnimal animal;
-    public void RequestMissing(ProfileAnimal animal)
+    private String mdesc;
+    public void RequestMissing(ProfileAnimal animal, String mdesc)
     {
         this.animal = animal;
+        this.mdesc = mdesc;
         if (permissionHandler.isGpsPermitted())
             requestLocation();
         else
@@ -57,7 +59,8 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
                 location.getLatitude(),
                 location.getLongitude(),
                 time,
-                area
+                area,
+                mdesc
         );
         mListener.onMissingRequestCreated(m);
     }

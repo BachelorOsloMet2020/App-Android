@@ -22,6 +22,7 @@ public class jMissing
             o.put("lng", missing.getLng());
             o.put("timeDate", missing.getTime());
             o.put("area", missing.getArea());
+            o.put("mdesc", missing.getMdesc());
             return o.toString();
         }
         catch (JSONException e)
@@ -78,7 +79,8 @@ public class jMissing
                 o.getInt("animalType"),
                 (!o.isNull("animalTypeExtras") ? o.getString("animalTypeExtras") : null),
                 o.getString("color"),
-                (!o.isNull("area") ? o.getString("area") : null)
+                (!o.isNull("area") ? o.getString("area") : null),
+                (o.has("mdesc") ? o.getString("mdesc") : "")
         );
     }
 
@@ -124,7 +126,8 @@ public class jMissing
             o.getString("color"),
             o.getInt("furLength"),
             o.getInt("furPattern"),
-            o.getString("description")
+            o.getString("description"),
+            (o.has("mdesc") ? o.getString("mdesc") : "")
         );
     }
 }

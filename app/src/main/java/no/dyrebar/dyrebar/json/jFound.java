@@ -11,6 +11,27 @@ import no.dyrebar.dyrebar.classes.Found;
 public class jFound
 {
 
+    public String encode(Found found)
+    {
+        JSONObject o = new JSONObject();
+        try
+        {
+            o.put("animalId", found.getAnimalId());
+            o.put("userId", found.getUser_ID());
+            o.put("lat", found.getLat());
+            o.put("lng", found.getLng());
+            o.put("timeDate", found.getTime());
+            o.put("area", found.getArea());
+            o.put("fdesc", found.getFdesc());
+            return o.toString();
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public ArrayList<Found> decodeArray(String j)
     {
@@ -49,7 +70,8 @@ public class jFound
                 o.getInt("animalType"),
                 (!o.isNull("animalTypeExtras") ? o.getString("animalTypeExtras") : null),
                 o.getString("color"),
-                (!o.isNull("area") ? o.getString("area") : null)
+                (!o.isNull("area") ? o.getString("area") : null),
+                (o.has("fdesc") ? o.getString("fdesc") : "")
         );
     }
 
@@ -90,7 +112,8 @@ public class jFound
                 o.getString("color"),
                 o.getInt("furLength"),
                 o.getInt("furPattern"),
-                o.getString("description")
+                o.getString("description"),
+                (o.has("fdesc") ? o.getString("fdesc") : "")
         );
     }
 }

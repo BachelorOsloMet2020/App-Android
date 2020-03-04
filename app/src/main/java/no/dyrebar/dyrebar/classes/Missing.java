@@ -9,6 +9,7 @@ public class Missing extends ProfileAnimal implements Serializable
     private double lng;
     private long time;
     private String area;
+    private String mdesc;
 
     /**
      * Constructor with super
@@ -30,13 +31,14 @@ public class Missing extends ProfileAnimal implements Serializable
      * @param furPattern
      * @param description
      */
-    public Missing(int missingId, double lat, double lng, long timeDate, int animalId, int userId, String image, String idTag, String name, int animalType, String animalTypeExtras, int sex, int sterilized, String color, int furLength, int furPattern, String description)
+    public Missing(int missingId, double lat, double lng, long timeDate, int animalId, int userId, String image, String idTag, String name, int animalType, String animalTypeExtras, int sex, int sterilized, String color, int furLength, int furPattern, String description, String mdesc)
     {
         super(animalId, userId, idTag, image, name, animalType, animalTypeExtras, sex, sterilized, color, furLength, furPattern, description);
         this._ID = missingId;
         this.lat = lat;
         this.lng = lng;
         this.time = timeDate;
+        this.mdesc = mdesc;
     }
 
     /**
@@ -51,13 +53,14 @@ public class Missing extends ProfileAnimal implements Serializable
      * @param animalTypeExtras
      * @param area
      */
-    public Missing(int missingId, double lat, double lng, long timeDate, int animalId, String name, String image, int animalType, String animalTypeExtras, String color, String area)
+    public Missing(int missingId, double lat, double lng, long timeDate, int animalId, String name, String image, int animalType, String animalTypeExtras, String color, String area, String mdesc)
     {
         this._ID = missingId;
         this.lat = lat;
         this.lng = lng;
         this.time = timeDate;
         this.area = area;
+        this.mdesc = mdesc;
         super.setName(name);
         super.setImage(image);
         super.set_ID(animalId);
@@ -73,7 +76,7 @@ public class Missing extends ProfileAnimal implements Serializable
      * @param timeDate
      * @param area
      */
-    public Missing(int animalId, int userId, double lat, double lng, long timeDate, String area)
+    public Missing(int animalId, int userId, double lat, double lng, long timeDate, String area, String mdesc)
     {
         super.set_ID(animalId);
         super.setUser_ID(userId);
@@ -81,6 +84,7 @@ public class Missing extends ProfileAnimal implements Serializable
         this.lng = lng;
         this.time = timeDate;
         this.area = area;
+        this.mdesc = mdesc;
     }
 
     public String getArea()
@@ -134,4 +138,8 @@ public class Missing extends ProfileAnimal implements Serializable
         return time;
     }
 
+    public String getMdesc()
+    {
+        return mdesc;
+    }
 }

@@ -9,8 +9,9 @@ public class Found extends ProfileAnimal implements Serializable
     private double lng;
     private long time;
     private String area;
+    private String fdesc;
 
-    public Found(int animalId, int userId, double lat, double lng, long timeDate, String area)
+    public Found(int animalId, int userId, double lat, double lng, long timeDate, String area, String fdesc)
     {
         super.set_ID(animalId);
         super.setUser_ID(userId);
@@ -18,16 +19,18 @@ public class Found extends ProfileAnimal implements Serializable
         this.lng = lng;
         this.time = timeDate;
         this.area = area;
+        this.fdesc = fdesc;
     }
 
 
-    public Found(int missingId, double lat, double lng, long timeDate, String name, String image, int animalType, String animalTypeExtras, String color, String area)
+    public Found(int missingId, double lat, double lng, long timeDate, String name, String image, int animalType, String animalTypeExtras, String color, String area, String fdesc)
     {
         this._ID = missingId;
         this.lat = lat;
         this.lng = lng;
         this.time = timeDate;
         this.area = area;
+        this.fdesc = fdesc;
         super.setName(name);
         super.setImage(image);
         super.setAnimalType(animalType);
@@ -36,13 +39,14 @@ public class Found extends ProfileAnimal implements Serializable
     }
 
 
-    public Found(int foundId, double lat, double lng, long timeDate, int animalId, int userId, String image, String idTag, String name, int animalType, String animalTypeExtras, int sex, int sterilized, String color, int furLength, int furPattern, String description)
+    public Found(int foundId, double lat, double lng, long timeDate, int animalId, int userId, String image, String idTag, String name, int animalType, String animalTypeExtras, int sex, int sterilized, String color, int furLength, int furPattern, String description, String fdesc)
     {
         super(animalId, userId, idTag, image, name, animalType, animalTypeExtras, sex, sterilized, color, furLength, furPattern, description);
         this._ID = foundId;
         this.lat = lat;
         this.lng = lng;
         this.time = timeDate;
+        this.fdesc = fdesc;
     }
 
 
@@ -97,4 +101,8 @@ public class Found extends ProfileAnimal implements Serializable
         return time;
     }
 
+    public String getFdesc()
+    {
+        return fdesc;
+    }
 }

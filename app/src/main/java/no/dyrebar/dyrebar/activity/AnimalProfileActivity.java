@@ -100,7 +100,7 @@ public class AnimalProfileActivity extends AppCompatActivity implements MissingH
         findViewById(R.id.animal_report_missing).setOnClickListener(v -> {
             if (App.authSession != null && animal != null)
             {
-                missingHandler.RequestMissing(animal);
+                missingHandler.RequestMissing(animal, "");
             }
         });
     }
