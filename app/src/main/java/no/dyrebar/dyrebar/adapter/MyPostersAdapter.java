@@ -48,6 +48,13 @@ public class MyPostersAdapter extends RecyclerView.Adapter<MyPostersAdapter.View
         this.mListener = mListener;
     }
 
+    public void removeItemByPosition(int index)
+    {
+        if (items.isEmpty() || items.size() -1 < index)
+            return;
+        items.remove(index);
+        notifyItemRemoved(index);
+    }
 
 
     @NonNull
@@ -153,12 +160,12 @@ public class MyPostersAdapter extends RecyclerView.Adapter<MyPostersAdapter.View
             Object o = items.get(getAdapterPosition());
             if (item.getItemId() == R.id.menu_item_solved)
             {
-                mListener.onActionSolvedPoster(o);
+                mListener.onActionSolvedPoster(getAdapterPosition(), o);
                 return true;
             }
             else if (item.getItemId() == R.id.menu_item_delete)
             {
-                mListener.onActionDeletePoster(o);
+                mListener.onActionDeletePoster(getAdapterPosition(), o);
                 return true;
             }
             return false;
@@ -168,8 +175,8 @@ public class MyPostersAdapter extends RecyclerView.Adapter<MyPostersAdapter.View
 
     public interface OnMyPosterAction
     {
-        void onActionDeletePoster(Object poster);
-        void onActionSolvedPoster(Object poster);
+        void onActionDeletePoster(int index, Object poster);
+        void onActionSolvedPoster(int index, Object poster);
     }
 
 }
