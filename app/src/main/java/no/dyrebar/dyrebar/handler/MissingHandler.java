@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
@@ -51,13 +52,13 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
     private void CreateMissing(Location location)
     {
         long time = Calendar.getInstance(TimeZone.getDefault()).getTimeInMillis();
-        String area = getArea(location);
+        String area = (location != null) ? getArea(location) : "";
 
         Missing m = new Missing(
                 animal.get_ID(),
                 Integer.valueOf(App.profile.getId()),
-                location.getLatitude(),
-                location.getLongitude(),
+                (location != null) ? location.getLatitude() : 0,
+                (location != null) ? location.getLongitude() : 0,
                 time,
                 area,
                 mdesc
@@ -65,7 +66,7 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
         mListener.onMissingRequestCreated(m);
     }
 
-    private String getArea(Location location)
+    public String getArea(Location location)
     {
         List<Address> addressList = null;
         try
@@ -90,6 +91,15 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
         locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,0, this);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0, this);
+
+        new Handler().postDelayed(() -> {
+            // Checking whether position has been obtained or not within given time span, not recommended to give 5k
+            if (!positionObtained)
+            {
+                locationManager.removeUpdates(this);
+                CreateMissing(null);
+            }
+        }, 1000);
     }
 
     public void onPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
@@ -97,9 +107,11 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
         permissionHandler.onPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    private boolean positionObtained = false;
     @Override
     public void onLocationChanged(Location location)
     {
+        positionObtained = true;
         locationManager.removeUpdates(this);
         CreateMissing(location);
     }
@@ -175,5 +187,6 @@ public class MissingHandler implements LocationListener, PermissionInterface.Per
     public interface MissingListener
     {
         void onMissingRequestCreated(Missing missing);
+        void onMissingRequestCreatedNoLocation(Missing missing);
     }
 }
