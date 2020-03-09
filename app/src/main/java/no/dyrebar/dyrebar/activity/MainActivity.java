@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
             if (toolbar.findViewById(R.id.toolbar_profile_image) != null && profile != null)
             {
                 ImageView profileImage = toolbar.findViewById(R.id.toolbar_profile_image);
-                Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).into(profileImage);
+                Picasso.get().load(profile.getImage()).transform(new PicassoCircleTransform()).memoryPolicy(MemoryPolicy.NO_CACHE).into(profileImage);
             }
             if (toolbar.findViewById(R.id.toolbar_profile_name) != null && profile != null)
                 ((TextView)toolbar.findViewById(R.id.toolbar_profile_name)).setText(profile.getFirstName());

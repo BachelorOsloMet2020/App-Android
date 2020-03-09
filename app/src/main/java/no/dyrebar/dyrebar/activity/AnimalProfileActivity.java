@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -47,7 +48,7 @@ import no.dyrebar.dyrebar.json.jMissing;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public class AnimalProfileActivity extends AppCompatActivity implements MissingHandler.MissingListener
+public abstract class AnimalProfileActivity extends AppCompatActivity implements MissingHandler.MissingListener
 {
     private ProfileAnimal animal;
     private MissingHandler missingHandler;
@@ -70,7 +71,7 @@ public class AnimalProfileActivity extends AppCompatActivity implements MissingH
     {
         ((TextView)findViewById(R.id.animal_name)).setText(animal.getName());
         ((TextView)findViewById(R.id.animal_idTag_text)).setText((animal.getTag_ID() == null || animal.getTag_ID().equals("null") || animal.getTag_ID().length() == 0) ? getString(R.string.not_given) : animal.getTag_ID());
-        Picasso.get().load(animal.getImage()).placeholder(R.drawable.ic_dyrebarlogo).into((ImageView) findViewById(R.id.animal_profile_image), new Callback() {
+        Picasso.get().load(animal.getImage()).placeholder(R.drawable.ic_dyrebarlogo).memoryPolicy(MemoryPolicy.NO_CACHE).into((ImageView) findViewById(R.id.animal_profile_image), new Callback() {
             @Override
             public void onSuccess()
             {
