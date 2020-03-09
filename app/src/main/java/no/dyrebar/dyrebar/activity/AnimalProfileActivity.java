@@ -48,7 +48,7 @@ import no.dyrebar.dyrebar.json.jMissing;
 import no.dyrebar.dyrebar.web.Api;
 import no.dyrebar.dyrebar.web.Source;
 
-public abstract class AnimalProfileActivity extends AppCompatActivity implements MissingHandler.MissingListener
+public class AnimalProfileActivity extends AppCompatActivity implements MissingHandler.MissingListener
 {
     private ProfileAnimal animal;
     private MissingHandler missingHandler;
@@ -140,5 +140,11 @@ public abstract class AnimalProfileActivity extends AppCompatActivity implements
     public void onMissingRequestCreated(Missing missing)
     {
         publishMissing(App.authSession, missing);
+    }
+
+    @Override
+    public void onMissingRequestCreatedNoLocation(Missing missing)
+    {
+
     }
 }
