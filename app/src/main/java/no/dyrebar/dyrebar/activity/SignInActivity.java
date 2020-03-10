@@ -12,6 +12,7 @@ import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.AuthChallenge;
 import no.dyrebar.dyrebar.dialog.IndicatorDialog;
 import no.dyrebar.dyrebar.handler.PermissionHandler;
+import no.dyrebar.dyrebar.handler.ResponseHandler;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jAuthSession;
 import no.dyrebar.dyrebar.json.jProfile;
@@ -98,28 +99,24 @@ public class SignInActivity extends AppCompatActivity
                     add(new Pair<>("auth", "validate"));
                     add(new Pair<>("data", json));
                 }});
-                boolean success = new jStatus().getStatus(resp);
-                if (success && new JSONObject(resp).getBoolean("isValid"))
+
+                ResponseHandler rh = new ResponseHandler();
+                boolean error = rh.showDialogOnError(SignInActivity.this, resp);
+                id.Hide();
+                if (!error)
                 {
-                    Log.d(TAG, "User is valid and has a session");
-                    boolean profileExists = hasProfile(new Api(), App.authSession);
-                    if (!profileExists)
+                    if (new JSONObject(resp).getBoolean("isValid"))
                     {
-                        runOnUiThread(this::challengeFailed);
+                        boolean profileExists = hasProfile(new Api(), App.authSession);
+                        if (!profileExists)
+                            runOnUiThread(this::challengeFailed);
+                        else
+                            prepareForNewActivity();
                     }
                     else
-                    {
-                        prepareForNewActivity();
-                    }
-                }
-                else
-                {
-                    Log.e(TAG, "Request failed");
-                    runOnUiThread(() -> {
-                        id.Hide();
-                        loadSingInOptions();
-                    });
-
+                        runOnUiThread(() -> {
+                            loadSingInOptions();
+                        });
                 }
             }
             catch (JSONException e)
@@ -291,34 +288,39 @@ public class SignInActivity extends AppCompatActivity
                     add(new Pair<>("auth", sic.getProvider().toString()));
                     add(new Pair<>("data", jSic));
                 }});
-                boolean success = new jStatus().getStatus(resp);
-                if (success && sic.getProfile().getEmail() != null && sic.getProfile().getEmail().length() > 0)
+                ResponseHandler rh = new ResponseHandler();
+                boolean error = rh.showDialogOnError(SignInActivity.this, resp);
+                id.Hide();
+                if (!error)
                 {
-                    try
+                    if (sic.getProfile().getEmail() != null && sic.getProfile().getEmail().length() > 0)
                     {
-                        App.authSession = new jAuthSession().decode(resp);
-                        /** Storing auth session to enable future use */
-                        new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, App.authSession.asList());
+                        try
+                        {
+                            App.authSession = new jAuthSession().decode(resp);
+                            /** Storing auth session to enable future use */
+                            new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, App.authSession.asList());
 
-                        prepareForNewActivity();
+                            prepareForNewActivity();
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                            challengeFailed();
+                        }
                     }
-                    catch (JSONException e)
+                    else
                     {
-                        e.printStackTrace();
+                        if (sic.getProfile().getEmail() == null || sic.getProfile().getEmail().length() == 0)
+                        {
+                            // Notify user that email is required
+                        }
                         challengeFailed();
+
+                        Log.e(TAG, "Request failed");
                     }
                 }
-                else
-                {
 
-                    if (sic.getProfile().getEmail() == null || sic.getProfile().getEmail().length() == 0)
-                    {
-                        // Notify user that email is required
-                    }
-                    challengeFailed();
-
-                    Log.e(TAG, "Request failed");
-                }
             });
 
             Log.d(TAG, jSic);

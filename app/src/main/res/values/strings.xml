@@ -178,6 +178,40 @@
     <string name="settings_sign_out_message">Er du sikker på at du vil logge av?</string>
     <string name="settings_sign_out_error_message">Kunne ikke fjerne sesjon på server</string>
 
+    <string name="error">Feil</string>
+
+    <string name="_0x1">Eposten er allerede registrert med en annen innloggingsmetode</string>
+    <string name="_0x2">Klarte ikke registrere. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x3">Klarte ikke finne en konto hos Dyrebar med valgt innlogging</string>
+    <string name="_0x4">Noe gikk galt</string>
+    <string name="_0x5">Epost er tilknyttet innlogging med Facebook eller Google</string>
+    <string name="_0x6">Utlogging feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x7">Noe galt skjedde. Prøv innlogging på nytt</string>
+    <string name="_0x8">Innlogging feilet. Prøv på nytt</string>
+    <string name="_0x9">Epost eller passordet er feil</string>
+    <string name="_0x10">Verifikasjon mot FaceBook feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x11">Verifikasjon mot Google feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x12">Token ikke gyldig</string>
+    <string name="_0x13">Klarte ikke å finne profil</string>
+    <string name="_0x14">Klarte ikke registrere profil</string>
+    <string name="_0x15">Oppdatering av epost feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x16">Ufullstendig data</string>
+    <string name="_0x17">Fant ingen lagret data</string>
+    <string name="_0x18">Registrering av dyret feilet</string>
+    <string name="_0x19">Finner ikke funnet annonse</string>
+    <string name="_0x20">Finner ikke savnet annonse</string>
+    <string name="_0x21">Sletting av savnet annonse feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x22">Opprettelse av savnet annonse feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x23">Finner ikke funnet annonsen</string>
+    <string name="_0x24">Finner ikke funnet annonse</string>
+    <string name="_0x25">Sletting av funnet annonse feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x26">Opprettelse av funnet annonse feilet. Kontakt brukerstøtte hvis problemet vedvarer</string>
+    <string name="_0x27">Vennligst tillatt innhenting av epost for å fortsette</string>
+    <string name="_0x28"></string>
+    <string name="_0x29"></string>
+    <string name="_0x30"></string>
+
+
 
     <string name="facebook_app_id">2183988041905442</string>
     <string name="fb_login_protocol_scheme">fb2183988041905442</string>

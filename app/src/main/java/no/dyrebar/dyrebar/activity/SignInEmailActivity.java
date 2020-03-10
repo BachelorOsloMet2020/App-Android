@@ -24,6 +24,7 @@ import no.dyrebar.dyrebar.classes.AuthChallenge;
 import no.dyrebar.dyrebar.classes.AuthSession;
 import no.dyrebar.dyrebar.dialog.IndicatorDialog;
 import no.dyrebar.dyrebar.handler.PermissionHandler;
+import no.dyrebar.dyrebar.handler.ResponseHandler;
 import no.dyrebar.dyrebar.handler.SettingsHandler;
 import no.dyrebar.dyrebar.json.jAuthChallenge;
 import no.dyrebar.dyrebar.json.jAuthSession;
@@ -65,6 +66,8 @@ public class SignInEmailActivity extends AppCompatActivity
     private void signIn()
     {
         AuthChallenge ac = getAuthChallenge();
+        if (ac == null || ac.getEmail() == null || ac.getEmail().length() == 0)
+            return;
         id = new IndicatorDialog(this, getString(R.string.please_wait), getString(R.string.challenge_sign_in_message));
         id.Show();
 
@@ -76,17 +79,15 @@ public class SignInEmailActivity extends AppCompatActivity
                     add(new Pair<>("auth", AuthChallenge.oAuthProvider.DYREBAR));
                     add(new Pair<>("data", jac));
                 }});
-                boolean success = new jStatus().getStatus(resp);
-                if (success && ac.getEmail() != null && ac.getEmail().length() > 0)
+                ResponseHandler rh = new ResponseHandler();
+                boolean error = rh.showDialogOnError(SignInEmailActivity.this, resp);
+                id.Hide();
+                if (!error)
                 {
                     authSession = new jAuthSession().decode(resp);
                     App.authSession = authSession;
                     new SettingsHandler(getApplicationContext()).setMultilineSetting(S.Dyrebar_Auth, authSession.asList());
                     prepareForNewActivity();
-                }
-                else
-                {
-                    // Show error
                 }
             }
             catch (JSONException e)
@@ -189,7 +190,12 @@ public class SignInEmailActivity extends AppCompatActivity
                 runOnUiThread(() -> {
                     id.Hide();
                 });
-                boolean success = new jStatus().getStatus(resp);
+                ResponseHandler rh = new ResponseHandler();
+                boolean error = rh.showDialogOnError(this, resp);
+                if (!error)
+                    runOnUiThread(this::signIn);
+
+               /* boolean success = new jStatus().getStatus(resp);
                 if (!success)
                 {
                     // Show error
@@ -198,7 +204,7 @@ public class SignInEmailActivity extends AppCompatActivity
                 {
                     // User registered
                     runOnUiThread(this::signIn);
-                }
+                }*/
             }
             catch (JSONException e)
             {
