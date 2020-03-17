@@ -1,5 +1,6 @@
 package no.dyrebar.dyrebar.fragment;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -8,16 +9,24 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 import java.util.ArrayList;
 
+import no.dyrebar.dyrebar.CustomControls.DrawerLayoutOverride;
 import no.dyrebar.dyrebar.R;
 import no.dyrebar.dyrebar.activity.AnimalPosterDisplayActivity;
 import no.dyrebar.dyrebar.adapter.MissingAnimalAdapter;
@@ -29,6 +38,7 @@ import no.dyrebar.dyrebar.web.Source;
 
 public class MissingFragment extends Fragment implements MissingAnimalAdapter.ItemClickListener
 {
+    DrawerLayoutOverride spl;
     FragmentInterface.FragmentListener mListener;
 
     @Override
@@ -64,9 +74,10 @@ public class MissingFragment extends Fragment implements MissingAnimalAdapter.It
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-
+        setHasOptionsMenu(true);
         RecyclerView rv = getView().findViewById(R.id.missing_recyclerview);
         rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        spl = getView().findViewById(R.id.fragment_missing_drawer);
 
         AsyncTask.execute(() -> {
             String resp = new Api().Get(Source.Api, new ArrayList<Pair<String, ?>>()
@@ -80,11 +91,54 @@ public class MissingFragment extends Fragment implements MissingAnimalAdapter.It
                 rv.setAdapter(maa); }, 150
                 );
         });
+    }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
+    {
+        menu.clear();
+        inflater.inflate(R.menu.fragment_poster_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
 
+        MenuItem searchItem = menu.findItem(R.id.poster_menu_search);
+        if (searchItem != null)
+        {
+            SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = (SearchView)searchItem.getActionView();
+            if (searchView != null)
+            {
+                searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query)
+                    {
+                        //searchContent(query);
+                        return false;
+                    }
 
+                    @Override
+                    public boolean onQueryTextChange(String newText)
+                    {
+                        //searchContent(newText);
+                        return false;
+                    }
+                });
+            }
+        }
 
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        int id = item.getItemId();
+        if (id == R.id.poster_menu_filter)
+        {
+            DrawerLayoutOverride dlo = getView().findViewById(R.id.fragment_missing_drawer);
+            dlo.openDrawer(GravityCompat.END);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

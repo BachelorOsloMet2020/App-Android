@@ -111,6 +111,8 @@
     <string name="continue_">Fortsett</string>
     <string name="complete_">Fullfør</string>
     <string name="ok">Ok</string>
+    <string name="filter">Filtrer</string>
+    <string name="search">Søk</string>
 
     <string name="unknown_location">Ukjent plassering</string>
 
