@@ -3,6 +3,8 @@ package no.dyrebar.dyrebar.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -40,8 +42,18 @@ public class IndicatorDialog
 
     public void Hide()
     {
-        if (dialog != null)
-            dialog.hide();
+        if (Looper.myLooper() == Looper.getMainLooper())
+        {
+            if (dialog != null)
+                dialog.hide();
+        }
+        else
+        {
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (dialog != null)
+                    dialog.hide();
+            });
+        }
     }
 
     public boolean isVisible()
