@@ -10,7 +10,7 @@ import no.dyrebar.dyrebar.classes.ProfileAnimal;
 
 public class jProfileAnimal
 {
-    public String encode(String uid, ProfileAnimal animal)
+    public String encode(int uid, ProfileAnimal animal)
     {
         JSONObject o = new JSONObject();
         /** Required to provide user id*/

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Profile implements Serializable
 {
-    private String id;
+    private int id;
     private int authId;
     private String FirstName;
     private String LastName;
@@ -43,7 +43,7 @@ public class Profile implements Serializable
     }
 
 
-    public Profile(String id, int auhtId, String FirstName, String LastName, String Email, String Tlf, String Address, String postNumber, String Image)
+    public Profile(int id, int auhtId, String FirstName, String LastName, String Email, String Tlf, String Address, String postNumber, String Image)
     {
         this.id = id;
         this.authId = auhtId;
@@ -58,7 +58,7 @@ public class Profile implements Serializable
 
     public Profile(Map<String, ?> map)
     {
-        this.id = (String) map.get("id");
+        this.id = (Integer)map.get("id");
         this.authId = (Integer) map.get("authId");
         this.FirstName = (String) map.get("firstName");
         this.LastName = (String) map.get("lastName");
@@ -69,7 +69,7 @@ public class Profile implements Serializable
         this.Image = (String) map.get("image");
     }
 
-    public String getId()
+    public int getId()
     {
         return id;
     }
@@ -129,7 +129,7 @@ public class Profile implements Serializable
         FirstName = firstName;
     }
 
-    public void setId(String id)
+    public void setId(int id)
     {
         this.id = id;
     }
