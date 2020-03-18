@@ -41,6 +41,16 @@ public class FoundAnimalAdapter extends RecyclerView.Adapter<FoundAnimalAdapter.
         this.items = items;
     }
 
+    public void setItems(ArrayList<Found> items)
+    {
+        if (this.items != items)
+        {
+            this.items = items;
+            notifyDataSetChanged();
+        }
+    }
+
+
     @NonNull
     @Override
     public FoundAnimalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)

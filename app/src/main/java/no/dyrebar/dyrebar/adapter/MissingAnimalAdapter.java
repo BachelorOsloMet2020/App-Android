@@ -44,6 +44,16 @@ public class MissingAnimalAdapter extends RecyclerView.Adapter<MissingAnimalAdap
         this.mListener = mListener;
     }
 
+    public void setItems(ArrayList<Missing> items)
+    {
+        if (this.items != items)
+        {
+            this.items = items;
+            notifyDataSetChanged();
+        }
+    }
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)

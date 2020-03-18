@@ -36,7 +36,7 @@ public class jProfile
         {
             JSONObject o = new JSONObject(json).getJSONObject("profile");
             Profile profile = new Profile(
-                o.getString("id"),
+                o.getInt("id"),
                     o.getInt("authId"),
                     o.getString("firstName"),
                     o.getString("lastName"),
@@ -87,7 +87,7 @@ public class jProfile
         {
             if (token != null)
                 o.put("token", token);
-            if (profile.getId() != null && profile.getId().length() > 0)
+            if (profile.getId() > 0)
                 o.put("id", profile.getId());
             o.put("authId", profile.getAuthId());
             o.put("firstName", profile.getFirstName());
