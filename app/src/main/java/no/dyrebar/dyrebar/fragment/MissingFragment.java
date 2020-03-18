@@ -211,7 +211,7 @@ public class MissingFragment extends Fragment implements MissingAnimalAdapter.It
         }
         else
         {
-            ArrayList<Missing> result = new DatasetHandler().searchInMissingList(query, data);
+            ArrayList<Missing> result = new DatasetHandler().searchInList(query, data);
             RecyclerView rv = getView().findViewById(R.id.missing_recyclerview);
             MissingAnimalAdapter maa = (MissingAnimalAdapter) rv.getAdapter();
             maa.setItems(result);

@@ -6,6 +6,7 @@ import android.util.Pair;
 import java.util.ArrayList;
 
 import no.dyrebar.dyrebar.R;
+import no.dyrebar.dyrebar.classes.Found;
 import no.dyrebar.dyrebar.classes.Missing;
 import no.dyrebar.dyrebar.classes.Profile;
 import no.dyrebar.dyrebar.classes.ProfileAnimal;
@@ -13,10 +14,10 @@ import no.dyrebar.dyrebar.classes.ProfileAnimal;
 public class DatasetHandler<T>
 {
 
-    public ArrayList<ProfileAnimal> searchInList(String query, ArrayList<ProfileAnimal> items)
+    public ArrayList<T> searchInList(String query, ArrayList<T> items)
     {
-        ArrayList<ProfileAnimal> mi = new ArrayList<>();
-        for (ProfileAnimal pa : items)
+        ArrayList<T> mi = new ArrayList<>();
+        for (T pa : items)
         {
             if (isRelevant(query, pa))
                 mi.add(pa);
@@ -24,18 +25,8 @@ public class DatasetHandler<T>
         return mi;
     }
 
-    public ArrayList<Missing> searchInMissingList(String query, ArrayList<Missing> items)
-    {
-        ArrayList<Missing> mi = new ArrayList<>();
-        for (Missing pa : items)
-        {
-            if (isRelevantMissing(query, pa))
-                mi.add(pa);
-        }
-        return mi;
-    }
 
-    private boolean isRelevant(String query, ProfileAnimal animal)
+    private boolean isRelevant(String query, T animal)
     {
         query = query.toLowerCase();
         String[] qi = query.split("[, .!-]");
@@ -43,46 +34,41 @@ public class DatasetHandler<T>
         for (int i = 0; i < qi.length; i++)
         {
             String q = qi[i];
-            if (animal.getName() != null && (q.equalsIgnoreCase(animal.getName()) || (animal.getName().toLowerCase().matches(q))))
-                return true;
-            else if (animal.getExtras() != null && (q.equalsIgnoreCase(animal.getExtras()) || (animal.getExtras()).toLowerCase().matches(q)))
-                return true;
-            else if (animal.getDescription() != null && (q.equalsIgnoreCase(animal.getDescription()) || (animal.getDescription().toLowerCase().matches(q))))
-                return true;
+            if (((ProfileAnimal)animal).getName() != null)
+                if (stringQueryCompare(q, ((ProfileAnimal)animal).getName()))
+                    return true;
+            if (((ProfileAnimal)animal).getExtras() != null)
+                if (stringQueryCompare(q, ((ProfileAnimal)animal).getExtras()))
+                    return true;
+            if (((ProfileAnimal)animal).getDescription() != null)
+                if (stringQueryCompare(q, ((ProfileAnimal)animal).getDescription()))
+                    return true;
+            if (((ProfileAnimal)animal).getColor() != null)
+                if (stringQueryCompare(q, ((ProfileAnimal)animal).getColor()))
+                    return true;
+            if (animal instanceof Missing)
+            {
+                if (((Missing)animal).getArea() != null)
+                    if (stringQueryCompare(q, ((Missing)animal).getArea()))
+                        return true;
+                if (((Missing)animal).getMdesc() != null)
+                    if (stringQueryCompare(q, ((Missing)animal).getMdesc()))
+                        return true;
+            }
+            else if (animal instanceof Found)
+            {
+                if (((Found)animal).getArea() != null)
+                    if (stringQueryCompare(q, ((Found)animal).getArea()))
+                        return true;
+                if (((Found)animal).getFdesc() != null)
+                    if (stringQueryCompare(q, ((Found)animal).getFdesc()))
+                        return true;
+            }
         }
         return false;
     }
 
     //https://stackoverflow.com/questions/41359615/how-to-find-particular-word-from-string-android
-    private boolean isRelevantMissing(String query, Missing missing)
-    {
-        query = query.toLowerCase();
-        String[] qi = query.split("[, .!-/]");
-
-        for (int i = 0; i < qi.length; i++)
-        {
-            String q = qi[i];
-            if (missing.getName() != null)
-                if (stringQueryCompare(q, missing.getName()))
-                    return true;
-            if (missing.getExtras() != null)
-                if (stringQueryCompare(q, missing.getExtras()))
-                    return true;
-            if (missing.getDescription() != null)
-                if (stringQueryCompare(q, missing.getDescription()))
-                    return true;
-            if (missing.getArea() != null)
-                if (stringQueryCompare(q, missing.getArea()))
-                    return true;
-            if (missing.getMdesc() != null)
-                if (stringQueryCompare(q, missing.getMdesc()))
-                    return true;
-            if (missing.getColor() != null)
-                if (stringQueryCompare(q, missing.getColor()))
-                    return true;
-        }
-        return false;
-    }
 
 
     private boolean stringQueryCompare(String query, String data)
