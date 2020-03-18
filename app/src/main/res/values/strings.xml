@@ -113,6 +113,9 @@
     <string name="ok">Ok</string>
     <string name="filter">Filtrer</string>
     <string name="search">Søk</string>
+    <string name="all">Alle</string>
+    <string name="clear_filter">Tøm filter</string>
+
 
     <string name="unknown_location">Ukjent plassering</string>
 

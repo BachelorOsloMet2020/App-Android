@@ -38,14 +38,11 @@
                app:layout_constraintEnd_toEndOf="parent"></com.google.android.material.floatingactionbutton.FloatingActionButton>
        </androidx.constraintlayout.widget.ConstraintLayout>
 
-       <androidx.constraintlayout.widget.ConstraintLayout
+       <include
            android:layout_gravity="end"
-           android:layout_width="wrap_content"
+           android:layout_width="300dp"
            android:layout_height="match_parent"
-           android:background="@color/colorAccent"
-           >
-
-       </androidx.constraintlayout.widget.ConstraintLayout>
+           layout="@layout/view_content_filter" />
 
 
    </no.dyrebar.dyrebar.CustomControls.DrawerLayoutOverride>
