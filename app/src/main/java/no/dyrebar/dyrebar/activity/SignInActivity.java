@@ -117,6 +117,7 @@ public class SignInActivity extends AppCompatActivity
                     Log.e(TAG, "Request failed");
                     runOnUiThread(() -> {
                         id.Hide();
+                        challengeFailed();
                         loadSingInOptions();
                     });
 
@@ -125,7 +126,10 @@ public class SignInActivity extends AppCompatActivity
             catch (JSONException e)
             {
                 e.printStackTrace();
-                challengeFailed();
+                runOnUiThread(() -> {
+                    challengeFailed();
+                    loadSingInOptions();
+                });
             }
         });
         if (id.isVisible())
@@ -315,9 +319,12 @@ public class SignInActivity extends AppCompatActivity
                     {
                         // Notify user that email is required
                     }
-                    challengeFailed();
-
                     Log.e(TAG, "Request failed");
+                    runOnUiThread(() -> {
+                        id.Hide();
+                        challengeFailed();
+                        loadSingInOptions();
+                    });
                 }
             });
 
