@@ -19,14 +19,15 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:background="@color/cardview_dark_background">
+            android:background="@color/colorPrimary">
 
             <Button
                 android:id="@+id/btn_missing"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/button_border"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_margin="8dp"
                 android:minHeight="45dp"
                 android:text="@string/missing"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -36,10 +37,11 @@
 
             <Button
                 android:id="@+id/btn_found"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/button_border"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_margin="8dp"
                 android:text="@string/found"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
